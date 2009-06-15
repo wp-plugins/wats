@@ -17,6 +17,7 @@ This plugin is almost plug and play! Just activate it and then go to the options
 == Frequently Asked Questions ==
 
 1/ License terms :
+
 - This release is provided for free. In exchange, you must keep the backlinks added by the plugin in the footer of the ticket pages on the frontend.
 
 - You cannot redistribute this software without my written agreement.
@@ -32,5 +33,6 @@ This plugin is almost plug and play! Just activate it and then go to the options
 => By installing and using this software, you fully accept all the terms of the license without any restriction.
 
 2/ Release history :
+
 - 1.0 (15/06/2009) : original release
 
