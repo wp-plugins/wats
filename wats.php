@@ -4,7 +4,7 @@ Plugin Name: Wats
 Plugin URI: http://www.lautre-monde.fr/wats/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0
+Version: 1.0.1
 Author URI: http://www.lautre-monde.fr
 */
 
