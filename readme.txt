@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr
 Tags: ticket,support,taxonomy,help,cms
 Requires at least: 2.8
 Tested up to: 2.8
-Stable tag: 1.0
+Stable tag: 1.0.1
 
 == Description ==
 
@@ -33,6 +33,10 @@ This plugin is almost plug and play! Just activate it and then go to the options
 => By installing and using this software, you fully accept all the terms of the license without any restriction.
 
 2/ Release history :
+
+- 1.0.1 (17/06/2009) :
++ added an option to display (or not) tickets together with posts on home
++ fixed a bug with archives not displaying tickets when only tickets are present
 
 - 1.0 (15/06/2009) : original release
 

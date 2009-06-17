@@ -28,10 +28,21 @@ function wats_load_settings()
 		$default['numerotation'] = 0;
 		$default['wats_version'] = $wats_version;
 		$default['wats_guest_user'] = -1;
+		$default['wats_home_display'] = 1;
    	    add_option('wats', $default);
 	}
         
     $wats_settings = get_option('wats');
+	
+	if ($wats_settings['wats_version'] != $wats_version)
+	{
+		if ($wats_version == '1.0')
+		{
+			$wats_settings['wats_home_display'] = 1;
+		}
+		$wats_settings['wats_version'] = $wats_version;
+		update_option('wats', $wats_settings);
+	}
 		
 	return;
 }
@@ -254,7 +265,7 @@ function wats_admin_add_table_interface($resultsup,$resultadd,$idsup,$idadd,$val
 	echo '<table class="form-table" cellspacing="1" cellpadding="1">';
 	echo '<tr><th><label>'.__($value,'WATS').'</label></th><td><input type="text" name="'.$input.'" id="'.$input.'" size="30" class="regular-text" /></td><td></td></tr>';
 	echo '</table><br />';
-	echo '<input type="submit" id="'.$idadd.'" value="'.__('Add','WATS').'" class="button-primary" /><div id="'.$resultadd.'"></div>';
+	echo '<input type="submit" id="'.$idadd.'" value="'.__('Add','WATS').'" class="button-primary" /><div id="'.$resultadd.'"></div><br /><br />';
 
 	return;
 }
@@ -343,6 +354,7 @@ function wats_options_admin_menu()
 		$wats_settings['wats_version'] = $wats_version;
 		$wats_settings['numerotation'] = $_POST['group1'];
 		$wats_settings['wats_guest_user'] = $_POST['guestlist'];
+		$wats_settings['wats_home_display'] = isset($_POST['homedisplay']) ? 1 : 0;
 		update_option('wats', $wats_settings);
 	}
 	
@@ -352,7 +364,7 @@ function wats_options_admin_menu()
 	echo '<form action="" method="post">';
 	wp_nonce_field('update-wats-options');
 	
-	echo '<h3>'.__('Ticket numeratotation','WATS').' :</h3><br />';
+	echo '<h3>'.__('Ticket numeratotation','WATS').' :</h3>';
 	echo '<table class="form-table">';
 	echo '<tr><td><input type="radio" name="group1" value="0" ';
 	echo ($wats_settings['numerotation'] == 0) ? 'checked' : '';
@@ -368,6 +380,14 @@ function wats_options_admin_menu()
 	{
 		echo '<h3>'.__('Latest ticket ID','WATS').' : '.wats_get_latest_ticket_number().'</h3><br />';
 	}
+	
+	echo '<h3>'.__('Tickets display','WATS').' :</h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="checkbox" name="homedisplay"';
+	if ($wats_settings['wats_home_display'] == 1)
+		echo ' checked';
+	echo '> '.__('Include tickets on homepage together with posts','WATS').'</td></tr></table><br />';
+
 	
 	echo '<h3>'.__('Guest user','WATS').' : ';
 	echo '<td><select name="guestlist" id="guestlist" size="1">';

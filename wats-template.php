@@ -22,9 +22,9 @@ function wats_is_ticket($post)
 
 function wats_parse_query()
 {
-	global $wp_query;
-	
-	if (!is_admin() && ($wp_query->is_page == false))
+	global $wp_query, $wats_settings;
+
+	if (((!is_home()) || ($wats_settings['wats_home_display'] == 1)) && (!is_admin() && ($wp_query->is_page == false)))
 		$wp_query->query_vars['post_type'] = 'any';
 
 	return;
@@ -62,6 +62,18 @@ function wats_taxomony_template($template)
 	}
 
 	return($template);
+}
+
+/*******************************************************************/
+/*                                                                 */
+/* Fonction de filtrage pour inclure les tickets dans les archives */
+/*                                                                 */
+/*******************************************************************/
+
+function wats_get_archives($where)
+{
+	$where = str_replace( " post_type = 'post' AND", '', $where);
+	return($where);
 }
 
 /****************************************************************************/
