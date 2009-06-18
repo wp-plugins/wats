@@ -4,12 +4,15 @@ Plugin Name: Wats
 Plugin URI: http://www.lautre-monde.fr/wats/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0
+Version: 1.0.1
 Author URI: http://www.lautre-monde.fr
 */
 
 /*
 1/ Release history :
+- V1.0.1 (17/06/2009) :
++ added an option to display (or not) tickets together with posts on home
++ fixed a bug with archives not displaying tickets when only tickets are present
 - V1.0 (15/06/2009) : Initial release
 
 2/ Plugin description :
@@ -52,7 +55,7 @@ define('WATS_BACKLINK','http://www.lautre-monde.fr');
 define('WATS_ANCHOR','Wordpress Advanced Ticket System');
 
 $wats_settings = array();
-$wats_version = '1.0';
+$wats_version = '1.0.1';
 
 $wats_default_ticket_priority = array(1 => "Emergency", 2 => "Critical", 3 => "Major", 4 => "Minor");
 $wats_default_ticket_status = array(1 => "Newly open", 2 => "Under investigation", 3 => "Waiting for reoccurence", 4 => "Waiting for details", 5 => "Solution delivered", 6 => "Closed");
@@ -130,6 +133,7 @@ add_filter('comments_template', 'wats_comments_template');
 add_filter('the_title','wats_title_insert_ticket_number');
 add_filter('get_previous_post_where','wats_ticket_get_previous_next_post_where');
 add_filter('get_next_post_where','wats_ticket_get_previous_next_post_where');
+add_filter('getarchives_where','wats_get_archives');
 
 /* Ajax Actions Hooks */
 add_action('wp_ajax_wats_admin_insert_option_entry','wats_admin_insert_option_entry',10);
