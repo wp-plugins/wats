@@ -64,7 +64,7 @@ define('WATS_URL',get_option('siteurl').'/wp-content/plugins/'.basename(dirname(
 define('WATS_PATH',ABSPATH.'wp-content/plugins/'.basename(dirname(__FILE__)).'/');
 define('WATS_SHORT_PATH','/wp-content/plugins/'.basename(dirname(__FILE__)).'/');
 define('WATS_THEME_PATH',WATS_PATH.'theme/');
-define('WATS_BACKLINK','http://www.google.com');
+define('WATS_BACKLINK','http://www.lautre-monde.fr');
 define('WATS_ANCHOR','Wordpress Advanced Ticket System');
 
 $wats_settings = array();
