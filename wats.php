@@ -26,6 +26,9 @@ WATS uses the following scripts :
 - jQuery
 - Wordpress
 => Without them, WATS wouldn't be so thanks to them!
+
+4/ License terms :
+WATS is licensed under GPL v3.
 */
 
 require_once(dirname(__FILE__) .'/wats-lib.php');
