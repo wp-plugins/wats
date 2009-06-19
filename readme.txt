@@ -16,10 +16,13 @@ This plugin is almost plug and play! Just activate it and then go to the options
 
 == Frequently Asked Questions ==
 
-Release history :
+1/ Release history :
 
 - 1.0.1 (17/06/2009) :
 + added an option to display (or not) tickets together with posts on home
 + fixed a bug with archives not displaying tickets when only tickets are present
 
 - 1.0 (15/06/2009) : original release
+
+2/ License terms :
+WATS is licensed under GPL v3.
