@@ -4,12 +4,16 @@ Plugin Name: Wats
 Plugin URI: http://www.lautre-monde.fr/wats/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0.1
+Version: 1.0.2
 Author URI: http://www.lautre-monde.fr
 */
 
 /*
 1/ Release history :
+- V1.0.2 (19/06/2009) :
++ fixed css for bullets in the dashboard meta box under FF
++ added robustness to prevent php error when no category filter has been set under the options
++ fixed handling of the previous/next links of the ticket to prevent page link display
 - V1.0.1 (17/06/2009) :
 + added an option to display (or not) tickets together with posts on home
 + fixed a bug with archives not displaying tickets when only tickets are present

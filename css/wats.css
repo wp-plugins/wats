@@ -16,3 +16,7 @@
 .editableaccept {
 	background: url('../img/accept.png') right center no-repeat;
 }
+
+li.wats {
+	margin-left:10px;
+}

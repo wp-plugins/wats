@@ -11,15 +11,15 @@ function wats_dashboard_widget_tickets()
 	global $current_user;
 
 	echo __('Global stats :','WATS').'<br />';
-	echo '<li>'.__('Number of tickets created : ','WATS');
+	echo '<li class="wats">'.__('Number of tickets created : ','WATS');
 	echo wats_get_number_of_tickets_by_status(0,0).'</li>';
-	echo '<li>'.__('Number of tickets closed : ','WATS');
+	echo '<li class="wats">'.__('Number of tickets closed : ','WATS');
 	echo wats_get_number_of_tickets_by_status(wats_get_closed_status_id(),0).'</li><br /><br />';
 	
 	echo __('Your stats :','WATS').'<br />';
-	echo '<li>'.__('Number of tickets created : ','WATS');
+	echo '<li class="wats">'.__('Number of tickets created : ','WATS');
 	echo wats_get_number_of_tickets_by_status(0,$current_user->ID).'</li>';
-	echo '<li>'.__('Number of tickets closed : ','WATS');
+	echo '<li class="wats">'.__('Number of tickets closed : ','WATS');
 	echo wats_get_number_of_tickets_by_status(wats_get_closed_status_id(),$current_user->ID).'</li>';
 	
 	return;

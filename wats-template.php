@@ -72,7 +72,7 @@ function wats_taxomony_template($template)
 
 function wats_get_archives($where)
 {
-	$where = str_replace( " post_type = 'post' AND", '', $where);
+	$where = str_replace( " post_type = 'post' AND", " (post_type = 'post' OR post_type = 'ticket') AND", $where);
 	return($where);
 }
 
@@ -173,7 +173,7 @@ function wats_title_insert_ticket_number($title)
 
 function wats_ticket_get_previous_next_post_where($where)
 {
-	$where = str_replace( " AND p.post_type = 'post'", '', $where);
+	$where = str_replace( " AND p.post_type = 'post'", " AND (p.post_type = 'post' OR p.post_type = 'ticket')", $where);
 	return ($where);
 }
 
@@ -187,14 +187,18 @@ function wats_list_terms_exclusions($args)
 {
 	global $wats_settings;
 	
-	$list = $wats_settings['wats_categories'];
-	$catlist = array();
-	foreach ($list as $key => $value)
+	$where = "";
+	if ($wats_settings['wats_categories'])
 	{
-		$catlist[] = $key;
+		$list = $wats_settings['wats_categories'];
+		$catlist = array();
+		foreach ($list as $key => $value)
+		{
+			$catlist[] = $key;
+		}
+		$catlist = implode(',',$catlist);
+		$where = " AND t.term_id IN ($catlist)";
 	}
-	$catlist = implode(',',$catlist);
-	$where = " AND t.term_id IN ($catlist)";
 	return $where;
 }
 
