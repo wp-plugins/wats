@@ -354,5 +354,3 @@ if ( $page_links )
 <br class="clear" />
 
 </div>
-
-<?php include('admin-footer.php');

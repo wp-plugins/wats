@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr
 Tags: ticket,support,taxonomy,help,cms
 Requires at least: 2.8
 Tested up to: 2.8
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 
 == Description ==
 
@@ -17,6 +17,9 @@ This plugin is almost plug and play! Just activate it and then go to the options
 == Frequently Asked Questions ==
 
 1/ Release history :
+
+- V1.0.3 (21/06/2009) :
++ fixed admin footer showing twice on edit ticket and new ticket pages
 
 - V1.0.2 (19/06/2009) :
 + fixed css for bullets in the dashboard meta box under FF

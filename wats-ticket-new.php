@@ -31,5 +31,4 @@ $post->post_type = 'ticket';
 
 include('wats-edit-form-advanced.php');
 
-include('admin-footer.php');
 ?>
