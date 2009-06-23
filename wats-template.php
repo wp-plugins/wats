@@ -1,5 +1,102 @@
 <?php
 
+/********************************************************************************/
+/*                                                                              */
+/* Fonction de filtrage sur le contenu pour l'affichage de la table des tickets */
+/*                                                                              */
+/********************************************************************************/
+
+function wats_list_tickets_filter($content)
+{
+    return (preg_replace_callback(WATS_TICKET_LIST_REGEXP, 'wats_list_tickets', $content));
+}
+
+/************************************************/
+/*                                              */
+/* Fonction d'affichage du listing des tickets  */
+/* Argument 1 : catégorie (0 : all, 1 : current */
+/*                                              */
+/************************************************/
+
+function wats_list_tickets($args)
+{
+	global $wpdb, $wats_settings;
+	
+	$args = explode(" ", rtrim($args[0], "]"));
+	$filtercategory = $args[1];
+	if ($filtercategory == 0)
+	{
+		$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'"));
+	}
+	else if ($filtercategory == 1)
+	{
+		$catlist = array();
+		$cats = get_the_category();
+		foreach ($cats as $cat)
+		{
+			$catlist[] = $cat->cat_ID;
+		}
+		$catlist = implode(',',$catlist);
+		wats_debug($catlist);
+		$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)"));
+	}
+
+	$output = '<table class="wats_table" cellspacing="0" id="tableticket" style="text-align:center;"><thead><tr class="thead">';
+	if (($wats_settings['numerotation'] == 1) || ($wats_settings['numerotation'] == 2))
+		$output .= '<th scope="col" style="text-align:center;">ID</th>';
+	$output .= '<th scope="col" style="text-align:center;">'.__('Title','WATS').'</th>';
+	$output .= '<th scope="col" style="text-align:center;">'.__('Category','WATS').'</th>';
+	$output .= '<th scope="col" style="text-align:center;">'.__('Author','WATS').'</th>';
+	$output .= '<th scope="col" style="text-align:center;">'.__('Creation date','WATS').'</th>';
+	$output .= '<th scope="col" style="text-align:center;">'.__('Type','WATS').'</th>';
+	$output .= '<th scope="col" style="text-align:center;">'.__('Priority','WATS').'</th>';
+	$output .= '<th scope="col" style="text-align:center;">'.__('Status','WATS').'</th>';
+	$output .= '</tr></thead><tbody>';
+   
+    $alt = false;
+	foreach ($tickets as $ticket)
+	{
+		$x = 1;
+	
+		$output .= '<tr';
+		$output .= ($alt == true) ? ' class="alternate"' : '';
+		if (($wats_settings['numerotation'] == 1) || ($wats_settings['numerotation'] == 2))
+			$output .= '><td>'.wats_get_ticket_number($ticket->ID).'</td>';
+		$output .= '<td><a href="'.get_permalink($ticket).'">'.htmlspecialchars(stripcslashes($ticket->post_title)).'</a></td>';
+		$categories = get_the_category($ticket->ID);
+		if (!empty($categories))
+		{
+			$out = array();
+			foreach ($categories as $c)
+			{
+				$out[] = wp_specialchars(sanitize_term_field('name', $c->name, $c->term_id, 'category', 'display'));
+	
+			}
+			$output .= '<td>'.join(', ',$out).'</td>';
+		} 
+		else
+		{
+			$output .= '<td>'.__('Uncategorized','WATS').'</td>';
+		}
+		
+		$output .= '<td>'.get_the_author_meta('nickname',$ticket->post_author).'</td>';
+		$output .= '<td>'.get_post_time(get_option('date_format'),false,$ticket,true).'</td>';
+		$output .= '<td>'.wats_ticket_get_type($ticket).'</td>';
+		$output .= '<td>'.wats_ticket_get_priority($ticket).'</td>';
+		$output .= '<td>'.wats_ticket_get_status($ticket).'</td>';
+		$output .= '</tr>';
+		$alt = !$alt;
+	}
+	if ($x == 0)
+	{
+		$output .= '<tr valign="middle"><td colspan="3" style="text-align:center">'.__('No entry','WATS').'</td></tr>';
+	}
+	$output .= '</tbody></table><br />';
+
+	return($output);
+}
+
+
 /****************************************/
 /*                                      */
 /* Fonction de vérification d'un ticket */

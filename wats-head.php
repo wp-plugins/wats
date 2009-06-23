@@ -148,7 +148,7 @@ function wats_options_admin_head()
 function wats_ticket_edit_admin_head()
 {
 	wats_admin_scripts();
-	wp_print_scripts('inline-edit-post');
+	/*wp_print_scripts('inline-edit-post');*/
 	add_filter('list_terms_exclusions','wats_list_terms_exclusions');
 	
 	return;

@@ -292,7 +292,6 @@ function wats_admin_display_options_list($type,$check)
 			echo '<tr valign="middle"';
 			echo ($alt == true) ? ' class="alternate"' : '';
 			echo '>';
-			echo '<tr>';
 			echo '<td>'.$key.'</td>';
 			echo '<td';
 			if ($type != 'wats_categories')

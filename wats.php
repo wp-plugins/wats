@@ -4,12 +4,16 @@ Plugin Name: Wats
 Plugin URI: http://www.lautre-monde.fr/wats/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0.3
+Version: 1.0.4
 Author URI: http://www.lautre-monde.fr
 */
 
 /*
 1/ Release history :
+- V1.0.4 (23/06/2009) :
++ added ticket listing functionnality
++ removed broken inline ticket edit under the admin bulk ticket edit page
++ fixed html table tag issue problem under the options panel in the admin
 - V1.0.3 (21/06/2009) :
 + fixed admin footer showing twice on edit ticket and new ticket pages
 - V1.0.2 (19/06/2009) :
@@ -47,6 +51,7 @@ require_once(dirname(__FILE__) .'/wats-template.php');
 
 add_action('admin_head', 'wats_admin_head');
 add_action('admin_print_styles', 'wats_add_my_stylesheet');
+add_action('wp_print_styles', 'wats_add_my_stylesheet');
 add_action('wp_dashboard_setup', 'wats_dashboard_setup');
 
 /*************************************/
@@ -62,6 +67,7 @@ define('WATS_SHORT_PATH','/wp-content/plugins/'.basename(dirname(__FILE__)).'/')
 define('WATS_THEME_PATH',WATS_PATH.'theme/');
 define('WATS_BACKLINK','http://www.lautre-monde.fr');
 define('WATS_ANCHOR','Wordpress Advanced Ticket System');
+define("WATS_TICKET_LIST_REGEXP", "/\[WATS_TICKET_LIST ([[:print:]]+)\]/");
 
 $wats_settings = array();
 $wats_version = '1.0.1';
@@ -143,6 +149,8 @@ add_filter('the_title','wats_title_insert_ticket_number');
 add_filter('get_previous_post_where','wats_ticket_get_previous_next_post_where');
 add_filter('get_next_post_where','wats_ticket_get_previous_next_post_where');
 add_filter('getarchives_where','wats_get_archives');
+add_filter('the_content', 'wats_list_tickets_filter');
+add_filter('the_content_rss', 'wats_list_tickets_filter');
 
 /* Ajax Actions Hooks */
 add_action('wp_ajax_wats_admin_insert_option_entry','wats_admin_insert_option_entry',10);
