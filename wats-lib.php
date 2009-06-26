@@ -181,4 +181,151 @@ function wats_get_closed_status_id()
 	return $closed;
 }
 
+/***********************************************************/
+/*                                                         */
+/* Fonction included for backward compatibility before 2.8 */
+/*                                                         */
+/***********************************************************/
+
+if (!function_exists('esc_attr'))
+{
+function esc_attr($text) 
+{
+	$safe_text = wp_check_invalid_utf8($text);
+    $safe_text = _wp_specialchars($safe_text, ENT_QUOTES);
+    
+	return apply_filters('attribute_escape', $safe_text, $text);
+}
+}
+
+/***********************************************************/
+/*                                                         */
+/* Fonction included for backward compatibility before 2.8 */
+/*                                                         */
+/***********************************************************/
+
+if (!function_exists('_wp_specialchars'))
+{
+function _wp_specialchars( $string, $quote_style = ENT_NOQUOTES, $charset = false, $double_encode = false ) {
+	$string = (string) $string;
+
+	if ( 0 === strlen( $string ) ) {
+		return '';
+	}
+
+	// Don't bother if there are no specialchars - saves some processing
+	if ( !preg_match( '/[&<>"\']/', $string ) ) {
+		return $string;
+	}
+
+	// Account for the previous behaviour of the function when the $quote_style is not an accepted value
+	if ( empty( $quote_style ) ) {
+		$quote_style = ENT_NOQUOTES;
+	} elseif ( !in_array( $quote_style, array( 0, 2, 3, 'single', 'double' ), true ) ) {
+		$quote_style = ENT_QUOTES;
+	}
+
+	// Store the site charset as a static to avoid multiple calls to wp_load_alloptions()
+	if ( !$charset ) {
+		static $_charset;
+		if ( !isset( $_charset ) ) {
+			$alloptions = wp_load_alloptions();
+			$_charset = isset( $alloptions['blog_charset'] ) ? $alloptions['blog_charset'] : '';
+		}
+		$charset = $_charset;
+	}
+	if ( in_array( $charset, array( 'utf8', 'utf-8', 'UTF8' ) ) ) {
+		$charset = 'UTF-8';
+	}
+
+	$_quote_style = $quote_style;
+
+	if ( $quote_style === 'double' ) {
+		$quote_style = ENT_COMPAT;
+		$_quote_style = ENT_COMPAT;
+	} elseif ( $quote_style === 'single' ) {
+		$quote_style = ENT_NOQUOTES;
+	}
+
+	// Handle double encoding ourselves
+	if ( !$double_encode ) {
+		$string = wp_specialchars_decode( $string, $_quote_style );
+		$string = preg_replace( '/&(#?x?[0-9a-z]+);/i', '|wp_entity|$1|/wp_entity|', $string );
+	}
+
+	$string = @htmlspecialchars( $string, $quote_style, $charset );
+
+	// Handle double encoding ourselves
+	if ( !$double_encode ) {
+		$string = str_replace( array( '|wp_entity|', '|/wp_entity|' ), array( '&', ';' ), $string );
+	}
+
+	// Backwards compatibility
+	if ( 'single' === $_quote_style ) {
+		$string = str_replace( "'", '&#039;', $string );
+	}
+
+	return $string;
+}
+}
+
+/***********************************************************/
+/*                                                         */
+/* Fonction included for backward compatibility before 2.8 */
+/*                                                         */
+/***********************************************************/
+
+if (!function_exists('esc_html'))
+{
+function esc_html( $text ) {
+	$safe_text = wp_check_invalid_utf8( $text );
+	$safe_text = _wp_specialchars( $safe_text, ENT_QUOTES );
+	return apply_filters( 'esc_html', $safe_text, $text );
+    return $text;
+}
+}
+
+/***********************************************************/
+/*                                                         */
+/* Fonction included for backward compatibility before 2.8 */
+/*                                                         */
+/***********************************************************/
+
+if (!function_exists('esc_url'))
+{
+function esc_url( $url, $protocols = null ) {
+	return clean_url( $url, $protocols, 'display' );
+}
+}
+
+/***********************************************************/
+/*                                                         */
+/* Fonction included for backward compatibility before 2.8 */
+/*                                                         */
+/***********************************************************/
+
+if (!function_exists('esc_attr_e'))
+{
+function esc_attr_e( $text, $domain = 'default' ) {
+    echo esc_attr( translate( $text, $domain ) );
+}
+}
+
+/***********************************************************/
+/*                                                         */
+/* Fonction included for backward compatibility before 2.8 */
+/*                                                         */
+/***********************************************************/
+
+if (!function_exists('esc_js'))
+{
+function esc_js( $text ) {
+	$safe_text = wp_check_invalid_utf8( $text );
+	$safe_text = _wp_specialchars( $safe_text, ENT_COMPAT );
+	$safe_text = preg_replace( '/&#(x)?0*(?(1)27|39);?/i', "'", stripslashes( $safe_text ) );
+	$safe_text = preg_replace( "/\r?\n/", "\\n", addslashes( $safe_text ) );
+	return apply_filters( 'js_escape', $safe_text, $text );
+}
+}
+
 ?>

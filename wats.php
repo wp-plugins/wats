@@ -4,12 +4,16 @@ Plugin Name: Wats
 Plugin URI: http://www.lautre-monde.fr/wats/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0.4
+Version: 1.0.5
 Author URI: http://www.lautre-monde.fr
 */
 
 /*
 1/ Release history :
+- V1.0.5 (26/06/2009) :
++ modified the code to allow WP 2.7.1 compatibility
++ fixed query filtering logic for display of tickets together with posts in home, categories and archives
++ added robustness to prevent subscriber level user from being set as the guest user as it doesn't have the minimum capabilities
 - V1.0.4 (23/06/2009) :
 + added ticket listing functionnality
 + removed broken inline ticket edit under the admin bulk ticket edit page
@@ -64,13 +68,13 @@ define('WATS_DEBUG', false);
 define('WATS_URL',get_option('siteurl').'/wp-content/plugins/'.basename(dirname(__FILE__)).'/');
 define('WATS_PATH',ABSPATH.'wp-content/plugins/'.basename(dirname(__FILE__)).'/');
 define('WATS_SHORT_PATH','/wp-content/plugins/'.basename(dirname(__FILE__)).'/');
-define('WATS_THEME_PATH',WATS_PATH.'theme/');
+define('WATS_THEME_PATH',WATS_PATH.'theme');
 define('WATS_BACKLINK','http://www.lautre-monde.fr');
 define('WATS_ANCHOR','Wordpress Advanced Ticket System');
 define("WATS_TICKET_LIST_REGEXP", "/\[WATS_TICKET_LIST ([[:print:]]+)\]/");
 
 $wats_settings = array();
-$wats_version = '1.0.1';
+$wats_version = '1.0.5';
 
 $wats_default_ticket_priority = array(1 => "Emergency", 2 => "Critical", 3 => "Major", 4 => "Minor");
 $wats_default_ticket_status = array(1 => "Newly open", 2 => "Under investigation", 3 => "Waiting for reoccurence", 4 => "Waiting for details", 5 => "Solution delivered", 6 => "Closed");
@@ -149,6 +153,7 @@ add_filter('the_title','wats_title_insert_ticket_number');
 add_filter('get_previous_post_where','wats_ticket_get_previous_next_post_where');
 add_filter('get_next_post_where','wats_ticket_get_previous_next_post_where');
 add_filter('getarchives_where','wats_get_archives');
+add_filter('posts_where','wats_posts_where');
 add_filter('the_content', 'wats_list_tickets_filter');
 add_filter('the_content_rss', 'wats_list_tickets_filter');
 

@@ -325,13 +325,15 @@ function wats_build_user_list()
 {
     global $wpdb;
 
-    $users = $wpdb->get_results("SELECT user_login FROM `{$wpdb->prefix}users`");
+    $users = $wpdb->get_results("SELECT ID FROM `{$wpdb->prefix}users`");
     $userlist = array();
 	$userlist[] = __("None",'WATS');
 
     foreach ($users AS $user)
     {
-        $userlist[] = $user->user_login;
+		$user = new WP_user($user->ID);
+		if ($user->user_level > 0)
+			$userlist[] = $user->user_login;
 	}
         
     return ($userlist);

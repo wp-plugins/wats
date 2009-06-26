@@ -37,7 +37,6 @@ function wats_list_tickets($args)
 			$catlist[] = $cat->cat_ID;
 		}
 		$catlist = implode(',',$catlist);
-		wats_debug($catlist);
 		$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)"));
 	}
 
@@ -119,10 +118,17 @@ function wats_is_ticket($post)
 
 function wats_parse_query()
 {
-	global $wp_query, $wats_settings;
+	global $wp_query, $wats_settings, $wp_version;
 
 	if (((!is_home()) || ($wats_settings['wats_home_display'] == 1)) && (!is_admin() && ($wp_query->is_page == false)))
-		$wp_query->query_vars['post_type'] = 'any';
+	{
+		//$wp_query->query_vars['post_type'] = 'any';
+		if (($wp_version < '2.8') && ($wp_query->is_single == true))
+		{
+			$wp_query->is_single = false;
+			$wp_query->was_single = true;
+		}
+	}
 
 	return;
 }
@@ -152,13 +158,28 @@ function wats_taxomony_template($template)
 
 	if ($wp_query->is_ticket == true)
 	{
-		if (file_exists(TEMPLATEPATH.'/single-ticket.php')) $template = TEMPLATEPATH.'/single-ticket.php';
+		if (file_exists(TEMPLATEPATH.'single-ticket.php')) $template = TEMPLATEPATH.'/single-ticket.php';
 		else $template = WATS_THEME_PATH.'/single-ticket.php';
-		
 		add_action('wp_footer','wats_wp_footer');
 	}
 
 	return($template);
+}
+
+/*************************************************/
+/*                                               */
+/* Fonction de filtrage pour inclure les tickets */
+/*                                               */
+/*************************************************/
+
+function wats_posts_where($where)
+{
+	global $wpdb, $wats_settings;
+	
+	if (((!is_home()) || ($wats_settings['wats_home_display'] == 1)) && (!is_admin()) && ($wp_query->is_page == false))
+		$where = str_replace($wpdb->posts.".post_type = 'post' AND","(".$wpdb->posts.".post_type = 'post' OR ".$wpdb->posts.".post_type = 'ticket') AND", $where);
+
+	return($where);
 }
 
 /*******************************************************************/
@@ -170,6 +191,7 @@ function wats_taxomony_template($template)
 function wats_get_archives($where)
 {
 	$where = str_replace( " post_type = 'post' AND", " (post_type = 'post' OR post_type = 'ticket') AND", $where);
+
 	return($where);
 }
 
@@ -200,10 +222,22 @@ function wats_comments_template($template)
 
 function wats_template_redirect()
 {
-	global $wp_query;
+	global $wp_query, $wp_version;
 
-	if (!is_admin() && isset($wp_query->is_single) && $wp_query->is_single == true)
+	if ($wp_version >= '2.8')
 	{
+		if (!is_admin() && isset($wp_query->is_single) && $wp_query->is_single == true)
+		{
+			if (wats_is_ticket($wp_query->post) == true)
+			{
+				$wp_query->is_ticket = true;
+				$wp_query->is_tax = true;
+			}
+		}
+	}
+	else if (!is_admin() && isset($wp_query->was_single) && $wp_query->was_single == true)
+	{
+		$wp_query->is_single = true;
 		if (wats_is_ticket($wp_query->post) == true)
 		{
 			$wp_query->is_ticket = true;

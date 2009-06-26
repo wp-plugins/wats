@@ -1,10 +1,10 @@
 === Wordpress Advanced Ticket System ===
 Contributors: Olivier
 Donate link: http://www.lautre-monde.fr
-Tags: ticket,support,taxonomy,help,cms
-Requires at least: 2.8
+Tags: ticket,support,taxonomy,help,cms,crm,customer
+Requires at least: 2.7.1
 Tested up to: 2.8
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 
 == Description ==
 
@@ -17,6 +17,11 @@ This plugin is almost plug and play! Just activate it and then go to the options
 == Frequently Asked Questions ==
 
 1/ Release history :
+
+- V1.0.5 (26/06/2009) :
++ modified the code to allow WP 2.7.1 compatibility
++ fixed query filtering logic for display of tickets together with posts in home, categories and archives
++ added robustness to prevent subscriber level user from being set as the guest user as it doesn't have the minimum capabilities
 
 - V1.0.4 (23/06/2009) :
 + added ticket listing functionnality

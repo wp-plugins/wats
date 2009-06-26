@@ -163,7 +163,7 @@ function wats_ticket_edit_admin_head()
 function wats_ticket_creation_admin_head()
 {
 	add_filter('list_terms_exclusions','wats_list_terms_exclusions');
-    wats_admin_scripts();
+    //wats_admin_scripts();
 
 	remove_action('media_buttons','media_buttons');
 	wats_ticket_meta_boxes();
