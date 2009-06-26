@@ -64,7 +64,7 @@ define('WATS_BACKLINK','http://www.lautre-monde.fr');
 define('WATS_ANCHOR','Wordpress Advanced Ticket System');
 
 $wats_settings = array();
-$wats_version = '1.0.1';
+$wats_version = '1.0.3';
 
 $wats_default_ticket_priority = array(1 => "Emergency", 2 => "Critical", 3 => "Major", 4 => "Minor");
 $wats_default_ticket_status = array(1 => "Newly open", 2 => "Under investigation", 3 => "Waiting for reoccurence", 4 => "Waiting for details", 5 => "Solution delivered", 6 => "Closed");
