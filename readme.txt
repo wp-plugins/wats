@@ -1,0 +1,46 @@
+=== Wordpress Advanced Ticket System ===
+Contributors: Olivier
+Donate link: http://www.lautre-monde.fr
+Tags: ticket,support,taxonomy,help,cms,crm,customer
+Requires at least: 2.7.1
+Tested up to: 2.8
+Stable tag: 1.0.5
+
+== Description ==
+
+This plugin  adds to wordpress the functionnalities of a ticket system. This allows users to submit tickets to report problems or get support on whatever you want. You can customize the status, priority and type of the ticket.
+
+== Installation ==
+
+This plugin is almost plug and play! Just activate it and then go to the options menuitem to set the guest user and the allowed categories for ticket submission.
+
+== Frequently Asked Questions ==
+
+1/ Release history :
+
+- V1.0.5 (26/06/2009) :
++ modified the code to allow WP 2.7.1 compatibility
++ fixed query filtering logic for display of tickets together with posts in home, categories and archives
++ added robustness to prevent subscriber level user from being set as the guest user as it doesn't have the minimum capabilities
+
+- V1.0.4 (23/06/2009) :
++ added ticket listing functionnality
++ removed broken inline ticket edit under the admin bulk ticket edit page
++ fixed html table tag issue problem under the options panel in the admin
+
+- V1.0.3 (21/06/2009) :
++ fixed admin footer showing twice on edit ticket and new ticket pages
+
+- V1.0.2 (19/06/2009) :
++ fixed css for bullets in the dashboard meta box under FF
++ added robustness to prevent php error when no category filter has been set under the options
++ fixed handling of the previous/next links of the ticket to prevent page link display
+
+- V1.0.1 (17/06/2009) :
++ added an option to display (or not) tickets together with posts on home
++ fixed a bug with archives not displaying tickets when only tickets are present
+
+- V1.0 (15/06/2009) : Initial release
+
+2/ License terms :
+WATS is licensed under GPL v3.
