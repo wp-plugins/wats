@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 
 == Description ==
 
@@ -17,6 +17,9 @@ This plugin is almost plug and play! Just activate it and then go to the options
 == Frequently Asked Questions ==
 
 1/ Release history :
+
+- V1.0.6 (06/07/2009) :
++ fixed a bug with non working guest user access (redirection loop) when WP isn't installed in a subdirectory
 
 - V1.0.5 (26/06/2009) :
 + modified the code to allow WP 2.7.1 compatibility

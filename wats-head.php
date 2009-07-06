@@ -66,7 +66,7 @@ function wats_customize_guest_admin()
 	$subtargeturi = substr_replace($targeturi,'',0,strlen(get_option('siteurl')));
 	$result = strpos($requesteduri,$subtargeturi);
 
-	if ($result == 0)
+	if ($result === false)
 	{
 		wp_safe_redirect($targeturi);
 	}
