@@ -88,7 +88,7 @@ function wats_list_tickets($args)
 	}
 	if ($x == 0)
 	{
-		$output .= '<tr valign="middle"><td colspan="3" style="text-align:center">'.__('No entry','WATS').'</td></tr>';
+		$output .= '<tr valign="middle"><td colspan="8" style="text-align:center">'.__('No entry','WATS').'</td></tr>';
 	}
 	$output .= '</tbody></table><br />';
 
@@ -120,16 +120,19 @@ function wats_parse_query()
 {
 	global $wp_query, $wats_settings, $wp_version;
 
-	if (((!is_home()) || ($wats_settings['wats_home_display'] == 1)) && (!is_admin() && ($wp_query->is_page == false)))
+	if (((!is_home()) || ($wats_settings['wats_home_display'] == 1)) && (!is_admin()) && ($wp_query->is_page == false))
 	{
-		//$wp_query->query_vars['post_type'] = 'any';
-		if (($wp_version < '2.8') && ($wp_query->is_single == true))
+		if (is_single())
+			$wp_query->query_vars['post_type'] = 'any';
+		if ($wp_query->is_single == true)
 		{
 			$wp_query->is_single = false;
 			$wp_query->was_single = true;
+			if ($wp_version >= '2.8')
+				$wp_query->is_page = true;
 		}
 	}
-
+	
 	return;
 }
 
@@ -162,7 +165,7 @@ function wats_taxomony_template($template)
 		else $template = WATS_THEME_PATH.'/single-ticket.php';
 		add_action('wp_footer','wats_wp_footer');
 	}
-
+	
 	return($template);
 }
 
@@ -207,8 +210,10 @@ function wats_comments_template($template)
 
 	if ($wp_query->is_ticket == true)
 	{
-		if (file_exists(TEMPLATEPATH.'/comments-ticket.php')) $template = TEMPLATEPATH.'/comments-ticket.php';
-		else $template = WATS_THEME_PATH.'/comments-ticket.php';
+		if (file_exists(TEMPLATEPATH.'/comments-ticket.php')) 
+			$template = TEMPLATEPATH.'/comments-ticket.php';
+		else 
+			$template = WATS_THEME_PATH.'/comments-ticket.php';
 	}
 
 	return($template);
@@ -224,18 +229,7 @@ function wats_template_redirect()
 {
 	global $wp_query, $wp_version;
 
-	if ($wp_version >= '2.8')
-	{
-		if (!is_admin() && isset($wp_query->is_single) && $wp_query->is_single == true)
-		{
-			if (wats_is_ticket($wp_query->post) == true)
-			{
-				$wp_query->is_ticket = true;
-				$wp_query->is_tax = true;
-			}
-		}
-	}
-	else if (!is_admin() && isset($wp_query->was_single) && $wp_query->was_single == true)
+	if (!is_admin() && isset($wp_query->was_single) && $wp_query->was_single == true)
 	{
 		$wp_query->is_single = true;
 		if (wats_is_ticket($wp_query->post) == true)

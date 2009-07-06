@@ -1,10 +1,4 @@
-﻿<?php 
-/** 
- * @package WordPress 
- * @subpackage Default_Theme 
- */ 
-
-get_header(); ?>
+﻿<?php get_header(); ?>
 
 <div id="content" class="widecolumn">
 	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
