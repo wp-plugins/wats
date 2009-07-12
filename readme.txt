@@ -3,8 +3,8 @@ Contributors: Olivier
 Donate link: http://www.lautre-monde.fr
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
-Tested up to: 2.8
-Stable tag: 1.0.7
+Tested up to: 2.8.1
+Stable tag: 1.0.8
 
 == Description ==
 
@@ -17,6 +17,11 @@ This plugin is almost plug and play! Just activate it and then go to the options
 == Frequently Asked Questions ==
 
 1/ Release history :
+
+- V1.0.8 (12/07/2009) :
++ fixed a bug with new category not showing up on wats options page dropdown list of categories
++ fixed admin page registration code to be compatible with WP 2.8.1 security enforcements
++ removed unused code (wats-edit-form.php)
 
 - V1.0.7 (06/07/2009) :
 + fixed a bug preventing single post/ticket display

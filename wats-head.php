@@ -82,7 +82,7 @@ function wats_customize_guest_admin()
 
 function wats_add_admin_page()
 {
-	global $wats_settings, $menu, $current_user;
+	global $wats_settings, $menu, $current_user, $_registered_pages;
 
 	wats_load_settings();
 	$plugin_url = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) .'/';
@@ -116,7 +116,9 @@ function wats_add_admin_page()
 			add_action('admin_head-wats/wats-ticket-new.php','wats_ticket_creation_admin_head');
 		}
 	}
-			
+	
+	$_registered_pages[get_plugin_page_hookname('wats/wats-ticket.php','')] = true;
+	
 	return;
 }
 

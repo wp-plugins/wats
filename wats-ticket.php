@@ -16,7 +16,7 @@ function redirect_ticket($post_ID = '')
 		$referredby = remove_query_arg('_wp_original_http_referer', $referredby);
 	}
 	$referer = preg_replace('|https?://[^/]+|i', '', wp_get_referer());
-
+	
 	if ( !empty($_POST['mode']) && 'bookmarklet' == $_POST['mode'] ) {
 		$location = $_POST['referredby'];
 	} elseif ( !empty($_POST['mode']) && 'sidebar' == $_POST['mode'] ) {
@@ -24,21 +24,14 @@ function redirect_ticket($post_ID = '')
 			$location = 'sidebar.php?a=c';
 		elseif ( isset($_POST['publish']) )
 			$location = 'sidebar.php?a=b';
-	} elseif ( ( isset($_POST['save']) || isset($_POST['publish']) ) && ( empty($referredby) || $referredby == $referer || 'redo' != $referredby ) ) {
-		if ( isset($_POST['_wp_original_http_referer']) && strpos( $_POST['_wp_original_http_referer'], '/wp-admin/post.php') === false && strpos( $_POST['_wp_original_http_referer'], '/wp-admin/post-new.php') === false )
-			$location = add_query_arg( array(
-				'_wp_original_http_referer' => urlencode( stripslashes( $_POST['_wp_original_http_referer'] ) ),
-				'message' => 1
-			), wats_get_edit_ticket_link( $post_ID, 'url' ) );
-		else {
-			if ( isset( $_POST['publish'] ) ) {
-				if ( 'pending' == get_post_status( $post_ID ) )
-					$location = add_query_arg( 'message', 8, wats_get_edit_ticket_link( $post_ID, 'url' ) );
-				else
-					$location = add_query_arg( 'message', 6, wats_get_edit_ticket_link( $post_ID, 'url' ) );
-			} else {
-				$location = add_query_arg( 'message', 7, wats_get_edit_ticket_link( $post_ID, 'url' ) );
-			}
+	} elseif ( ( isset($_POST['save']) || isset($_POST['publish']) ) ) {
+		if ( isset( $_POST['publish'] ) ) {
+			if ( 'pending' == get_post_status( $post_ID ) )
+				$location = add_query_arg( 'message', 8, wats_get_edit_ticket_link( $post_ID, 'url' ) );
+			else
+				$location = add_query_arg( 'message', 6, wats_get_edit_ticket_link( $post_ID, 'url' ) );
+		} else {
+			$location = add_query_arg( 'message', 1, wats_get_edit_ticket_link( $post_ID, 'url' ) );
 		}
 	} elseif (isset($_POST['addmeta']) && $_POST['addmeta']) {
 		$location = add_query_arg( 'message', 2, wp_get_referer() );
@@ -48,15 +41,6 @@ function redirect_ticket($post_ID = '')
 		$location = add_query_arg( 'message', 3, wp_get_referer() );
 		$location = explode('#', $location);
 		$location = $location[0] . '#postcustom';
-	} elseif (!empty($referredby) && $referredby != $referer) {
-		$location = $_POST['referredby'];
-		$location = remove_query_arg('_wp_original_http_referer', $location);
-		if ( false !== strpos($location, 'edit.php') || false !== strpos($location, 'edit-post-drafts.php') )
-			$location = add_query_arg('posted', $post_ID, $location);
-		elseif ( false !== strpos($location, 'wp-admin') )
-			$location = "post-new.php?posted=$post_ID";
-	} elseif ( isset($_POST['publish']) ) {
-		$location = "post-new.php?posted=$post_ID";
 	} elseif ($action == 'editattachment') {
 		$location = 'attachments.php';
 	} elseif ( 'post-quickpress-save-cont' == $_POST['action'] ) {
@@ -125,9 +109,9 @@ case 'edit':
 		wp_redirect(wats_get_edit_ticket_link($post->ID, 'url'));
 		exit();
 	}*/
-	
+
 	wats_ticket_creation_admin_head();
-	
+
 	if ( current_user_can('edit_post', $post_ID) ) {
 		if ( $last = wp_check_post_lock( $post->ID ) ) {
 			$last_user = get_userdata( $last );

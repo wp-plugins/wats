@@ -239,7 +239,7 @@ function wats_admin_add_category_interface($resultsup,$resultadd,$idsup,$idadd,$
 	echo '<table class="form-table" cellspacing="1" cellpadding="1">';
 	echo '<tr><th><label>'.__($value,'WATS').'</label></th><td>';
 	echo '<select name="catlist" id="catlist" size="1">';
-	$categories = get_categories('type=post');
+	$categories = get_categories('type=post&hide_empty=0');
 	foreach ($categories as $category)
 	{
         echo '<option value="'.$category->cat_ID.'" >'.$category->cat_name.'</option>';
