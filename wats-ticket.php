@@ -205,5 +205,5 @@ default:
 	exit();
 	break;
 } // end switch
-include('admin-footer.php');
+
 ?>

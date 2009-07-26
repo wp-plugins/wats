@@ -11,19 +11,19 @@ $post_ID = isset($post_ID) ? (int) $post_ID : 0;
 $action = isset($action) ? $action : '';
 if ( isset($_GET['message']) )
 	$_GET['message'] = absint( $_GET['message'] );
-$messages[1] = sprintf(__('Post updated. <a href="%s">View post</a>'), get_permalink($post_ID));
+$messages[1] = sprintf(__('Ticket updated. <a href="%s">View ticket</a>'), get_permalink($post_ID));
 $messages[2] = __('Custom field updated.');
 $messages[3] = __('Custom field deleted.');
-$messages[4] = __('Post updated.');
-$messages[6] = sprintf(__('Post published. <a href="%s">View post</a>'), get_permalink($post_ID));
+$messages[4] = __('Ticket updated.');
+$messages[6] = sprintf(__('Ticket published. <a href="%s">View ticket</a>'), get_permalink($post_ID));
 $messages[7] = __('Post saved.');
-$messages[8] = sprintf(__('Post submitted. <a href="%s">Preview post</a>'), add_query_arg( 'preview', 'true', get_permalink($post_ID) ) );
+$messages[8] = sprintf(__('Ticket submitted. <a href="%s">Preview ticket</a>'), add_query_arg( 'preview', 'true', get_permalink($post_ID) ) );
 
 if ( isset($_GET['revision']) )
-	$messages[5] = sprintf( __('Post restored to revision from %s'), wp_post_revision_title( (int) $_GET['revision'], false ) );
+	$messages[5] = sprintf( __('Ticket restored to revision from %s'), wp_post_revision_title( (int) $_GET['revision'], false ) );
 
 $notice = false;
-$notices[1] = __( 'There is an autosave of this post that is more recent than the version below.  <a href="%s">View the autosave</a>.' );
+$notices[1] = __( 'There is an autosave of this ticket that is more recent than the version below.  <a href="%s">View the autosave</a>.' );
 
 if ( 0 == $post_ID ) {
 	$form_action = 'post';
@@ -245,8 +245,8 @@ if ( !in_array( $post->post_status, array('publish', 'future', 'private') ) || 0
 <?php
 	endif;
 } else { ?>
-		<input name="original_publish" type="hidden" id="original_publish" value="<?php esc_attr_e('Update Post') ?>" />
-		<input name="save" type="submit" class="button-primary" id="publish" tabindex="5" accesskey="p" value="<?php esc_attr_e('Update Post') ?>" />
+		<input name="original_publish" type="hidden" id="original_publish" value="<?php esc_attr_e('Update Ticket') ?>" />
+		<input name="save" type="submit" class="button-primary" id="publish" tabindex="5" accesskey="p" value="<?php esc_attr_e('Update Ticket') ?>" />
 <?php
 } ?>
 </div>

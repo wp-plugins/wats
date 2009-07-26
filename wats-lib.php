@@ -12,7 +12,7 @@ function wats_debug($msg)
 	{
 	    $today = date("d/m/Y H:i:s ");
 	    $myFile = dirname(__file__) . "/debug.log";
-	    $fh = fopen($myFile, 'a') or die("Can't open debug file. Please manually create the 'debug.log' file (inside the 'mynet' directory) and make it writable.");
+	    $fh = fopen($myFile, 'a') or die("Can't open debug file. Please manually create the 'debug.log' file (inside the 'wats' directory) and make it writable.");
 	    $ua_simple = preg_replace("/(.*)\s\(.*/","\\1",$_SERVER['HTTP_USER_AGENT']);
 	    fwrite($fh, $today . " [from: ".$_SERVER['REMOTE_ADDR']."|$ua_simple] - " . $msg . "\n");
 	    fclose($fh);
