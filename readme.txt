@@ -13,14 +13,14 @@ This plugin adds to wordpress the functionnalities of a ticket system. This allo
 Any registered user (with a minimul level access of contributor) can submit tickets. You can also setup a "guest" user that will be shared between visitors so that they don't have to register before submitting tickets.
 
 Examples of use of WATS :
-* technical support system
-* customer relationship management system
-* software release lifecycle management
-* service request system
+- technical support system
+- customer relationship management system
+- software release lifecycle management
+- service request system
 
 Translations :
-* English
-* French
+- English
+- French
 
 == Installation ==
 
