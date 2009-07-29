@@ -295,7 +295,7 @@ function wats_admin_display_options_list($type,$check)
 			echo '<td>'.$key.'</td>';
 			echo '<td';
 			if ($type != 'wats_categories')
-				echo ' class="editable">';
+				echo ' class="wats_editable">';
 			else
 				echo '>';
 			echo htmlspecialchars(stripcslashes($value)).'</td>';

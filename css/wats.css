@@ -9,11 +9,11 @@
         padding-left:20px;
 }
 
-.editable {
+.wats_editable {
 	background: url('../img/modify.png') right center no-repeat;
 }
 
-.editableaccept {
+.wats_editableaccept {
 	background: url('../img/accept.png') right center no-repeat;
 }
 

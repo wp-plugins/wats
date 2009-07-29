@@ -9,22 +9,28 @@ $watsmsg[4] = __('Adding entry','WATS');
 $watsmsg[5] = __('Error : the string contains invalid caracters!','WATS');
 ?>
 jQuery(document).ready(function() {
-	jQuery('.editable').editable(
+	function wats_options_editable_init()
 	{
-		onEdit:wats_options_editable_begin,
-		onSubmit:wats_options_editable_end,
-		submitBy:'click'
-	});
+		jQuery('.wats_editable').editable(
+		{
+			onEdit:wats_options_editable_begin,
+			onSubmit:wats_options_editable_end,
+			submitBy:'click'
+		});
+		
+		return;
+	}
 	
+	wats_options_editable_init();
 	function wats_options_editable_begin()
 	{    
-		jQuery(this).addClass("editableaccept");
+		jQuery(this).addClass("wats_editableaccept");
 		
 	}
 	
 	function wats_options_editable_end(content)
 	{
-		jQuery(this).removeClass("editableaccept");
+		jQuery(this).removeClass("wats_editableaccept");
 		if (content.current != content.previous)
 		{
 			if (wats_js_is_string(content.current) == 1)
@@ -70,8 +76,10 @@ jQuery(document).ready(function() {
 				{
 					var x = jQuery("input[name=typecheck]").length;
 					var liste = [message_result.id,message_result.idvalue];
-					wats_js_add_table_col(document.getElementById("tabletype"),liste,"typecheck",x,message_result.id);
+					var editable = [0,1];
+					wats_js_add_table_col(document.getElementById("tabletype"),liste,"typecheck",x,message_result.id,editable);
 					jQuery("#idtype").val("");
+					wats_options_editable_init();
 				}
 				wats_stop_loading(document.getElementById("resultaddtype"),message_result.error);
 			});
@@ -84,10 +92,10 @@ jQuery(document).ready(function() {
 	jQuery('#idsuptype').click(function() {
 		if (jQuery("input[name=typecheck]").length == 0)
 			wats_stop_loading(document.getElementById("resultsuptype"),"<?php echo $watsmsg[0]; ?>");
-		else if (jQuery("input[name=typecheck][checked]").length == 0)
+		else if (jQuery("input[name=typecheck]:checked").length == 0)
 			wats_stop_loading(document.getElementById("resultsuptype"),"<?php echo $watsmsg[1]; ?>");
 		var type = "wats_types";
-	    jQuery("input[name=typecheck][checked]").each(function()
+	    jQuery("input[name=typecheck]:checked").each(function()
 		{
 		    if (this.checked == true)
 			{
@@ -129,8 +137,10 @@ jQuery(document).ready(function() {
 				{
 					var x = jQuery("input[name=prioritycheck]").length;
 					var liste = [message_result.id,message_result.idvalue];
-					wats_js_add_table_col(document.getElementById("tablepriority"),liste,"prioritycheck",x,message_result.id);
+					var editable = [0,1];
+					wats_js_add_table_col(document.getElementById("tablepriority"),liste,"prioritycheck",x,message_result.id,editable);
 					jQuery("#idpriority").val("");
+					wats_options_editable_init();
 				}
 				wats_stop_loading(document.getElementById("resultaddpriority"),message_result.error);
 			});
@@ -143,10 +153,10 @@ jQuery(document).ready(function() {
 	jQuery('#idsuppriority').click(function() {
 		if (jQuery("input[name=prioritycheck]").length == 0)
 			wats_stop_loading(document.getElementById("resultsuppriority"),"<?php echo $watsmsg[0]; ?>");
-		else if (jQuery("input[name=prioritycheck][checked]").length == 0)
+		else if (jQuery("input[name=prioritycheck]:checked").length == 0)
 			wats_stop_loading(document.getElementById("resultsuppriority"),"<?php echo $watsmsg[1]; ?>");
 		var type = "wats_priorities";
-	    jQuery("input[name=prioritycheck][checked]").each(function()
+	    jQuery("input[name=prioritycheck]:checked").each(function()
 		{
 		    if (this.checked == true)
 			{
@@ -188,8 +198,10 @@ jQuery(document).ready(function() {
 				{
 					var x = jQuery("input[name=statuscheck]").length;
 					var liste = [message_result.id,message_result.idvalue];
-					wats_js_add_table_col(document.getElementById("tablestatus"),liste,"statuscheck",x,message_result.id);
+					var editable = [0,1];
+					wats_js_add_table_col(document.getElementById("tablestatus"),liste,"statuscheck",x,message_result.id,editable);
 					jQuery("#idstatus").val("");
+					wats_options_editable_init();
 				}
 				wats_stop_loading(document.getElementById("resultaddstatus"),message_result.error);
 			});
@@ -202,10 +214,10 @@ jQuery(document).ready(function() {
 	jQuery('#idsupstatus').click(function() {
 		if (jQuery("input[name=statuscheck]").length == 0)
 			wats_stop_loading(document.getElementById("resultsupstatus"),"<?php echo $watsmsg[0]; ?>");
-		else if (jQuery("input[name=statuscheck][checked]").length == 0)
+		else if (jQuery("input[name=statuscheck]:checked").length == 0)
 			wats_stop_loading(document.getElementById("resultsupstatus"),"<?php echo $watsmsg[1]; ?>");
 		var type = "wats_statuses";
-	    jQuery("input[name=statuscheck][checked]").each(function()
+	    jQuery("input[name=statuscheck]:checked").each(function()
 		{
 		    if (this.checked == true)
 			{
@@ -242,7 +254,8 @@ jQuery(document).ready(function() {
 			{
 				var x = jQuery("input[name=catcheck]").length;
 				var liste = [message_result.id,message_result.idvalue];
-				wats_js_add_table_col(document.getElementById("tablecat"),liste,"catcheck",x,message_result.id);
+				var editable = [0,1];
+				wats_js_add_table_col(document.getElementById("tablecat"),liste,"catcheck",x,message_result.id,editable);
 			}
 			wats_stop_loading(document.getElementById("resultaddcat"),message_result.error);
 		});
@@ -253,10 +266,10 @@ jQuery(document).ready(function() {
 	jQuery('#idsupcat').click(function() {
 		if (jQuery("input[name=catcheck]").length == 0)
 			wats_stop_loading(document.getElementById("resultsupcat"),"<?php echo $watsmsg[0]; ?>");
-		else if (jQuery("input[name=catcheck][checked]").length == 0)
+		else if (jQuery("input[name=catcheck]:checked").length == 0)
 			wats_stop_loading(document.getElementById("resultsupcat"),"<?php echo $watsmsg[1]; ?>");
 		var type = "wats_categories";
-	    jQuery("input[name=catcheck][checked]").each(function()
+	    jQuery("input[name=catcheck]:checked").each(function()
 		{
 		    if (this.checked == true)
 			{

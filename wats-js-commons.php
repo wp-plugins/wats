@@ -40,7 +40,7 @@ function wats_js_add_check_input(tr,checkid,checkvalue)
 	return;
 }
 
-function wats_js_add_table_col(table,liste,checkid,x,checkvalue)
+function wats_js_add_table_col(table,liste,checkid,x,checkvalue,editable)
 {
 	if (x == 0)
 		table.deleteRow(table.rows.length-1);
@@ -51,6 +51,8 @@ function wats_js_add_table_col(table,liste,checkid,x,checkvalue)
 	{
 		c = tr.insertCell(-1);
 		c.appendChild(document.createTextNode(liste[i]));
+		if (editable[i] == 1)
+			c.className = 'wats_editable';
 	}
 	c = tr.insertCell(-1);
 	input = document.createElement('input');

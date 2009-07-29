@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.2
-Stable tag: 1.0.9
+Stable tag: 1.0.10
 
 == Description ==
 
@@ -13,17 +13,14 @@ This plugin adds to wordpress the functionnalities of a ticket system. This allo
 Any registered user (with a minimul level access of contributor) can submit tickets. You can also setup a "guest" user that will be shared between visitors so that they don't have to register before submitting tickets.
 
 Examples of use of WATS :
-
 * technical support system
 * customer relationship management system
 * software release lifecycle management
 * service request system
 
 Translations :
-
 * English
 * French
-
 
 == Installation ==
 
@@ -44,6 +41,10 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.10 (29/07/2009) =
+* fixed jQuery checked selector issue on Firefox
+* improved editable support on the options page
 
 = V1.0.9 (23/07/2009) =
 * modified readme file structure to support WP repository changelog feature
