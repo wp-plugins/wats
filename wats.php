@@ -1,15 +1,17 @@
 <?php
 /*
 Plugin Name: Wats
-Plugin URI: http://www.lautre-monde.fr/wats/
+Plugin URI: http://www.lautre-monde.fr/wats-going-on/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0.11
+Version: 1.0.12
 Author URI: http://www.lautre-monde.fr
 */
 
 /*
 1/ Release history :
+- V1.0.12 (18/08/2009) :
++ added an option to filter ticket visibility on frontend based on user privileges
 - V1.0.11 (12/08/2009) :
 + fixed few translations items
 - V1.0.10 (29/07/2009) :
@@ -90,12 +92,14 @@ define('WATS_URL',get_option('siteurl').'/wp-content/plugins/'.basename(dirname(
 define('WATS_PATH',ABSPATH.'wp-content/plugins/'.basename(dirname(__FILE__)).'/');
 define('WATS_SHORT_PATH','/wp-content/plugins/'.basename(dirname(__FILE__)).'/');
 define('WATS_THEME_PATH',WATS_PATH.'theme');
-define('WATS_BACKLINK','http://www.lautre-monde.fr');
+define('WATS_BACKLINK','http://www.lautre-monde.fr/wats-going-on/');
+define('WATS_BACKLINK2','http://www.lautre-monde.fr');
 define('WATS_ANCHOR','Wordpress Advanced Ticket System');
+define('WATS_ANCHOR2',"l'autre monde");
 define("WATS_TICKET_LIST_REGEXP", "/\[WATS_TICKET_LIST ([[:print:]]+)\]/");
 
 $wats_settings = array();
-$wats_version = '1.0.11';
+$wats_version = '1.0.12';
 
 $wats_default_ticket_priority = array(1 => "Emergency", 2 => "Critical", 3 => "Major", 4 => "Minor");
 $wats_default_ticket_status = array(1 => "Newly open", 2 => "Under investigation", 3 => "Waiting for reoccurence", 4 => "Waiting for details", 5 => "Solution delivered", 6 => "Closed");
@@ -168,6 +172,8 @@ add_action('save_post','wats_ticket_save_meta');
 add_action('pre_get_posts','wats_parse_query');
 add_action('template_redirect','wats_template_redirect');
 add_action('comment_post','wats_comment_update_meta');
+add_action('wp_footer','wats_wp_footer');
+
 add_filter('taxonomy_template', 'wats_taxomony_template');
 add_filter('comments_template', 'wats_comments_template');
 add_filter('the_title','wats_title_insert_ticket_number');

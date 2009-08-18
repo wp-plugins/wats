@@ -29,17 +29,25 @@ function wats_load_settings()
 		$default['wats_version'] = $wats_version;
 		$default['wats_guest_user'] = -1;
 		$default['wats_home_display'] = 1;
+		$default['visibility'] = 0;
    	    add_option('wats', $default);
 	}
         
     $wats_settings = get_option('wats');
-	
+
+	// Mise à jour des options après installation d'une nouvelle version
 	if ($wats_settings['wats_version'] != $wats_version)
 	{
-		if ($wats_version == '1.0')
+		if (!isset($wats_settings['wats_home_display']))
 		{
 			$wats_settings['wats_home_display'] = 1;
 		}
+
+		if (!isset($wats_settings['visibility']))
+		{
+			$wats_settings['visibility'] = 0;
+		}
+
 		$wats_settings['wats_version'] = $wats_version;
 		update_option('wats', $wats_settings);
 	}
@@ -354,6 +362,7 @@ function wats_options_admin_menu()
 		check_admin_referer('update-wats-options');
 		$wats_settings['wats_version'] = $wats_version;
 		$wats_settings['numerotation'] = $_POST['group1'];
+		$wats_settings['visibility'] = $_POST['group2'];
 		$wats_settings['wats_guest_user'] = $_POST['guestlist'];
 		$wats_settings['wats_home_display'] = isset($_POST['homedisplay']) ? 1 : 0;
 		update_option('wats', $wats_settings);
@@ -389,6 +398,17 @@ function wats_options_admin_menu()
 		echo ' checked';
 	echo '> '.__('Include tickets on homepage together with posts','WATS').'</td></tr></table><br />';
 
+	echo '<h3>'.__('Tickets visibility','WATS').' :</h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="radio" name="group2" value="0" ';
+	echo ($wats_settings['visibility'] == 0) ? 'checked' : '';
+	echo '>'.__('Everybody can see all tickets','WATS').' </td></tr>';
+	echo '<tr><td><input type="radio" name="group2" value="1" ';
+	echo ($wats_settings['visibility'] == 1) ? 'checked' : '';
+	echo '>'.__('Only registered users can see tickets','WATS').'</td></tr>';
+	echo '<tr><td><input type="radio" name="group2" value="2" ';
+	echo ($wats_settings['visibility'] == 2) ? 'checked' : '';
+	echo '>'.__('Only ticket creator and admins can see tickets','WATS').'</td></tr></table>';
 	
 	echo '<h3>'.__('Guest user','WATS').' : ';
 	echo '<td><select name="guestlist" id="guestlist" size="1">';

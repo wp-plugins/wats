@@ -1,10 +1,10 @@
 === Wordpress Advanced Ticket System ===
 Contributors: Olivier
-Donate link: http://www.lautre-monde.fr
+Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.4
-Stable tag: 1.0.11
+Stable tag: 1.0.12
 
 == Description ==
 
@@ -47,6 +47,9 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.12 (18/08/2009) =
+* added an option to filter ticket visibility on frontend based on user privileges
 
 = V1.0.11 (12/08/2009) =
 * fixed few translations items

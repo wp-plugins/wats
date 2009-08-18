@@ -1,7 +1,12 @@
 ﻿<?php get_header(); ?>
 
 <div id="content" class="widecolumn">
-	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+	<?php 
+	if (have_posts()) : while (have_posts()) : the_post(); 
+	
+	if (wats_check_visibility_rights())
+	{
+	?>
 	
 		<div class="navigation">
 			<div class="alignleft"><?php previous_post_link('&laquo; %link') ?></div>
@@ -42,8 +47,15 @@
 				</p>
 			</div>
 		</div>
-		<?php comments_template(); ?>
-	
+	<?php 
+		comments_template(); 
+	}
+	else
+	{
+		echo '<p>'.__('Sorry, you don\'t have the rights to browse this ticket.', 'WATS').'</p>';
+	}
+	?>
+
 	<?php endwhile; else: ?>
 	
 		<p><?php _e('Sorry, no tickets matched your criteria.', 'WATS'); ?></p>

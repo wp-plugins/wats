@@ -1,5 +1,19 @@
 <?php
 
+function wats_check_visibility_rights()
+{
+	global $wats_settings, $current_user, $post;
+	
+	if ($wats_settings['visibility'] == 0)
+		return true;
+	else if ($wats_settings['visibility'] == 1 && is_user_logged_in())
+		return true;
+	else if ($wats_settings['visibility'] == 2 && is_user_logged_in() && ($current_user->user_level == 10 || $current_user->ID == $post->post_author))
+		return true;
+		
+	return false;
+}
+
 /********************************************************************************/
 /*                                                                              */
 /* Fonction de filtrage sur le contenu pour l'affichage de la table des tickets */
@@ -11,22 +25,30 @@ function wats_list_tickets_filter($content)
     return (preg_replace_callback(WATS_TICKET_LIST_REGEXP, 'wats_list_tickets', $content));
 }
 
-/************************************************/
-/*                                              */
-/* Fonction d'affichage du listing des tickets  */
-/* Argument 1 : catégorie (0 : all, 1 : current */
-/*                                              */
-/************************************************/
+/*************************************************/
+/*                                               */
+/* Fonction d'affichage du listing des tickets   */
+/* Argument 1 : catégorie (0 : all, 1 : current) */
+/*                                               */
+/*************************************************/
 
 function wats_list_tickets($args)
 {
-	global $wpdb, $wats_settings;
+	global $wpdb, $wats_settings, $current_user;
 	
 	$args = explode(" ", rtrim($args[0], "]"));
 	$filtercategory = $args[1];
 	if ($filtercategory == 0)
 	{
-		$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'"));
+
+		if ($wats_settings['visibility'] == 0)
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'"));
+		else if ($wats_settings['visibility'] == 1 && is_user_logged_in())
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'"));
+		else if ($wats_settings['visibility'] == 2 && is_user_logged_in() && $current_user->user_level == 10)
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'"));
+		else if ($wats_settings['visibility'] == 2 && is_user_logged_in())
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_author = $current_user->ID AND $wpdb->posts.post_status = 'publish'"));
 	}
 	else if ($filtercategory == 1)
 	{
@@ -37,7 +59,14 @@ function wats_list_tickets($args)
 			$catlist[] = $cat->cat_ID;
 		}
 		$catlist = implode(',',$catlist);
-		$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)"));
+		if ($wats_settings['visibility'] == 0)
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)"));
+		else if ($wats_settings['visibility'] == 1 && is_user_logged_in())
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)"));
+		else if ($wats_settings['visibility'] == 2 && is_user_logged_in() && $current_user->user_level == 10)
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)"));
+		else if ($wats_settings['visibility'] == 2 && is_user_logged_in())
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_author = $current_user->ID AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)"));
 	}
 
 	$output = '<table class="wats_table" cellspacing="0" id="tableticket" style="text-align:center;"><thead><tr class="thead">';
@@ -53,6 +82,7 @@ function wats_list_tickets($args)
 	$output .= '</tr></thead><tbody>';
    
     $alt = false;
+	if ($tickets)
 	foreach ($tickets as $ticket)
 	{
 		$x = 1;
@@ -144,7 +174,7 @@ function wats_parse_query()
 
 function wats_wp_footer()
 {
-	echo '<div style="text-align:center;">'.__('Page generated by ').'<a href="'.WATS_BACKLINK.'">'.WATS_ANCHOR.'</a></div>';
+	echo '<div style="text-align:center;"><a href="'.WATS_BACKLINK.'">'.WATS_ANCHOR.'</a> is powered by <a href="'.WATS_BACKLINK2.'">'.WATS_ANCHOR2.'</a></div>';
 	
 	return;
 }
@@ -163,7 +193,6 @@ function wats_taxomony_template($template)
 	{
 		if (file_exists(TEMPLATEPATH.'single-ticket.php')) $template = TEMPLATEPATH.'/single-ticket.php';
 		else $template = WATS_THEME_PATH.'/single-ticket.php';
-		add_action('wp_footer','wats_wp_footer');
 	}
 	
 	return($template);
@@ -177,10 +206,19 @@ function wats_taxomony_template($template)
 
 function wats_posts_where($where)
 {
-	global $wpdb, $wats_settings;
+	global $wpdb, $wats_settings, $current_user;
 	
 	if (((!is_home()) || ($wats_settings['wats_home_display'] == 1)) && (!is_admin()) && ($wp_query->is_page == false))
-		$where = str_replace($wpdb->posts.".post_type = 'post' AND","(".$wpdb->posts.".post_type = 'post' OR ".$wpdb->posts.".post_type = 'ticket') AND", $where);
+	{
+		if ($wats_settings['visibility'] == 0)
+			$where = str_replace($wpdb->posts.".post_type = 'post' AND","(".$wpdb->posts.".post_type = 'post' OR ".$wpdb->posts.".post_type = 'ticket') AND", $where);
+		else if ($wats_settings['visibility'] == 1 && is_user_logged_in())
+			$where = str_replace($wpdb->posts.".post_type = 'post' AND","(".$wpdb->posts.".post_type = 'post' OR ".$wpdb->posts.".post_type = 'ticket') AND", $where);
+		else if ($wats_settings['visibility'] == 2 && is_user_logged_in() && $current_user->user_level == 10)
+			$where = str_replace($wpdb->posts.".post_type = 'post' AND","(".$wpdb->posts.".post_type = 'post' OR ".$wpdb->posts.".post_type = 'ticket') AND", $where);
+		else if ($wats_settings['visibility'] == 2 && is_user_logged_in())
+			$where = str_replace($wpdb->posts.".post_type = 'post' AND","(".$wpdb->posts.".post_type = 'post' OR (".$wpdb->posts.".post_type = 'ticket' AND ".$wpdb->posts.".post_author = ".$current_user->ID.")) AND", $where);
+	}
 
 	return($where);
 }
@@ -250,7 +288,7 @@ function wats_template_redirect()
 
 function wats_register_taxonomy()
 {
-  register_taxonomy( 'category', 'ticket', array('hierarchical' => true, 'update_count_callback' => 'wats_update_ticket_term_count', 'label' => __('Categories'), 'query_var' => false, 'rewrite' => false) ) ;
+	register_taxonomy( 'category', 'ticket', array('hierarchical' => true, 'update_count_callback' => 'wats_update_ticket_term_count', 'label' => __('Categories'), 'query_var' => false, 'rewrite' => false) ) ;
 }
 
 /*********************************************************/
@@ -298,7 +336,17 @@ function wats_title_insert_ticket_number($title)
 
 function wats_ticket_get_previous_next_post_where($where)
 {
-	$where = str_replace( " AND p.post_type = 'post'", " AND (p.post_type = 'post' OR p.post_type = 'ticket')", $where);
+	global $wats_settings, $current_user;
+	
+	if ($wats_settings['visibility'] == 0)
+		$where = str_replace( " AND p.post_type = 'post'", " AND (p.post_type = 'post' OR p.post_type = 'ticket')", $where);
+	else if ($wats_settings['visibility'] == 1 && is_user_logged_in())
+		$where = str_replace( " AND p.post_type = 'post'", " AND (p.post_type = 'post' OR p.post_type = 'ticket')", $where);
+	else if ($wats_settings['visibility'] == 2 && is_user_logged_in() && $current_user->user_level == 10)
+		$where = str_replace( " AND p.post_type = 'post'", " AND (p.post_type = 'post' OR p.post_type = 'ticket')", $where);
+	else if ($wats_settings['visibility'] == 2 && is_user_logged_in())
+		$where = str_replace( " AND p.post_type = 'post'", " AND (p.post_type = 'post' OR (p.post_type = 'ticket' AND p.post_author = ".$current_user->ID."))", $where);
+
 	return ($where);
 }
 
@@ -324,6 +372,7 @@ function wats_list_terms_exclusions($args)
 		$catlist = implode(',',$catlist);
 		$where = " AND t.term_id IN ($catlist)";
 	}
+	
 	return $where;
 }
 
