@@ -1,6 +1,6 @@
 ﻿<?php get_header(); ?>
 
-<div id="content" class="widecolumn">
+<div id="content" class="narrowcolumn">
 	<?php 
 	if (have_posts()) : while (have_posts()) : the_post(); 
 	
@@ -57,10 +57,8 @@
 	?>
 
 	<?php endwhile; else: ?>
-	
 		<p><?php _e('Sorry, no tickets matched your criteria.', 'WATS'); ?></p>
-		
 	<?php endif; ?>
 </div>
 
-<?php get_footer(); ?>
+<?php get_sidebar(); get_footer(); ?>
