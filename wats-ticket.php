@@ -56,7 +56,7 @@ if ( isset( $_POST['deletepost'] ) )
 	$action = 'delete';
 elseif ( isset($_POST['wp-preview']) && 'dopreview' == $_POST['wp-preview'] )
 	$action = 'preview';
-
+add_action('save_post','wats_ticket_save_meta');
 switch($action) {
 case 'postajaxpost':
 case 'post':
@@ -88,7 +88,7 @@ case 'post-quickpress-save':
 	}
 
 	redirect_ticket($post_ID);
-		
+
 	exit();
 	break;
 
@@ -158,7 +158,7 @@ case 'editpost':
 	$post_ID = edit_post();
 
 	redirect_ticket($post_ID); // Send user on their way while we keep working
-
+	
 	exit();
 	break;
 

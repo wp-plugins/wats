@@ -72,7 +72,7 @@ function wats_comment_update_meta($comment_id)
 
 function wats_ticket_save_meta($postID)
 {
-	
+
 	if (!update_post_meta($postID, 'wats_ticket_status', $_POST['wats_select_ticket_status']))
 		add_post_meta($postID, 'wats_ticket_status', $_POST['wats_select_ticket_status']);
 		

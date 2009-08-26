@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.4
-Stable tag: 1.0.13
+Stable tag: 1.0.14
 
 == Description ==
 
@@ -47,6 +47,9 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.14 (26/08/2009) =
+* fixed a bug where ticket metas would be generated for all post types (post, page and ticket) instead of only ticket
 
 = V1.0.13 (24/08/2009) =
 * modified single ticket template to include sidebar
