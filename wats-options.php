@@ -30,6 +30,8 @@ function wats_load_settings()
 		$default['wats_guest_user'] = -1;
 		$default['wats_home_display'] = 1;
 		$default['visibility'] = 0;
+		$default['ticket_assign'] = 0;
+		$default['ticket_assign_level'] = 0;
    	    add_option('wats', $default);
 	}
         
