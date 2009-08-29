@@ -4,13 +4,13 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.4
-Stable tag: 1.0.14
+Stable tag: 1.0.15
 
 == Description ==
 
 This plugin adds to wordpress the functionnalities of a ticket system. This allows users to submit tickets to report problems or get support on whatever you want. You can customize the status, priority and type of the ticket.
 
-Any registered user (with a minimul level access of contributor) can submit tickets. You can also setup a "guest" user that will be shared between visitors so that they don't have to register before submitting tickets.
+Any registered user (with a minimum level access of contributor) can submit tickets. You can also setup a "guest" user that will be shared between visitors so that they don't have to register before submitting tickets.
 
 
 Examples of use of WATS :
@@ -47,6 +47,9 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.15 (29/08/2009) =
+* added ticket ownership feature. Tickets can now be assigned to users in the frontend and the backend.
 
 = V1.0.14 (26/08/2009) =
 * fixed a bug where ticket metas would be generated for all post types (post, page and ticket) instead of only ticket

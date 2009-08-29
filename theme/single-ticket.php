@@ -18,6 +18,7 @@
 			<?php echo __("Current priority : ",'WATS'). wats_ticket_get_priority($post)."<br />"; ?>
 			<?php echo __("Current status : ",'WATS'). wats_ticket_get_status($post)."<br />"; ?>
 			<?php echo __("Ticket type : ",'WATS'). wats_ticket_get_type($post)."<br />"; ?>
+			<?php wats_ticket_get_owner($post); ?>
 			<div class="entry">
 				<?php the_content('<p class="serif">Read the rest of the ticket &raquo;</p>'); ?>
 				<?php wp_link_pages(array('before' => '<p><strong>Pages:</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>

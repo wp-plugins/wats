@@ -75,6 +75,7 @@ function wats_list_tickets($args)
 	$output .= '<th scope="col" style="text-align:center;">'.__('Title','WATS').'</th>';
 	$output .= '<th scope="col" style="text-align:center;">'.__('Category','WATS').'</th>';
 	$output .= '<th scope="col" style="text-align:center;">'.__('Author','WATS').'</th>';
+	$output .= '<th scope="col" style="text-align:center;">'.__('Owner','WATS').'</th>';
 	$output .= '<th scope="col" style="text-align:center;">'.__('Creation date','WATS').'</th>';
 	$output .= '<th scope="col" style="text-align:center;">'.__('Type','WATS').'</th>';
 	$output .= '<th scope="col" style="text-align:center;">'.__('Priority','WATS').'</th>';
@@ -109,6 +110,11 @@ function wats_list_tickets($args)
 		}
 		
 		$output .= '<td>'.get_the_author_meta('nickname',$ticket->post_author).'</td>';
+		$ticket_owner = get_post_meta($ticket->ID,'wats_ticket_owner',true);
+		if ($ticket_owner)
+			$output .= '<td>'.get_post_meta($ticket->ID,'wats_ticket_owner',true).'</td>';
+		else
+			$output .= '<td>'.__('None','WATS').'</td>';
 		$output .= '<td>'.get_post_time(get_option('date_format'),false,$ticket,true).'</td>';
 		$output .= '<td>'.wats_ticket_get_type($ticket).'</td>';
 		$output .= '<td>'.wats_ticket_get_priority($ticket).'</td>';

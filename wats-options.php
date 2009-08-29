@@ -48,6 +48,16 @@ function wats_load_settings()
 			$wats_settings['visibility'] = 0;
 		}
 
+		if (!isset($wats_settings['ticket_assign']))
+		{
+			$wats_settings['ticket_assign'] = 0;
+		}
+
+		if (!isset($wats_settings['ticket_assign_level']))
+		{
+			$wats_settings['ticket_assign_level'] = 0;
+		}
+		
 		$wats_settings['wats_version'] = $wats_version;
 		update_option('wats', $wats_settings);
 	}
@@ -329,7 +339,7 @@ function wats_admin_display_options_list($type,$check)
 /*                                                       */
 /*********************************************************/
 
-function wats_build_user_list()
+function wats_build_user_list($min_level)
 {
     global $wpdb;
 
@@ -340,7 +350,7 @@ function wats_build_user_list()
     foreach ($users AS $user)
     {
 		$user = new WP_user($user->ID);
-		if ($user->user_level > 0)
+		if ($user->user_level >= $min_level)
 			$userlist[] = $user->user_login;
 	}
         
@@ -363,6 +373,8 @@ function wats_options_admin_menu()
 		$wats_settings['wats_version'] = $wats_version;
 		$wats_settings['numerotation'] = $_POST['group1'];
 		$wats_settings['visibility'] = $_POST['group2'];
+		$wats_settings['ticket_assign'] = $_POST['group3'];
+		$wats_settings['ticket_assign_level'] = $_POST['ticket_assign_level'];
 		$wats_settings['wats_guest_user'] = $_POST['guestlist'];
 		$wats_settings['wats_home_display'] = isset($_POST['homedisplay']) ? 1 : 0;
 		update_option('wats', $wats_settings);
@@ -410,9 +422,33 @@ function wats_options_admin_menu()
 	echo ($wats_settings['visibility'] == 2) ? 'checked' : '';
 	echo '>'.__('Only ticket creator and admins can see tickets','WATS').'</td></tr></table>';
 	
+	echo '<h3>'.__('Tickets assignment','WATS').' :</h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="radio" name="group3" value="0" ';
+	echo ($wats_settings['ticket_assign'] == 0) ? 'checked' : '';
+	echo '>'.__('No assignment possible','WATS').' </td></tr>';
+	echo '<tr><td><input type="radio" name="group3" value="1" ';
+	echo ($wats_settings['ticket_assign'] == 1) ? 'checked' : '';
+	echo '>'.__('Everybody can assign a ticket','WATS').'</td></tr>';
+	echo '<tr><td><input type="radio" name="group3" value="2" ';
+	echo ($wats_settings['ticket_assign'] == 2) ? 'checked' : '';
+	echo '>'.__('Only registered users can assign a ticket','WATS').'</td></tr></table>';
+
+	echo '<h3>'.__('Ticket assignment capability minimum level requirement','WATS').' : ';
+	echo '<td><select name="ticket_assign_level" id="ticket_assign_level" size="1">';
+	for ($i = 0; $i != 11; $i++)
+	{
+        echo '<option value="'.$i.'" ';
+        if ($i == $wats_settings['ticket_assign_level']) echo 'selected';
+			echo '>'.$i.'</option>';
+	}
+	echo '</select></td></tr>';
+	echo '</h3><br />';
+
+	
 	echo '<h3>'.__('Guest user','WATS').' : ';
 	echo '<td><select name="guestlist" id="guestlist" size="1">';
-	$userlist = wats_build_user_list();
+	$userlist = wats_build_user_list(1);
 	for ($i = 0; $userlist[$i] != false; $i++)
 	{
         echo '<option value="'.$userlist[$i].'" ';
