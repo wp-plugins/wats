@@ -22,54 +22,147 @@ function wats_check_visibility_rights()
 
 function wats_list_tickets_filter($content)
 {
-    return (preg_replace_callback(WATS_TICKET_LIST_REGEXP, 'wats_list_tickets', $content));
+    return (preg_replace_callback(WATS_TICKET_LIST_REGEXP, 'wats_list_tickets_args', $content));
+}
+
+function wats_list_tickets_args($args)
+{
+	global $wpdb;
+	
+	$args = explode(" ", rtrim($args[0], "]"));
+	
+	$cats = get_the_category();
+	foreach ($cats as $cat)
+	{
+		$catlist[] = $cat->cat_ID;
+	}
+	$catlist = implode(',',$catlist);
+	
+	return (wats_list_tickets($args[1],$catlist,0,0,0,0,0));
+}
+
+function wats_list_tickets_filters()
+{
+	global $wats_settings;
+	
+	$wats_ticket_priority = $wats_settings['wats_priorities'];
+	$wats_ticket_type = $wats_settings['wats_types'];
+	$wats_ticket_status = $wats_settings['wats_statuses'];
+	
+	$output = '<form action="" method="post">';
+	wp_nonce_field('filter-wats-tickets-list');
+	
+	$output .= '<p align="left">'.__('Ticket type','WATS').' : ';
+	$output .= '<select name="wats_select_ticket_type" id="wats_select_ticket_type">';
+	$output .= '<option value="0">'.__('Any','WATS').'</option>';
+	foreach ($wats_ticket_type as $key => $value)
+		$output .= '<option value='.$key.'>'.__($value,'WATS').'</option>';
+	$output .= '</select><br /><br />';
+	
+	$output .= __('Ticket priority','WATS').' : ';
+	$output .= '<select name="wats_select_ticket_priority" id="wats_select_ticket_priority">';
+	$output .= '<option value="0">'.__('Any','WATS').'</option>';
+	foreach ($wats_ticket_priority as $key => $value)
+		$output .= '<option value='.$key.'>'.__($value,'WATS').'</option>';
+	$output .= '</select><br /><br />';
+	
+	$output .=  __('Ticket status','WATS').' : ';
+	$output .= '<select name="wats_select_ticket_status" id="wats_select_ticket_status">';
+	$output .= '<option value="0">'.__('Any','WATS').'</option>';
+	foreach ($wats_ticket_status as $key => $value)
+		$output .= '<option value='.$key.'>'.__($value,'WATS').'</option>';
+	$output .= '</select><br /><br />';
+	
+	$output .= __('Ticket owner','WATS').' : ';
+	$userlist = wats_build_user_list(0,__('Any','WATS'));
+	$output .= '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner">';
+	for ($i = 0; $userlist[$i] != false; $i++)
+		$output .= '<option value="'.$userlist[$i].'">'.$userlist[$i].'</option>';
+	$output .= '</select><br /></p>';
+	
+	$output .= '<p class="submit">';
+	$output .= '<input class="button-primary" type="submit" id="filter" name="filter" value="'.__('Filter','WATS').'" /></p></form>';
+	
+	return($output);
 }
 
 /*************************************************/
 /*                                               */
 /* Fonction d'affichage du listing des tickets   */
-/* Argument 1 : catégorie (0 : all, 1 : current) */
+/* Argument 1 : filtre catégorie (0 : all, 1 : current) */
 /*                                               */
 /*************************************************/
 
-function wats_list_tickets($args)
+function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriority, $idstatus, $idowner)
 {
 	global $wpdb, $wats_settings, $current_user;
-	
-	$args = explode(" ", rtrim($args[0], "]"));
-	$filtercategory = $args[1];
+
+	wats_load_settings();
+
+	$joinoptions = 0;
+	$leftjoin = "";
+	$where = "";
+	if ($view == 1)
+	{
+		if ($idtype > 0)
+		{
+			$leftjoin = " LEFT JOIN $wpdb->postmeta AS wp1 ON $wpdb->posts.ID = wp1.post_id ";
+			$where = " AND (wp1.meta_key = 'wats_ticket_type' AND wp1.meta_value = '$idtype')";
+			$joinoptions = 1;
+		}
+		if ($idpriority > 0)
+		{
+			$leftjoin .= " LEFT JOIN $wpdb->postmeta AS wp2 ON $wpdb->posts.ID = wp2.post_id ";
+			$where .= " AND (wp2.meta_key = 'wats_ticket_priority' AND wp2.meta_value = '$idpriority')";
+			$joinoptions = 1;
+		}
+		if ($idstatus > 0)
+		{
+			$leftjoin .= " LEFT JOIN $wpdb->postmeta AS wp3 ON $wpdb->posts.ID = wp3.post_id ";
+			$where .= " AND (wp3.meta_key = 'wats_ticket_status' AND wp3.meta_value = '$idstatus')";
+			$joinoptions = 1;
+		}
+		if ($idowner != __('Any','WATS'))
+		{
+			$leftjoin .= " LEFT JOIN $wpdb->postmeta AS wp4 ON $wpdb->posts.ID = wp4.post_id ";
+			$where .= " AND (wp4.meta_key = 'wats_ticket_owner' AND wp4.meta_value = '$idowner')";
+			$joinoptions = 1;
+		}
+	}
+
 	if ($filtercategory == 0)
 	{
-
 		if ($wats_settings['visibility'] == 0)
-			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'"));
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts ".$leftjoin." WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'".$where));
 		else if ($wats_settings['visibility'] == 1 && is_user_logged_in())
-			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'"));
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts ".$leftjoin." WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'".$where));
 		else if ($wats_settings['visibility'] == 2 && is_user_logged_in() && $current_user->user_level == 10)
-			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'"));
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts ".$leftjoin." WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'".$where));
 		else if ($wats_settings['visibility'] == 2 && is_user_logged_in())
-			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_author = $current_user->ID AND $wpdb->posts.post_status = 'publish'"));
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts ".$leftjoin." WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_author = $current_user->ID AND $wpdb->posts.post_status = 'publish'".$where));
 	}
 	else if ($filtercategory == 1)
 	{
-		$catlist = array();
-		$cats = get_the_category();
-		foreach ($cats as $cat)
-		{
-			$catlist[] = $cat->cat_ID;
-		}
-		$catlist = implode(',',$catlist);
 		if ($wats_settings['visibility'] == 0)
-			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)"));
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id ".$leftjoin." WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)".$where));
 		else if ($wats_settings['visibility'] == 1 && is_user_logged_in())
-			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)"));
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id ".$leftjoin." WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)".$where));
 		else if ($wats_settings['visibility'] == 2 && is_user_logged_in() && $current_user->user_level == 10)
-			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)"));
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id ".$leftjoin." WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)".$where));
 		else if ($wats_settings['visibility'] == 2 && is_user_logged_in())
-			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_author = $current_user->ID AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)"));
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id ".$leftjoin." WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_author = $current_user->ID AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)".$where));
+	}
+	
+	$output = "";
+	if ($view == 0)
+	{
+		$output .= wats_list_tickets_filters();
+		$output .= '<input class="button-primary" type="hidden" id="categoryfilter" name="categoryfilter" value="'.$filtercategory.'" />';
+		$output .= '<input class="button-primary" type="hidden" id="categorylistfilter" name="categorylistfilter" value="'.$catlist.'" />';
+		$output .= '<div id="resultticketlist">';
 	}
 
-	$output = '<table class="wats_table" cellspacing="0" id="tableticket" style="text-align:center;"><thead><tr class="thead">';
+	$output .= '<table class="wats_table" cellspacing="0" id="tableticket" style="text-align:center;"><thead><tr class="thead">';
 	if (($wats_settings['numerotation'] == 1) || ($wats_settings['numerotation'] == 2))
 		$output .= '<th scope="col" style="text-align:center;">ID</th>';
 	$output .= '<th scope="col" style="text-align:center;">'.__('Title','WATS').'</th>';
@@ -124,10 +217,13 @@ function wats_list_tickets($args)
 	}
 	if ($x == 0)
 	{
-		$output .= '<tr valign="middle"><td colspan="8" style="text-align:center">'.__('No entry','WATS').'</td></tr>';
+		$output .= '<tr valign="middle"><td colspan="9" style="text-align:center">'.__('No entry','WATS').'</td></tr>';
 	}
 	$output .= '</tbody></table><br />';
 
+	if ($view == 0)
+		$output .= '</div>';
+	
 	return($output);
 }
 

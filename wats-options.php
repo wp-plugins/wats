@@ -341,13 +341,13 @@ function wats_admin_display_options_list($type,$check)
 /*                                                       */
 /*********************************************************/
 
-function wats_build_user_list($min_level)
+function wats_build_user_list($min_level,$firstitem)
 {
     global $wpdb;
 
     $users = $wpdb->get_results("SELECT ID FROM `{$wpdb->prefix}users`");
     $userlist = array();
-	$userlist[] = __("None",'WATS');
+	$userlist[] = $firstitem;
 
     foreach ($users AS $user)
     {
@@ -450,7 +450,7 @@ function wats_options_admin_menu()
 	
 	echo '<h3>'.__('Guest user','WATS').' : ';
 	echo '<td><select name="guestlist" id="guestlist" size="1">';
-	$userlist = wats_build_user_list(1);
+	$userlist = wats_build_user_list(1,__("None",'WATS'));
 	for ($i = 0; $userlist[$i] != false; $i++)
 	{
         echo '<option value="'.$userlist[$i].'" ';

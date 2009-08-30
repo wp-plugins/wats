@@ -224,7 +224,7 @@ function wats_ticket_details_meta_box($post)
 	if ($wats_ticket_assign == 1 || ($wats_ticket_assign == 2 && $wats_ticket_assign_level <= $current_user->user_level))
 	{
 		echo __('Ticket owner','WATS').' : ';
-		$userlist = wats_build_user_list(0);
+		$userlist = wats_build_user_list(0,__("None",'WATS'));
 		echo '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner">';
 		for ($i = 0; $userlist[$i] != false; $i++)
 		{

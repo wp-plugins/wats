@@ -12,6 +12,23 @@ function wats_admin_head()
 	return;
 }
 
+/*****************************************/
+/*                                       */
+/* Fonction d'accroche dans le frontend head */
+/*                                       */
+/*****************************************/
+
+function wats_enqueue_script_frontend()
+{
+	wp_enqueue_script('jquery');
+	$ajaxfileloc = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) . '/wats-js-commons.php';
+    wp_enqueue_script('wats-js-commons', $ajaxfileloc);
+	$ajaxfileloc = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) .'/wats-ticket-list-ajax.php';
+	wp_enqueue_script('wats-ticket-list',$ajaxfileloc);
+		
+	return;
+}
+
 /*********************************/
 /*                               */
 /* Fonction de chargement du css */

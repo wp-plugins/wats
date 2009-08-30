@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WATS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-29 10:57+0100\n"
+"POT-Creation-Date: 2009-08-30 17:51+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -262,7 +262,7 @@ msgid "Parent category"
 msgstr ""
 
 #: wats-edit-form-advanced.php:341
-#: wats-template.php:297
+#: wats-template.php:393
 msgid "Categories"
 msgstr ""
 
@@ -336,7 +336,7 @@ msgid "No comments yet."
 msgstr ""
 
 #: wats-edit-form-advanced.php:464
-#: wats-template.php:77
+#: wats-template.php:170
 msgid "Author"
 msgstr "Auteur"
 
@@ -363,7 +363,7 @@ msgid "Post Revisions"
 msgstr ""
 
 #: wats-edit-form-advanced.php:589
-#: wats-template.php:75
+#: wats-template.php:168
 msgid "Title"
 msgstr "Titre"
 
@@ -378,20 +378,20 @@ msgid "Last edited on %1$s at %2$s"
 msgstr ""
 
 #: wats-edit-post-rows.php:13
-#: wats-options.php:465
-#: wats-template.php:80
+#: wats-options.php:467
+#: wats-template.php:173
 msgid "Type"
 msgstr "Type"
 
 #: wats-edit-post-rows.php:14
-#: wats-options.php:474
-#: wats-template.php:81
+#: wats-options.php:476
+#: wats-template.php:174
 msgid "Priority"
 msgstr "Priorité"
 
 #: wats-edit-post-rows.php:15
-#: wats-options.php:483
-#: wats-template.php:82
+#: wats-options.php:485
+#: wats-template.php:175
 msgid "Status"
 msgstr "Status"
 
@@ -472,7 +472,7 @@ msgid "View"
 msgstr ""
 
 #: wats-edit-post-rows.php:224
-#: wats-template.php:109
+#: wats-template.php:202
 msgid "Uncategorized"
 msgstr ""
 
@@ -525,7 +525,7 @@ msgid "Error in deleting..."
 msgstr ""
 
 #: wats-edit.php:131
-#: wats-head.php:112
+#: wats-head.php:129
 msgid "Edit Tickets"
 msgstr "Editer les tickets"
 
@@ -578,6 +578,7 @@ msgid "View all categories"
 msgstr ""
 
 #: wats-edit.php:298
+#: wats-template.php:84
 msgid "Filter"
 msgstr ""
 
@@ -598,21 +599,21 @@ msgstr ""
 msgid "No ticket found"
 msgstr "Aucun ticket trouvé"
 
-#: wats-head.php:105
+#: wats-head.php:122
 msgid "New Ticket"
 msgstr "Nouveau ticket"
 
-#: wats-head.php:105
-#: wats-head.php:111
+#: wats-head.php:122
+#: wats-head.php:128
 msgid "Tickets"
 msgstr "Tickets"
 
-#: wats-head.php:106
-#: wats-head.php:115
+#: wats-head.php:123
+#: wats-head.php:132
 msgid "New ticket"
 msgstr "Nouveau ticket"
 
-#: wats-head.php:111
+#: wats-head.php:128
 msgid "Modify"
 msgstr "Modifier"
 
@@ -629,8 +630,8 @@ msgid "Error : please select an entry to remove!"
 msgstr "Erreur : veuillez sélectionner une entrée à supprimer!"
 
 #: wats-options-ajax.php:6
-#: wats-options.php:329
-#: wats-template.php:127
+#: wats-options.php:331
+#: wats-template.php:220
 msgid "No entry"
 msgstr "Aucune entrée"
 
@@ -646,164 +647,197 @@ msgstr "Ajout d'entrée en cours"
 msgid "Error : the string contains invalid caracters!"
 msgstr "Erreur : la chaîne contient des caractères invalides!"
 
-#: wats-options.php:87
-#: wats-options.php:101
-#: wats-options.php:198
+#: wats-options.php:89
+#: wats-options.php:103
+#: wats-options.php:200
 msgid "Error : please enter an entry!"
 msgstr "Erreur : veuillez entrer une valeur!"
 
-#: wats-options.php:119
+#: wats-options.php:121
 msgid "Error : entry not found!"
 msgstr "Erreur : entrée introuvable!"
 
-#: wats-options.php:123
+#: wats-options.php:125
 msgid "Error : another entry has the same value!"
 msgstr "Erreur : une autre entrée a la même valeur!"
 
-#: wats-options.php:132
+#: wats-options.php:134
 msgid "Entry successfully updated!"
 msgstr "Entrée mise à jour avec succès!"
 
-#: wats-options.php:136
-#: wats-options.php:237
+#: wats-options.php:138
+#: wats-options.php:239
 msgid "Error : the entry contains invalid characters!"
 msgstr "Erreur : la chaîne contient des caractères invalides!"
 
-#: wats-options.php:168
+#: wats-options.php:170
 msgid "Entry successfully removed!"
 msgstr "Entrée supprimée avec succès!"
 
-#: wats-options.php:172
+#: wats-options.php:174
 msgid "Error : entry not existing!"
 msgstr "Erreur : entrée introuvable!"
 
-#: wats-options.php:220
+#: wats-options.php:222
 msgid "Error : already existing entry!"
 msgstr "Erreur : entrée déjà existante!"
 
-#: wats-options.php:233
+#: wats-options.php:235
 msgid "Entry successfully added!"
 msgstr "Entrée ajoutée avec succès!"
 
-#: wats-options.php:255
-#: wats-options.php:281
+#: wats-options.php:257
+#: wats-options.php:283
 msgid "Remove"
 msgstr "Supprimer"
 
-#: wats-options.php:267
-#: wats-options.php:286
+#: wats-options.php:269
+#: wats-options.php:288
 msgid "Add"
 msgstr "Ajouter"
 
-#: wats-options.php:348
-#: wats-options.php:393
-#: wats-template.php:117
-msgid "None"
-msgstr "Aucun"
-
-#: wats-options.php:389
+#: wats-options.php:391
 msgid "Ticket numeratotation"
 msgstr "Numérotation des tickets"
 
-#: wats-options.php:396
+#: wats-options.php:395
+#: wats-options.php:453
+#: wats-template.php:210
+#: wats-ticket-metas.php:227
+msgid "None"
+msgstr "Aucun"
+
+#: wats-options.php:398
 msgid "Dated"
 msgstr "Daté"
 
-#: wats-options.php:399
+#: wats-options.php:401
 msgid "Numbered"
 msgstr "Numéroté"
 
-#: wats-options.php:403
+#: wats-options.php:405
 msgid "Latest ticket ID"
 msgstr "Dernier identifiant de ticket"
 
-#: wats-options.php:406
+#: wats-options.php:408
 msgid "Tickets display"
 msgstr "Affichage des tickets"
 
-#: wats-options.php:411
+#: wats-options.php:413
 msgid "Include tickets on homepage together with posts"
 msgstr "Afficher les tickets sur la page d'accueil avec les articles"
 
-#: wats-options.php:413
+#: wats-options.php:415
 msgid "Tickets visibility"
 msgstr "Visibilité des tickets"
 
-#: wats-options.php:417
+#: wats-options.php:419
 msgid "Everybody can see all tickets"
 msgstr "Tout le monde peut voir les tickets"
 
-#: wats-options.php:420
+#: wats-options.php:422
 msgid "Only registered users can see tickets"
 msgstr "Seuls les utilisateurs enregistrés peuvent voir les tickets"
 
-#: wats-options.php:423
+#: wats-options.php:425
 msgid "Only ticket creator and admins can see tickets"
 msgstr "Seuls le créateur du ticket et les administrateurs peuvent voir les tickets"
 
-#: wats-options.php:425
+#: wats-options.php:427
 msgid "Tickets assignment"
 msgstr "Assignation des tickets"
 
-#: wats-options.php:429
+#: wats-options.php:431
 msgid "No assignment possible"
 msgstr "Aucune assignation possible"
 
-#: wats-options.php:432
+#: wats-options.php:434
 msgid "Everybody can assign a ticket"
 msgstr "Tout le monde peut assigner les tickets"
 
-#: wats-options.php:435
+#: wats-options.php:437
 msgid "Only registered users can assign a ticket"
 msgstr "Seuls les utilisateurs enregistrés peuvent assigner les tickets"
 
-#: wats-options.php:437
+#: wats-options.php:439
 msgid "Ticket assignment capability minimum level requirement"
 msgstr "Niveau minimum requis pour pouvoir assigner un ticket"
 
-#: wats-options.php:449
+#: wats-options.php:451
 msgid "Guest user"
 msgstr "Utilisateur invité"
 
-#: wats-options.php:462
+#: wats-options.php:464
 msgid "Ticket types"
 msgstr "Types des tickets"
 
-#: wats-options.php:466
-#: wats-options.php:475
-#: wats-options.php:484
-#: wats-options.php:493
+#: wats-options.php:468
+#: wats-options.php:477
+#: wats-options.php:486
+#: wats-options.php:495
 msgid "Selection"
 msgstr "Sélection"
 
-#: wats-options.php:471
+#: wats-options.php:473
 msgid "Ticket priorities"
 msgstr "Priorités des tickets"
 
-#: wats-options.php:480
+#: wats-options.php:482
 msgid "Ticket statuses"
 msgstr "Status des tickets"
 
-#: wats-options.php:489
+#: wats-options.php:491
 msgid "Categories opened to submission"
 msgstr "Catégories ouvertes pour la soumission de nouveaux tickets"
 
-#: wats-options.php:492
-#: wats-template.php:76
+#: wats-options.php:494
+#: wats-template.php:169
 msgid "Category"
 msgstr "Catégorie"
 
-#: wats-options.php:499
+#: wats-options.php:501
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: wats-template.php:78
+#: wats-template.php:55
+#: wats-ticket-metas.php:191
+msgid "Ticket type"
+msgstr "Type du ticket"
+
+#: wats-template.php:57
+#: wats-template.php:64
+#: wats-template.php:71
+#: wats-template.php:77
+#: wats-template.php:125
+msgid "Any"
+msgstr "Tous"
+
+#: wats-template.php:62
+#: wats-ticket-metas.php:202
+msgid "Ticket priority"
+msgstr "Priorité du ticket"
+
+#: wats-template.php:69
+#: wats-ticket-metas.php:213
+msgid "Ticket status"
+msgstr "Status du ticket"
+
+#: wats-template.php:76
+#: wats-ticket-metas.php:226
+msgid "Ticket owner"
+msgstr "Propriétaire du ticket"
+
+#: wats-template.php:171
 msgid "Owner"
 msgstr "Propriétaire"
 
-#: wats-template.php:79
+#: wats-template.php:172
 msgid "Creation date"
 msgstr "Date de création"
+
+#: wats-ticket-list-ajax.php:4
+msgid "Filtering table..."
+msgstr "Filtrage de la table en cours..."
 
 #: wats-ticket-metas.php:17
 msgid "Ticket owner : "
@@ -816,22 +850,6 @@ msgstr "Détails du ticket"
 #: wats-ticket-metas.php:165
 msgid "Here is the ticket history"
 msgstr "Historique du ticket"
-
-#: wats-ticket-metas.php:191
-msgid "Ticket type"
-msgstr "Type du ticket"
-
-#: wats-ticket-metas.php:202
-msgid "Ticket priority"
-msgstr "Priorité du ticket"
-
-#: wats-ticket-metas.php:213
-msgid "Ticket status"
-msgstr "Status du ticket"
-
-#: wats-ticket-metas.php:226
-msgid "Ticket owner"
-msgstr "Propriétaire du ticket"
 
 #: wats-ticket-new.php:3
 msgid "Add New Ticket"

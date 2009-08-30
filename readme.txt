@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.4
-Stable tag: 1.0.15
+Stable tag: 1.0.16
 
 == Description ==
 
@@ -47,6 +47,9 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.16 (30/08/2009) =
+* added ticket filtering feature to the ticket list (works through Ajax, JS support required).
 
 = V1.0.15 (29/08/2009) =
 * added ticket ownership feature. Tickets can now be assigned to users in the frontend and the backend.
