@@ -78,7 +78,10 @@ function wats_customize_guest_admin()
 		unset($menu[$key]);
 	}
 	
-	$requesteduri = $GLOBALS["HTTP_SERVER_VARS"]["REQUEST_URI"];
+    if (isset($GLOBALS["HTTP_SERVER_VARS"]["REQUEST_URI"]))
+		$requesteduri = $GLOBALS["HTTP_SERVER_VARS"]["REQUEST_URI"];
+    else
+		$requesteduri = getenv('REQUEST_URI');
 	$targeturi = admin_url().'admin.php?page=wats/wats-ticket-new.php';
 	$subtargeturi = substr_replace($targeturi,'',0,strlen(get_option('siteurl')));
 	$result = strpos($requesteduri,$subtargeturi);
