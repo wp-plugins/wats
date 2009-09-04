@@ -32,6 +32,7 @@ function wats_load_settings()
 		$default['visibility'] = 0;
 		$default['ticket_assign'] = 0;
 		$default['ticket_assign_level'] = 0;
+		$default['new_ticket_notification_admin'] = 0;
    	    add_option('wats', $default);
 	}
         
@@ -58,6 +59,11 @@ function wats_load_settings()
 		if (!isset($wats_settings['ticket_assign_level']))
 		{
 			$wats_settings['ticket_assign_level'] = 0;
+		}
+		
+		if (!isset($wats_settings['new_ticket_notification_admin']))
+		{
+			$wats_settings['new_ticket_notification_admin'] = 0;
 		}
 		
 		$wats_settings['wats_version'] = $wats_version;
@@ -379,6 +385,7 @@ function wats_options_admin_menu()
 		$wats_settings['ticket_assign_level'] = $_POST['ticket_assign_level'];
 		$wats_settings['wats_guest_user'] = $_POST['guestlist'];
 		$wats_settings['wats_home_display'] = isset($_POST['homedisplay']) ? 1 : 0;
+		$wats_settings['new_ticket_notification_admin'] = isset($_POST['new_ticket_notification_admin']) ? 1 : 0;
 		update_option('wats', $wats_settings);
 	}
 	
@@ -412,6 +419,14 @@ function wats_options_admin_menu()
 		echo ' checked';
 	echo '> '.__('Include tickets on homepage together with posts','WATS').'</td></tr></table><br />';
 
+	echo '<h3>'.__('Notification','WATS').' :</h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="checkbox" name="new_ticket_notification_admin"';
+	if ($wats_settings['new_ticket_notification_admin'] == 1)
+		echo ' checked';
+	echo '> '.__('Notify admin by email upon new ticket submission','WATS').'</td></tr></table><br />';
+
+	
 	echo '<h3>'.__('Tickets visibility','WATS').' :</h3>';
 	echo '<table class="form-table">';
 	echo '<tr><td><input type="radio" name="group2" value="0" ';

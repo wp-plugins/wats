@@ -1,10 +1,10 @@
 <?php
 
-/**************************************/
-/*                                                                        */
+/********************************************/
+/*                                          */
 /* Fonction de récupération du ticket owner */
-/*                                                                       */
-/*************************************/
+/*                                          */
+/********************************************/
 
 function wats_ticket_get_owner($post)
 {
@@ -93,9 +93,10 @@ function wats_comment_update_meta($comment_id)
 
 function wats_ticket_save_meta($postID)
 {
-
+	$newticket = 0;
 	if (!update_post_meta($postID,'wats_ticket_status',$_POST['wats_select_ticket_status']))
 		add_post_meta($postID,'wats_ticket_status',$_POST['wats_select_ticket_status']);
+
 		
 	if (!update_post_meta($postID,'wats_ticket_type',$_POST['wats_select_ticket_type']))
 		add_post_meta($postID,'wats_ticket_type',$_POST['wats_select_ticket_type']);
@@ -104,10 +105,76 @@ function wats_ticket_save_meta($postID)
 		add_post_meta($postID,'wats_ticket_priority',$_POST['wats_select_ticket_priority']);
 	
 	if (!get_post_meta($postID,'wats_ticket_number',true))
+	{
 		add_post_meta($postID,'wats_ticket_number',wats_get_latest_ticket_number()+1);
-
+		$newticket = 1;
+	}
+	
 	if (!update_post_meta($postID,'wats_ticket_owner',$_POST['wats_select_ticket_owner']))
 		add_post_meta($postID,'wats_ticket_owner',$_POST['wats_select_ticket_owner']);
+	
+	if ($newticket == 1)
+		wats_fire_admin_notification($postID);
+	
+	return;
+}
+
+/************************************************************************/
+/*                                                                      */
+/* Fonction de filtrage du mail de l'expéditeur du mail de notification */
+/*                                                                      */
+/************************************************************************/
+
+function wats_mail_from()
+{
+	return get_option('admin_email');
+}
+
+/***********************************************************************/
+/*                                                                     */
+/* Fonction de filtrage du nom de l'expéditeur du mail de notification */
+/*                                                                     */
+/***********************************************************************/
+
+function wats_mail_from_name()
+{
+	return get_option('blogname');
+}
+
+/****************************************************/
+/*                                                  */
+/* Fonction de notification de création d'un ticket */
+/*                                                  */
+/****************************************************/
+
+function wats_fire_admin_notification($postID)
+{
+	global $wats_settings, $wpdb;
+
+	wats_load_settings();
+
+	if ($wats_settings['new_ticket_notification_admin'] == 1)
+	{
+		add_filter('wp_mail_from', 'wats_mail_from');
+		add_filter('wp_mail_from_name', 'wats_mail_from_name');
+		$users = $wpdb->get_results("SELECT ID FROM `{$wpdb->prefix}users`");
+		foreach ($users AS $user)
+		{
+			$user = new WP_user($user->ID);
+			if ($user->user_level == 10)
+			{
+				$subject = __('New ticket submitted','WATS');
+				$output = __('Hello ','WATS').get_usermeta($user->ID, 'first_name').",\r\n\r\n";
+				$output .= __('A new ticket has been submitted into the system.','WATS');
+				$output .= __('You can view it there :','WATS')."\r\n";
+				$output .= __('+ Frontend side : ').get_permalink($postID)."\r\n\r\n";
+				$output .= __('+ Admin side : ').wats_get_edit_ticket_link($postID)."\r\n\r\n";
+				$output .= __('Regards','WATS').",\r\n\r\n";
+				$output .= __('WATS Notification engine','WATS');
+				wp_mail($user->user_email,$subject,$output);
+			}
+		}
+	}
 	
 	return;
 }
