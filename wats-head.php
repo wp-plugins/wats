@@ -78,18 +78,17 @@ function wats_customize_guest_admin()
 		unset($menu[$key]);
 	}
 	
-    if (isset($GLOBALS["HTTP_SERVER_VARS"]["REQUEST_URI"]))
-		$requesteduri = $GLOBALS["HTTP_SERVER_VARS"]["REQUEST_URI"];
+    if (!empty($_SERVER["REQUEST_URI"]))
+		$requesteduri = $_SERVER["REQUEST_URI"];
     else
 		$requesteduri = getenv('REQUEST_URI');
+
 	$targeturi = admin_url().'admin.php?page=wats/wats-ticket-new.php';
 	$subtargeturi = substr_replace($targeturi,'',0,strlen(get_option('siteurl')));
 	$result = strpos($requesteduri,$subtargeturi);
 
 	if ($result === false)
-	{
 		wp_safe_redirect($targeturi);
-	}
 	
 	return;
 }
