@@ -125,7 +125,7 @@ function wats_add_admin_page()
 			add_submenu_page(WATS_PATH.'wats-ticket-new.php',__('New ticket','WATS'),__('New ticket','WATS'),0,WATS_PATH.'wats-ticket-new.php');
 			add_action('admin_head-wats/wats-ticket-new.php','wats_ticket_creation_admin_head');
 		}
-		else if (current_user_can('edit_post') == 1)
+		else if (current_user_can('edit_posts') == 1)
 		{
 			add_menu_page(__('Modify','WATS'),__('Tickets','WATS'),0,WATS_PATH.'wats-edit.php',0,$plugin_url.'img/support.png');
 			add_submenu_page(WATS_PATH.'wats-edit.php',__('Edit Tickets','WATS'),__('Edit Tickets','WATS'),0,WATS_PATH.'wats-edit.php');
