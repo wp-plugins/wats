@@ -17,9 +17,14 @@ jQuery(document).ready(function() {
 			function(res)
 			{
 				wats_stop_loading(document.getElementById("resultticketlist"),res);
+				jQuery('#tableticket').tablesorter();
 			});
+		
 		return false;
 	});
+
 	
+	jQuery('#tableticket').tablesorter();
+
 	return false;
 });
