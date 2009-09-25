@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WATS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 14:44+0100\n"
+"POT-Creation-Date: 2009-09-25 14:11+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Olivier <autremonde75@gmail.com>\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -525,7 +525,7 @@ msgid "Error in deleting..."
 msgstr ""
 
 #: wats-edit.php:131
-#: wats-head.php:132
+#: wats-head.php:133
 msgid "Edit Tickets"
 msgstr "Editer les tickets"
 
@@ -599,21 +599,21 @@ msgstr ""
 msgid "No ticket found"
 msgstr "Aucun ticket trouvé"
 
-#: wats-head.php:125
+#: wats-head.php:126
 msgid "New Ticket"
 msgstr "Nouveau ticket"
 
-#: wats-head.php:125
-#: wats-head.php:131
+#: wats-head.php:126
+#: wats-head.php:132
 msgid "Tickets"
 msgstr "Tickets"
 
-#: wats-head.php:126
-#: wats-head.php:135
+#: wats-head.php:127
+#: wats-head.php:136
 msgid "New ticket"
 msgstr "Nouveau ticket"
 
-#: wats-head.php:131
+#: wats-head.php:132
 msgid "Modify"
 msgstr "Modifier"
 
@@ -848,7 +848,7 @@ msgid "Filtering table..."
 msgstr "Filtrage de la table en cours..."
 
 #: wats-ticket-metas.php:17
-msgid "Ticket owner : "
+msgid "Current ticket owner : "
 msgstr "Propriétaire du ticket : "
 
 #: wats-ticket-metas.php:166
@@ -890,6 +890,10 @@ msgstr "Détails du ticket"
 #: wats-ticket-metas.php:232
 msgid "Here is the ticket history"
 msgstr "Historique du ticket"
+
+#: wats-ticket-metas.php:310
+msgid "Ticket originator : "
+msgstr "Créateur du ticket : "
 
 #: wats-ticket-new.php:3
 msgid "Add New Ticket"
@@ -993,47 +997,47 @@ msgstr "Status du ticket : "
 msgid "Ticket type : "
 msgstr "Type du ticket : "
 
-#: theme/single-ticket.php:28
+#: theme/single-ticket.php:29
 #, php-format
 msgid "This entry was submited %1$s on %2$s at %3$s and is filed under %4$s."
 msgstr "Ce ticket a été soumis le %1$s %2$s à %3$s dans la catégorie %4$s."
 
-#: theme/single-ticket.php:28
+#: theme/single-ticket.php:29
 msgid "l, F jS, Y"
 msgstr "l j F Y"
 
-#: theme/single-ticket.php:29
+#: theme/single-ticket.php:30
 #, php-format
 msgid "You can follow any responses to this entry through the <a href='%s'>RSS 2.0</a> feed."
 msgstr "Vous pouvez suivre les mises à jour de ce ticket par le flux <a href='%s'>RSS 2.0</a>."
 
-#: theme/single-ticket.php:32
+#: theme/single-ticket.php:33
 #, php-format
 msgid "You can <a href=\"#respond\">leave an update</a>, or <a href=\"%s\" rel=\"trackback\">trackback</a> from your own site."
 msgstr "Vous pouvez <a href=\"#respond\">effectuer une mise à jour</a>, ou <a href=\"%s\" rel=\"trackback\">un trackback</a> depuis votre site."
 
-#: theme/single-ticket.php:36
+#: theme/single-ticket.php:37
 #, php-format
 msgid "Responses are currently closed, but you can <a href=\"%s\" rel=\"trackback\">trackback</a> from your own site."
 msgstr "Les mises à jour sont actuellement fermées mais vous pouvez faire <a href=\"%s\" rel=\"trackback\">un trackback</a> depuis votre site."
 
-#: theme/single-ticket.php:40
+#: theme/single-ticket.php:41
 msgid "You can skip to the end and leave an update. Pinging is currently not allowed."
 msgstr "Vous pouvez passer à la fin et effectuer une mise à jour. Les trackbacks sont fermés."
 
-#: theme/single-ticket.php:44
+#: theme/single-ticket.php:45
 msgid "Both comments and pings are currently closed."
 msgstr "Les commentaires et les trackbacks sont actuellement fermés."
 
-#: theme/single-ticket.php:46
+#: theme/single-ticket.php:47
 msgid "Edit this entry"
 msgstr "Editer le ticket"
 
-#: theme/single-ticket.php:56
+#: theme/single-ticket.php:57
 msgid "Sorry, you don't have the rights to browse this ticket."
 msgstr "Désolé, vous ne disposez pas des droits suffisants pour afficher le contenu de ce ticket."
 
-#: theme/single-ticket.php:61
+#: theme/single-ticket.php:62
 msgid "Sorry, no tickets matched your criteria."
 msgstr "Désolé, aucun ticket ne répond à vos critères"
 

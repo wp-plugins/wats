@@ -208,7 +208,7 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 			$output .= '<td>'.get_post_meta($ticket->ID,'wats_ticket_owner',true).'</td>';
 		else
 			$output .= '<td>'.__('None','WATS').'</td>';
-		$output .= '<td>'.get_post_time(get_option('date_format'),false,$ticket,true).'</td>';
+		$output .= '<td>'.get_post_time('M d, Y',false,$ticket,true).'</td>';
 		$output .= '<td>'.wats_ticket_get_type($ticket).'</td>';
 		$output .= '<td>'.wats_ticket_get_priority($ticket).'</td>';
 		$output .= '<td>'.wats_ticket_get_status($ticket).'</td>';

@@ -14,7 +14,7 @@ function wats_ticket_get_owner($post)
 	{
 		$ticket_owner = get_post_meta($post->ID,'wats_ticket_owner',true);
 		if ($ticket_owner)
-			echo __("Ticket owner : ",'WATS').$ticket_owner."<br />";
+			echo __("Current ticket owner : ",'WATS').$ticket_owner."<br />";
 	}
 
 	return;
@@ -300,6 +300,16 @@ function wats_ticket_details_meta_box($post)
 				echo '>'.$userlist[$i].'</option>';
 		}
 		echo '</select>';
+	}
+
+	if (is_admin())
+	{
+		setup_postdata($post);
+		if ($post->ID)
+		{
+			echo '<br /><br />'.__('Ticket originator : ','WATS');
+			the_author();
+		}
 	}
 	
 	return;
