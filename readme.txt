@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.4
-Stable tag: 1.0.22
+Stable tag: 1.0.23
 
 == Description ==
 
@@ -48,10 +48,16 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 
 == Changelog ==
 
+= V1.0.23 (26/09/2009) =
+* added frontend widget for ticket statistics (code provided by Tobias Kalleder from http://indivisualists.com/)
+* modified ticket listing filtering in the admin tickets table so that non admin users can only view their own tickets (as per ticket visibility option)
+* added german translation (provided by Tobias Kalleder from http://indivisualists.com/)
+* fixed few translations items
+
 = V1.0.22 (25/09/2009) =
-* Modified single ticket display template to include ticket originator details
-* Modified ticket edit template in the admin to include ticket originator details
-* Modified creation date format to allow proper sorting in the ticket listing table
+* modified single ticket display template to include ticket originator details
+* modified ticket edit template in the admin to include ticket originator details
+* modified creation date format to allow proper sorting in the ticket listing table
 
 = V1.0.21 (10/09/2009) =
 * added tickets listing table sort feature

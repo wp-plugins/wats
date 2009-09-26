@@ -62,7 +62,7 @@ function wats_edit_post_custom_column($column_name, $post_id)
 
 function wats_post_rows($posts = array()) 
 {
-	global $wp_query, $post, $mode;
+	global $wp_query, $post, $mode, $wats_settings, $current_user;
 
 	add_filter('the_title','esc_html');
 
@@ -79,11 +79,15 @@ function wats_post_rows($posts = array())
 	if ( empty($comment_pending_count) )
 		$comment_pending_count = array();
 
-	foreach ( $posts as $post ) {
-		if ( empty($comment_pending_count[$post->ID]) )
+	foreach ($posts as $post)
+	{
+		if (empty($comment_pending_count[$post->ID]))
 			$comment_pending_count[$post->ID] = 0;
 
-		wats_post_row($post, $comment_pending_count[$post->ID], $mode);
+		if ($wats_settings['visibility'] == 2 && ($current_user->user_level == 10 || $current_user->ID == $post->post_author))
+			wats_post_row($post, $comment_pending_count[$post->ID], $mode);
+		else if ($wats_settings['visibility'] != 2)
+			wats_post_row($post, $comment_pending_count[$post->ID], $mode);
 	}
 }
 

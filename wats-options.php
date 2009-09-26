@@ -395,7 +395,7 @@ function wats_options_admin_menu()
 	echo '<form action="" method="post">';
 	wp_nonce_field('update-wats-options');
 	
-	echo '<h3>'.__('Ticket numeratotation','WATS').' :</h3>';
+	echo '<h3>'.__('Ticket numerotation','WATS').' :</h3>';
 	echo '<table class="form-table">';
 	echo '<tr><td><input type="radio" name="group1" value="0" ';
 	echo ($wats_settings['numerotation'] == 0) ? 'checked' : '';

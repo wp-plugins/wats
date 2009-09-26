@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WATS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-26 17:40+0100\n"
+"POT-Creation-Date: 2009-09-26 17:42+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -16,22 +16,22 @@ msgstr ""
 #: wats-dashboard.php:13
 #: wats-dashboard.php:73
 msgid "Global stats :"
-msgstr "Statistiques globales :"
+msgstr "Globale Statistik:"
 
 #: wats-dashboard.php:14
 #: wats-dashboard.php:22
 msgid "Tickets created :"
-msgstr "Tickets soumis :"
+msgstr "Tickets erstellt :"
 
 #: wats-dashboard.php:16
 #: wats-dashboard.php:24
 msgid "Tickets closed :"
-msgstr "Tickets fermés :"
+msgstr "Ticket-Bearbeiter : "
 
 #: wats-dashboard.php:21
 #: wats-dashboard.php:79
 msgid "Your stats :"
-msgstr "Vos statistiques :"
+msgstr "User Statistik:"
 
 #: wats-dashboard.php:43
 #: wats-dashboard.php:58
@@ -43,17 +43,17 @@ msgstr "Tickets"
 #: wats-dashboard.php:74
 #: wats-dashboard.php:80
 msgid "Number of tickets created : "
-msgstr "Nombre de tickets soumis :"
+msgstr "Tickets erstellt :"
 
 #: wats-dashboard.php:76
 #: wats-dashboard.php:82
 msgid "Number of tickets closed : "
-msgstr "Nombre de tickets fermés :"
+msgstr "Tickets geschlossen :"
 
 #: wats-edit-form-advanced.php:14
 #, php-format
 msgid "Ticket updated. <a href=\"%s\">View ticket</a>"
-msgstr "Ticket mis à jour. <a href=\"%s\">Voir le ticket</a>"
+msgstr "Ticket aktualisiert. <a href=\"%s\">Ticket anzeigen</a>"
 
 #: wats-edit-form-advanced.php:15
 msgid "Custom field updated."
@@ -65,12 +65,12 @@ msgstr ""
 
 #: wats-edit-form-advanced.php:17
 msgid "Ticket updated."
-msgstr "Ticket mis à jour."
+msgstr "Ticket aktualisiert."
 
 #: wats-edit-form-advanced.php:18
 #, php-format
 msgid "Ticket published. <a href=\"%s\">View ticket</a>"
-msgstr "Ticket publié. <a href=\"%s\">Voir le ticket</a>"
+msgstr "Ticket ver&ouml;ffentlicht <a href=\"%s\">Ticket anzeigen</a>"
 
 #: wats-edit-form-advanced.php:19
 msgid "Post saved."
@@ -79,17 +79,17 @@ msgstr ""
 #: wats-edit-form-advanced.php:20
 #, php-format
 msgid "Ticket submitted. <a href=\"%s\">Preview ticket</a>"
-msgstr "Ticket soumis. <a href=\"%s\">Aperçu du ticket</a>"
+msgstr "Ticket gespeichert. <a href=\"%s\">Ticket-Vorschau</a>"
 
 #: wats-edit-form-advanced.php:23
 #, php-format
 msgid "Ticket restored to revision from %s"
-msgstr "Ticket restauré à partir de la révision %s"
+msgstr "Ticket wiederhergestellt von Version %s"
 
 #: wats-edit-form-advanced.php:26
 #, php-format
 msgid "There is an autosave of this ticket that is more recent than the version below.  <a href=\"%s\">View the autosave</a>."
-msgstr "Il existe une sauvegarde automatique du ticket qui est plus récente que la version ci-dessous. <a href=\"%s\">Voir la sauvegarde automatique</a>."
+msgstr "Es gibt eine neuere Auto-Save Version dieses Tickets als die folgende. <a href=\"%s\">Auto-Save anzeigen</a>."
 
 #: wats-edit-form-advanced.php:86
 msgid "Preview Changes"
@@ -241,7 +241,7 @@ msgstr ""
 #: wats-edit-form-advanced.php:248
 #: wats-edit-form-advanced.php:249
 msgid "Update Ticket"
-msgstr "Mettre à jour le ticket"
+msgstr "Ticket Aktualisieren"
 
 #: wats-edit-form-advanced.php:259
 msgid "Publish"
@@ -357,7 +357,7 @@ msgstr ""
 #: wats-edit-form-advanced.php:464
 #: wats-template.php:170
 msgid "Author"
-msgstr "Auteur"
+msgstr "Author"
 
 #: wats-edit-form-advanced.php:470
 msgid "Show comments"
@@ -384,7 +384,7 @@ msgstr ""
 #: wats-edit-form-advanced.php:589
 #: wats-template.php:168
 msgid "Title"
-msgstr "Titre"
+msgstr "Titel"
 
 #: wats-edit-form-advanced.php:620
 #, php-format
@@ -400,13 +400,13 @@ msgstr ""
 #: wats-options.php:482
 #: wats-template.php:173
 msgid "Type"
-msgstr "Type"
+msgstr "Typ"
 
 #: wats-edit-post-rows.php:14
 #: wats-options.php:491
 #: wats-template.php:174
 msgid "Priority"
-msgstr "Priorité"
+msgstr "Priorit&auml;t"
 
 #: wats-edit-post-rows.php:15
 #: wats-options.php:500
@@ -546,7 +546,7 @@ msgstr ""
 #: wats-edit.php:131
 #: wats-head.php:133
 msgid "Edit Tickets"
-msgstr "Editer les tickets"
+msgstr "Tickets bearbeiten"
 
 #: wats-edit.php:156
 #, php-format
@@ -555,7 +555,7 @@ msgstr ""
 
 #: wats-edit.php:161
 msgid "Your ticket has been saved."
-msgstr "Votre ticket a été sauvegardé."
+msgstr "Das Ticket wurde gespeichert."
 
 #: wats-edit.php:161
 msgid "View post"
@@ -563,12 +563,12 @@ msgstr ""
 
 #: wats-edit.php:161
 msgid "Edit ticket"
-msgstr "Editer le ticket"
+msgstr "Ticket bearbeiten"
 
 #: wats-edit.php:224
 #: wats-edit.php:226
 msgid "Search Tickets"
-msgstr "Chercher dans les tickets"
+msgstr "Tickets suchen"
 
 #: wats-edit.php:243
 msgid "&laquo;"
@@ -586,7 +586,7 @@ msgstr ""
 #: wats-edit.php:257
 #: wats-edit.php:337
 msgid "Apply"
-msgstr "Appliquer"
+msgstr "Anwenden"
 
 #: wats-edit.php:272
 msgid "Show all dates"
@@ -616,20 +616,20 @@ msgstr ""
 
 #: wats-edit.php:345
 msgid "No ticket found"
-msgstr "Aucun ticket trouvé"
+msgstr "Kein Ticket gefunden"
 
 #: wats-head.php:126
 msgid "New Ticket"
-msgstr "Nouveau ticket"
+msgstr "Neues Ticket"
 
 #: wats-head.php:127
 #: wats-head.php:136
 msgid "New ticket"
-msgstr "Nouveau ticket"
+msgstr "Neues ticket"
 
 #: wats-head.php:132
 msgid "Modify"
-msgstr "Modifier"
+msgstr "Bearbeiten"
 
 #: wats-link-template.php:66
 msgid "Edit post"
@@ -637,194 +637,194 @@ msgstr ""
 
 #: wats-options-ajax.php:4
 msgid "Error : there is nothing to remove!"
-msgstr "Erreur : il n&#180;y a rien à supprimer!"
+msgstr "Fehler: es gibt nichts zu l&ouml;schen"
 
 #: wats-options-ajax.php:5
 msgid "Error : please select an entry to remove!"
-msgstr "Erreur : veuillez sélectionner une entrée à supprimer!"
+msgstr "Fehler: bitte w&auml;hle einen Eintrag zum l&ouml;schen aus!"
 
 #: wats-options-ajax.php:6
 #: wats-options.php:337
 #: wats-template.php:220
 msgid "No entry"
-msgstr "Aucune entrée"
+msgstr "Kein Eintrag"
 
 #: wats-options-ajax.php:7
 msgid "Please correct the errors"
-msgstr "Merci de corriger les erreurs"
+msgstr "Bitte Fehler korrigieren"
 
 #: wats-options-ajax.php:8
 msgid "Adding entry"
-msgstr "Ajout d'entrée en cours"
+msgstr "Eintrag wird hinzugef&uuml;gt"
 
 #: wats-options-ajax.php:9
 msgid "Error : the string contains invalid caracters!"
-msgstr "Erreur : la chaîne contient des caractères invalides!"
+msgstr "Fehler: der String beinhaltet unerlaubte Zeichen!"
 
 #: wats-options.php:95
 #: wats-options.php:109
 #: wats-options.php:206
 msgid "Error : please enter an entry!"
-msgstr "Erreur : veuillez entrer une valeur!"
+msgstr "Fehler: bitte Eintrag eingeben!"
 
 #: wats-options.php:127
 msgid "Error : entry not found!"
-msgstr "Erreur : entrée introuvable!"
+msgstr "Fehler: Kein Eintrag gefunden"
 
 #: wats-options.php:131
 msgid "Error : another entry has the same value!"
-msgstr "Erreur : une autre entrée a la même valeur!"
+msgstr "Fehler: ein anderer Eintrag hat den selben Wert"
 
 #: wats-options.php:140
 msgid "Entry successfully updated!"
-msgstr "Entrée mise à jour avec succès!"
+msgstr "Eintrag erfolgreich Aktualisiert!"
 
 #: wats-options.php:144
 #: wats-options.php:245
 msgid "Error : the entry contains invalid characters!"
-msgstr "Erreur : la chaîne contient des caractères invalides!"
+msgstr "Fehler: der Eintrag beinhaltet unerlaubte Zeichen!"
 
 #: wats-options.php:176
 msgid "Entry successfully removed!"
-msgstr "Entrée supprimée avec succès!"
+msgstr "Eintrag erfolgreich gel&ouml;scht!"
 
 #: wats-options.php:180
 msgid "Error : entry not existing!"
-msgstr "Erreur : entrée introuvable!"
+msgstr "Fehler: Eintrag existiert nicht!"
 
 #: wats-options.php:228
 msgid "Error : already existing entry!"
-msgstr "Erreur : entrée déjà existante!"
+msgstr "Fehler: Eintrag existiert bereits!"
 
 #: wats-options.php:241
 msgid "Entry successfully added!"
-msgstr "Entrée ajoutée avec succès!"
+msgstr "Eintrag erfolgreich hinzugef&uuml;gt!"
 
 #: wats-options.php:263
 #: wats-options.php:289
 msgid "Remove"
-msgstr "Supprimer"
+msgstr "L&ouml;schen"
 
 #: wats-options.php:275
 #: wats-options.php:294
 msgid "Add"
-msgstr "Ajouter"
+msgstr "Hinzuf&uuml;gen"
 
 #: wats-options.php:398
 msgid "Ticket numerotation"
-msgstr "Numérotation des tickets"
+msgstr "Ticket Nummerierung"
 
 #: wats-options.php:402
 #: wats-options.php:468
 #: wats-template.php:210
 #: wats-ticket-metas.php:294
 msgid "None"
-msgstr "Aucun"
+msgstr "Kein/e"
 
 #: wats-options.php:405
 msgid "Dated"
-msgstr "Daté"
+msgstr "Datum"
 
 #: wats-options.php:408
 msgid "Numbered"
-msgstr "Numéroté"
+msgstr "Nummeriert"
 
 #: wats-options.php:412
 msgid "Latest ticket ID"
-msgstr "Dernier identifiant de ticket"
+msgstr "Letzte Ticket ID"
 
 #: wats-options.php:415
 msgid "Tickets display"
-msgstr "Affichage des tickets"
+msgstr "Ticket Anzeige"
 
 #: wats-options.php:420
 msgid "Include tickets on homepage together with posts"
-msgstr "Afficher les tickets sur la page d'accueil avec les articles"
+msgstr "Tickets auf der Homepage zusammen mit Posts anzeigen"
 
 #: wats-options.php:422
 msgid "Notification"
-msgstr "Notification"
+msgstr "Benachrichtigung"
 
 #: wats-options.php:427
 msgid "Notify admin by email upon new ticket submission"
-msgstr "Notifier l'administrateur par email lors de la soumission d'un nouveau ticket"
+msgstr "Administrator per E-mail benachrichtigen wenn neue Tickets erstellt werden"
 
 #: wats-options.php:430
 msgid "Tickets visibility"
-msgstr "Visibilité des tickets"
+msgstr "Ticket Sichtbarkeit"
 
 #: wats-options.php:434
 msgid "Everybody can see all tickets"
-msgstr "Tout le monde peut voir les tickets"
+msgstr "Jeder kann alle Tickets sehen"
 
 #: wats-options.php:437
 msgid "Only registered users can see tickets"
-msgstr "Seuls les utilisateurs enregistrés peuvent voir les tickets"
+msgstr "Nur registrierte Benutzer k&ouml;nnen Tickets sehen"
 
 #: wats-options.php:440
 msgid "Only ticket creator and admins can see tickets"
-msgstr "Seuls le créateur du ticket et les administrateurs peuvent voir les tickets"
+msgstr "Nur Ersteller des Tickets und Administratoren k&ouml;nnen Tickets sehen"
 
 #: wats-options.php:442
 msgid "Tickets assignment"
-msgstr "Assignation des tickets"
+msgstr "Ticket-Zuweisung"
 
 #: wats-options.php:446
 msgid "No assignment possible"
-msgstr "Aucune assignation possible"
+msgstr "Keine Zuweisung erm&ouml;glichen"
 
 #: wats-options.php:449
 msgid "Everybody can assign a ticket"
-msgstr "Tout le monde peut assigner les tickets"
+msgstr "Jeder kann ein Ticket zuweisen"
 
 #: wats-options.php:452
 msgid "Only registered users can assign a ticket"
-msgstr "Seuls les utilisateurs enregistrés peuvent assigner les tickets"
+msgstr "Nur registrierte Benutzer k&ouml;nnen Tickets zuweisen"
 
 #: wats-options.php:454
 msgid "Ticket assignment capability minimum level requirement"
-msgstr "Niveau minimum requis pour pouvoir assigner un ticket"
+msgstr "Minimales Userlevel f&uuml;r die Ticket-Zuweisung"
 
 #: wats-options.php:466
 msgid "Guest user"
-msgstr "Utilisateur invité"
+msgstr "Gast User"
 
 #: wats-options.php:479
 msgid "Ticket types"
-msgstr "Types des tickets"
+msgstr "Arten von Tickets"
 
 #: wats-options.php:483
 #: wats-options.php:492
 #: wats-options.php:501
 #: wats-options.php:510
 msgid "Selection"
-msgstr "Sélection"
+msgstr "Auswahl"
 
 #: wats-options.php:488
 msgid "Ticket priorities"
-msgstr "Priorités des tickets"
+msgstr "Ticket-Priorit&auml;ten"
 
 #: wats-options.php:497
 msgid "Ticket statuses"
-msgstr "Status des tickets"
+msgstr "Ticket-Status"
 
 #: wats-options.php:506
 msgid "Categories opened to submission"
-msgstr "Catégories ouvertes pour la soumission de nouveaux tickets"
+msgstr "F&uuml; die Ticketeingabe freigegebene Kategorien"
 
 #: wats-options.php:509
 #: wats-template.php:169
 msgid "Category"
-msgstr "Catégorie"
+msgstr "Kategorie"
 
 #: wats-options.php:516
 msgid "Save"
-msgstr "Sauvegarder"
+msgstr "Speichern"
 
 #: wats-template.php:55
 #: wats-ticket-metas.php:258
 msgid "Ticket type"
-msgstr "Type du ticket"
+msgstr "Ticket-Typ"
 
 #: wats-template.php:57
 #: wats-template.php:64
@@ -832,54 +832,54 @@ msgstr "Type du ticket"
 #: wats-template.php:77
 #: wats-template.php:125
 msgid "Any"
-msgstr "Tous"
+msgstr "Alle"
 
 #: wats-template.php:62
 #: wats-ticket-metas.php:269
 msgid "Ticket priority"
-msgstr "Priorité du ticket"
+msgstr "Ticket-Priorit&auml;t"
 
 #: wats-template.php:69
 #: wats-ticket-metas.php:280
 msgid "Ticket status"
-msgstr "Status du ticket"
+msgstr "Ticket-Status"
 
 #: wats-template.php:76
 #: wats-ticket-metas.php:293
 msgid "Ticket owner"
-msgstr "Propriétaire du ticket"
+msgstr "Ticket-Bearbeiter"
 
 #: wats-template.php:171
 msgid "Owner"
-msgstr "Propriétaire"
+msgstr "Bearbeiter"
 
 #: wats-template.php:172
 msgid "Creation date"
-msgstr "Date de création"
+msgstr "Erstellungsdatum"
 
 #: wats-ticket-list-ajax.php:4
 msgid "Filtering table..."
-msgstr "Filtrage de la table en cours..."
+msgstr "Filtere Tabelle..."
 
 #: wats-ticket-metas.php:17
 msgid "Current ticket owner : "
-msgstr "Propriétaire du ticket : "
+msgstr "Ticket-Bearbeiter : "
 
 #: wats-ticket-metas.php:166
 msgid "New ticket submitted"
-msgstr "Nouveau ticket soumis"
+msgstr "Neues Ticket eingereicht"
 
 #: wats-ticket-metas.php:167
 msgid "Hello "
-msgstr "Bonjour "
+msgstr "Servus "
 
 #: wats-ticket-metas.php:168
 msgid "A new ticket has been submitted into the system."
-msgstr "Un nouveau ticket a été soumis dans le système."
+msgstr "Ein neues Ticket wurde in das System eingetragen."
 
 #: wats-ticket-metas.php:169
 msgid "You can view it there :"
-msgstr "Vous pouvez le visualiser ici :"
+msgstr "Hier kannst du es ansehen:"
 
 #: wats-ticket-metas.php:170
 msgid "+ Frontend side : "
@@ -891,27 +891,27 @@ msgstr ""
 
 #: wats-ticket-metas.php:172
 msgid "Regards"
-msgstr "Cordialement"
+msgstr "Gr&uuml;&szlig;e"
 
 #: wats-ticket-metas.php:173
 msgid "WATS Notification engine"
-msgstr "Le système de notification de WATS"
+msgstr "WATS Benachrichtigungsdienst"
 
 #: wats-ticket-metas.php:201
 msgid "Ticket details"
-msgstr "Détails du ticket"
+msgstr "Ticket-Details"
 
 #: wats-ticket-metas.php:232
 msgid "Here is the ticket history"
-msgstr "Historique du ticket"
+msgstr "Hier ist der Ticket-Verlauf"
 
 #: wats-ticket-metas.php:310
 msgid "Ticket originator : "
-msgstr "Créateur du ticket : "
+msgstr "Ticket-Ersteller : "
 
 #: wats-ticket-new.php:3
 msgid "Add New Ticket"
-msgstr "Ajouter nouveau ticket"
+msgstr "Neues Ticket hinzuf&uuml;gen"
 
 #: wats-ticket-new.php:18
 #, php-format
@@ -923,142 +923,142 @@ msgstr ""
 
 #: wats-ticket.php:107
 msgid "You attempted to edit a ticket that doesn't exist. Perhaps it was deleted?"
-msgstr "Vous essayez d&#180;éditer un ticket qui n&#180;existe pas. Peut être qu&#180;il a été supprimé?"
+msgstr "Du hast versucht ein Ticket zu bearbeiten das nicht existiert. Wurde es vielleicht gel&ouml;scht?"
 
 #: wats-ticket.php:120
 msgid "Somebody"
-msgstr "Quelqu'un"
+msgstr "Irgendwer"
 
 #: wats-ticket.php:121
 #, php-format
 msgid "Warning: %s is currently editing this ticket"
-msgstr "Attention: %s édite actuellement ce ticket"
+msgstr "Warnung: %s bearbeitet gerade dieses Ticket"
 
 #: wats-ticket.php:130
 msgid "Edit Ticket"
-msgstr "Editer le ticket"
+msgstr "Ticket bearbeiten"
 
 #: wats-ticket.php:133
 msgid "You are not allowed to edit this ticket."
-msgstr "Vous n&#180;êtes pas autorisés à éditer ce ticket."
+msgstr "Nicht gen&uuml;gend Rechte um das Ticket zu bearbeiten."
 
 #: wats-ticket.php:175
 msgid "You are not allowed to delete this ticket."
-msgstr "Vous n&#180;êtes pas autorisés à supprimer ce ticket."
+msgstr "Nicht gen&uuml;gend Rechte um das Ticket zu l&ouml;schen"
 
 #: theme/comments-ticket.php:53
 msgid "Leave an update"
-msgstr "Effectuer une mise à jour"
+msgstr "Aktualisierung eintragen"
 
 #: theme/comments-ticket.php:53
 #, php-format
 msgid "Leave an update for %s"
-msgstr "Effectuer une mise à jour pour %s"
+msgstr "Aktualisierung f&uuml; %s eintragen"
 
 #: theme/comments-ticket.php:60
 #, php-format
 msgid "You must be <a href=\"%s\">logged in</a> to post an update."
-msgstr "Vous devez être <a href=\"%s\">connectés</a> pour effectuer une mise à jour."
+msgstr "Du musst dich <a href=\"%s\">einloggen</a> um eine Aktualisierung vorzunehmen."
 
 #: theme/comments-ticket.php:67
 #, php-format
 msgid "Logged in as <a href=\"%1$s\">%2$s</a>."
-msgstr "Connecté en tant que <a href=\"%1$s\">%2$s</a>."
+msgstr "Eingeloggt als <a href=\"%1$s\">%2$s</a>."
 
 #: theme/comments-ticket.php:67
 msgid "Log out of this account"
-msgstr "Se déconnecter de ce compte"
+msgstr "Von diesem Account abmelden"
 
 #: theme/comments-ticket.php:67
 msgid "Log out &raquo;"
-msgstr "Se déconnecter &raquo;"
+msgstr "Abmelden &raquo;"
 
 #: theme/comments-ticket.php:72
 msgid "Name"
-msgstr "Nom"
+msgstr "Name"
 
 #: theme/comments-ticket.php:72
 #: theme/comments-ticket.php:75
 msgid "(required)"
-msgstr "(obligatoire)"
+msgstr "(obligatorisch)"
 
 #: theme/comments-ticket.php:75
 msgid "Mail (will not be published)"
-msgstr "Mail (ne sera pas publié)"
+msgstr "Mail (wird nicht ver&ouml;ffentlicht)"
 
 #: theme/comments-ticket.php:78
 msgid "Website"
-msgstr "Site web"
+msgstr "Website"
 
 #: theme/comments-ticket.php:82
 #, php-format
 msgid "<strong>XHTML:</strong> You can use these tags: <code>%s</code>"
-msgstr "<strong>XHTML:</strong>Vous pouvez utiliser ces tags: <code>%s</code>"
+msgstr "<strong>XHTML:</strong>Du kannst diese Tags benutzen: <code>%s</code>"
 
 #: theme/comments-ticket.php:88
 msgid "Submit update"
-msgstr "Soumettre la mise à jour"
+msgstr "Update abschicken"
 
 #: theme/single-ticket.php:18
 msgid "Current priority : "
-msgstr "Priorité du ticket : "
+msgstr "Aktuelle Priorit&auml;t : "
 
 #: theme/single-ticket.php:19
 msgid "Current status : "
-msgstr "Status du ticket : "
+msgstr "Aktueller Status : "
 
 #: theme/single-ticket.php:20
 msgid "Ticket type : "
-msgstr "Type du ticket : "
+msgstr "Aktueller Ticket-Typ : "
 
 #: theme/single-ticket.php:29
 #, php-format
 msgid "This entry was submited %1$s on %2$s at %3$s and is filed under %4$s."
-msgstr "Ce ticket a été soumis le %1$s %2$s à %3$s dans la catégorie %4$s."
+msgstr "Dieser Eintrag wurde eingereicht %1$s am %2$s um %3$s und ist in der Kategorie %4$s."
 
 #: theme/single-ticket.php:29
 msgid "l, F jS, Y"
-msgstr "l j F Y"
+msgstr "l, d.m.Y"
 
 #: theme/single-ticket.php:30
 #, php-format
 msgid "You can follow any responses to this entry through the <a href='%s'>RSS 2.0</a> feed."
-msgstr "Vous pouvez suivre les mises à jour de ce ticket par le flux <a href='%s'>RSS 2.0</a>."
+msgstr "Du kannst allen Antworten auf diesen Eintrag mit dem <a href='%s'>RSS 2.0-Feed</a> folgen."
 
 #: theme/single-ticket.php:33
 #, php-format
 msgid "You can <a href=\"#respond\">leave an update</a>, or <a href=\"%s\" rel=\"trackback\">trackback</a> from your own site."
-msgstr "Vous pouvez <a href=\"#respond\">effectuer une mise à jour</a>, ou <a href=\"%s\" rel=\"trackback\">un trackback</a> depuis votre site."
+msgstr "Du kannst eine <a href=\"#respond\">Aktualisierung einreichen</a>, oder einen <a href=\"%s\" rel=\"trackback\">Trackback</a> von deiner eigenen Seite."
 
 #: theme/single-ticket.php:37
 #, php-format
 msgid "Responses are currently closed, but you can <a href=\"%s\" rel=\"trackback\">trackback</a> from your own site."
-msgstr "Les mises à jour sont actuellement fermées mais vous pouvez faire <a href=\"%s\" rel=\"trackback\">un trackback</a> depuis votre site."
+msgstr "Antworten sind momentan nicht erlaubt aber du kannst einen <a href=\"%s\" rel=\"trackback\">Trackback</a> von deiner eigenen Seite erstellen."
 
 #: theme/single-ticket.php:41
 msgid "You can skip to the end and leave an update. Pinging is currently not allowed."
-msgstr "Vous pouvez passer à la fin et effectuer une mise à jour. Les trackbacks sont fermés."
+msgstr "Du kannst bis zum Ende springen und ein Update hinterlassen. Pingen ist momentan nicht erlaubt."
 
 #: theme/single-ticket.php:45
 msgid "Both comments and pings are currently closed."
-msgstr "Les commentaires et les trackbacks sont actuellement fermés."
+msgstr "Kommentare und Trackbacks sind momentan nicht erlaubt."
 
 #: theme/single-ticket.php:47
 msgid "Edit this entry"
-msgstr "Editer le ticket"
+msgstr "Ticket bearbeiten"
 
 #: theme/single-ticket.php:57
 msgid "Sorry, you don't have the rights to browse this ticket."
-msgstr "Désolé, vous ne disposez pas des droits suffisants pour afficher le contenu de ce ticket."
+msgstr "Entschuldigung, nicht gen&uuml;gend Rechte um das Ticket anzuzeigen."
 
 #: theme/single-ticket.php:62
 msgid "Sorry, no tickets matched your criteria."
-msgstr "Désolé, aucun ticket ne répond à vos critères"
+msgstr "Entschuldigung, keine Tickets zu den Suchkriterien gefunden."
 
 #~ msgid "Page generated by "
-#~ msgstr "Page générée par"
+#~ msgstr "Seite erstellt von"
 #~ msgid "Ticket history"
-#~ msgstr "Historique du ticket"
+#~ msgstr "Ticket-Verlauf"
 #~ msgid "Ticket title"
-#~ msgstr "Titre du ticket"
+#~ msgstr "Ticket-Titel"
 
