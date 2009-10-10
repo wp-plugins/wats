@@ -167,8 +167,8 @@ function wats_fire_admin_notification($postID)
 				$output = __('Hello ','WATS').get_usermeta($user->ID, 'first_name').",\r\n\r\n";
 				$output .= __('A new ticket has been submitted into the system.','WATS');
 				$output .= __('You can view it there :','WATS')."\r\n";
-				$output .= __('+ Frontend side : ').get_permalink($postID)."\r\n\r\n";
-				$output .= __('+ Admin side : ').wats_get_edit_ticket_link($postID)."\r\n\r\n";
+				$output .= __('+ Frontend side : ','WATS').get_permalink($postID)."\r\n\r\n";
+				$output .= __('+ Admin side : ','WATS').wats_get_edit_ticket_link($postID)."\r\n\r\n";
 				$output .= __('Regards','WATS').",\r\n\r\n";
 				$output .= __('WATS Notification engine','WATS');
 				wp_mail($user->user_email,$subject,$output);

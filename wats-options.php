@@ -33,6 +33,7 @@ function wats_load_settings()
 		$default['ticket_assign'] = 0;
 		$default['ticket_assign_level'] = 0;
 		$default['new_ticket_notification_admin'] = 0;
+		$default['comment_menuitem_visibility'] = 0;
    	    add_option('wats', $default);
 	}
         
@@ -64,6 +65,11 @@ function wats_load_settings()
 		if (!isset($wats_settings['new_ticket_notification_admin']))
 		{
 			$wats_settings['new_ticket_notification_admin'] = 0;
+		}
+		
+		if (!isset($wats_settings['comment_menuitem_visibility']))
+		{
+			$wats_settings['comment_menuitem_visibility'] = 0;
 		}
 		
 		$wats_settings['wats_version'] = $wats_version;
@@ -386,12 +392,23 @@ function wats_options_admin_menu()
 		$wats_settings['wats_guest_user'] = $_POST['guestlist'];
 		$wats_settings['wats_home_display'] = isset($_POST['homedisplay']) ? 1 : 0;
 		$wats_settings['new_ticket_notification_admin'] = isset($_POST['new_ticket_notification_admin']) ? 1 : 0;
+		$wats_settings['comment_menuitem_visibility'] = isset($_POST['comment_menuitem_visibility']) ? 1 : 0;
 		update_option('wats', $wats_settings);
 	}
 	
 	wats_load_settings();
 
 	echo '<H2><div style="text-align:center">WATS '.$wats_settings['wats_version'].'</div></H2>';
+	
+	echo '<h3>'.__('Donation','WATS').' :</h3>';
+	echo __('WATS is free to use, cool isn\'t it? It has however required hundreds of hours to be developed.','WATS');
+	echo __(' It still requires a huge amount of time in order to provide technical support for users and new releases with bugfixes and new features.','WATS');
+	echo __(' By making a donation, you recognize my work and encourage me to go on with the development and support of WATS. Thanks for this!','WATS');
+	echo '<br /><br /><p align="center"><form action="https://www.paypal.com/cgi-bin/webscr" enctype="application/x-www-form-urlencoded" method="post">';
+	echo '<input name="cmd" type="hidden" value="_s-xclick" />';
+	echo '<input name="hosted_button_id" type="hidden" value="6412724" />';
+	echo '<input alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypal.com/en_US/FR/i/btn/btn_donateCC_LG.gif" type="image" style="border: none" /> <img src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" border="0" alt="pixel WATS going on..." width="1" height="1" title="WATS going on..." /><br /></form></p>';
+		
 	echo '<form action="" method="post">';
 	wp_nonce_field('update-wats-options');
 	
@@ -462,6 +479,13 @@ function wats_options_admin_menu()
 	echo '</select></td></tr>';
 	echo '</h3><br />';
 
+	echo '<h3>'.__('Admin menu access','WATS').' : ';
+	echo '</h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="checkbox" name="comment_menuitem_visibility"';
+	if ($wats_settings['comment_menuitem_visibility'] == 1)
+		echo ' checked';
+	echo '> '.__('Block comments menu access for users without moderate_comments capability','WATS').'</td></tr></table><br />';
 	
 	echo '<h3>'.__('Guest user','WATS').' : ';
 	echo '<td><select name="guestlist" id="guestlist" size="1">';

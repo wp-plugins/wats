@@ -129,6 +129,21 @@ function wats_add_admin_page()
 		}
 		else if (current_user_can('edit_posts') == 1)
 		{
+			if ((current_user_can('moderate_comments') == 0) && ($wats_settings['comment_menuitem_visibility'] == 1))
+			{
+				unset($menu[25]);
+				if (!empty($_SERVER["REQUEST_URI"]))
+					$requesteduri = $_SERVER["REQUEST_URI"];
+				else
+					$requesteduri = getenv('REQUEST_URI');
+    
+				$destpage = get_option('siteurl').'/wp-admin/index.php';
+				$mypos = strpos($requesteduri,'/wp-admin/edit-comments.php');
+
+				if ($mypos !== false)
+					wp_safe_redirect($destpage);
+			}
+			
 			add_menu_page(__('Modify','WATS'),__('Tickets','WATS'),0,WATS_PATH.'wats-edit.php',0,$plugin_url.'img/support.png');
 			add_submenu_page(WATS_PATH.'wats-edit.php',__('Edit Tickets','WATS'),__('Edit Tickets','WATS'),0,WATS_PATH.'wats-edit.php');
 			add_action('admin_head-wats/wats-edit.php','wats_ticket_edit_admin_head');

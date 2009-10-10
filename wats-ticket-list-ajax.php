@@ -23,8 +23,8 @@ jQuery(document).ready(function() {
 		return false;
 	});
 
-	
-	jQuery('#tableticket').tablesorter();
+	if (jQuery('#tableticket').length > 0)
+		jQuery('#tableticket').tablesorter();
 
 	return false;
 });

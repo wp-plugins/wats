@@ -85,6 +85,71 @@ function wats_dashboard_widget_tickets()
 	return;
 }
 
+/*********************************************/
+/*                                                                                      */
+/* Fonction pour le widget des commentaires récents */
+/*                                                                                      */
+/*********************************************/
+
+function wp_dashboard_wats_recent_comments()
+{
+	global $wpdb, $wats_settings, $current_user;
+
+	if (current_user_can('edit_posts'))
+		$allowed_states = array('0', '1');
+	else
+		$allowed_states = array('1');
+
+	// Select all comment types and filter out spam later for better query performance.
+	$comments = array();
+	$start = 0;
+	
+	if ($wats_settings['visibility'] == 0 || $wats_settings['visibility'] == 1)
+		$query = "SELECT * FROM $wpdb->comments ORDER BY comment_date_gmt DESC LIMIT $start, 50";
+	else if ($wats_settings['visibility'] == 2 && $current_user->user_level == 10)
+		$query = "SELECT * FROM $wpdb->comments ORDER BY comment_date_gmt DESC LIMIT $start, 50";
+	else if ($wats_settings['visibility'] == 2)
+		$query = "SELECT * FROM $wpdb->comments LEFT JOIN $wpdb->posts ON $wpdb->comments.comment_post_ID = $wpdb->posts.ID WHERE $wpdb->posts.post_author = ".$current_user->ID." ORDER BY comment_date_gmt DESC LIMIT ".$start.", 50";
+			
+	while (count($comments) < 5 && $possible = $wpdb->get_results($query))
+	{
+		foreach ($possible as $comment)
+		{
+			if (count($comments) >= 5)
+				break;
+			if (in_array($comment->comment_approved, $allowed_states))
+				$comments[] = $comment;
+		}
+		$start = $start + 50;
+		if ($wats_settings['visibility'] == 0 || $wats_settings['visibility'] == 1)
+			$query = "SELECT * FROM $wpdb->comments ORDER BY comment_date_gmt DESC LIMIT $start, 50";
+		else if ($wats_settings['visibility'] == 2 && $current_user->user_level == 10)
+			$query = "SELECT * FROM $wpdb->comments ORDER BY comment_date_gmt DESC LIMIT $start, 50";
+		else if ($wats_settings['visibility'] == 2)
+			$query = "SELECT * FROM $wpdb->comments LEFT JOIN $wpdb->posts ON $wpdb->comments.comment_post_ID = $wpdb->posts.ID WHERE $wpdb->posts.post_author = ".$current_user->ID." ORDER BY comment_date_gmt DESC LIMIT ".$start.", 50";
+	}
+
+	if ($comments) :
+?>
+		<div id="the-comment-list" class="list:comment">
+<?php
+		foreach ($comments as $comment)
+			_wp_dashboard_recent_comments_row($comment);
+?>
+		</div>
+<?php
+		if (current_user_can('moderate_comments') || ($wats_settings['comment_menuitem_visibility'] == 0))
+		{ ?>
+			<p class="textright"><a href="edit-comments.php" class="button"><?php _e('View all'); ?></a></p>
+<?php	}
+		wp_comment_reply( -1, false, 'dashboard', false );
+	else :
+?>
+	<p><?php _e( 'No comments yet.' ); ?></p>
+<?php
+	endif; // $comments;
+}
+
 /********************************************************************************/
 /*                                                                              */
 /* Fonction pour ajouter le widget de statistiques des tickets sur le dashboard */
@@ -93,7 +158,12 @@ function wats_dashboard_widget_tickets()
 
 function wats_dashboard_setup()
 {
+	global $wp_meta_boxes;
+
 	wp_add_dashboard_widget('my_wp_dashboard_wats', 'Tickets', 'wats_dashboard_widget_tickets');
+	unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_recent_comments']);
+	$recent_comments_title = __( 'Recent Comments' );
+	wp_add_dashboard_widget( 'dashboard_recent_comments', $recent_comments_title, 'wp_dashboard_wats_recent_comments' );
 
 	return;
 }
