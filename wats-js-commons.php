@@ -123,7 +123,7 @@ function wats_js_is_date(x)
 
 function wats_js_is_string(x)
 {
-	var validformat=/^[\w\s\+\-\.\,\;\'\"ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ]+$/;
+	var validformat=/^[\w\s\+\-\.\,\;\'\"ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿž]+$/;
 
 	if (validformat.test(x) == 1)
 		return 1;

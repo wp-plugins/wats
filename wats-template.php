@@ -391,6 +391,7 @@ function wats_template_redirect()
 function wats_register_taxonomy()
 {
 	register_taxonomy( 'category', 'ticket', array('hierarchical' => true, 'update_count_callback' => 'wats_update_ticket_term_count', 'label' => __('Categories'), 'query_var' => false, 'rewrite' => false) ) ;
+	register_taxonomy( 'post_tag', 'post', array('hierarchical' => false, 'update_count_callback' => 'wats_update_ticket_term_count', 'label' => __('Post Tags'), 'query_var' => false, 'rewrite' => false) ) ;
 }
 
 /*********************************************************/

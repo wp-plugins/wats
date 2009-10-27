@@ -187,12 +187,14 @@ function wats_fire_admin_notification($postID)
 
 function wats_ticket_meta_boxes()
 {
-	global $wp_meta_boxes;
+	global $wp_meta_boxes, $wats_settings;
 
 	remove_meta_box('trackbacksdiv', 'post', 'normal');
 	remove_meta_box('postexcerpt', 'post', 'normal');
-	remove_meta_box('tagsdiv-post_tag', 'post', 'normal');
-	remove_meta_box('postcustom', 'post', 'normal');
+	if ($wats_settings['tickets_tagging'] == 0)
+		remove_meta_box('tagsdiv-post_tag', 'post', 'normal');
+	if ($wats_settings['tickets_custom_fields'] == 0)
+		remove_meta_box('postcustom', 'post', 'normal');
 	remove_meta_box('commentsdiv', 'post', 'normal');
 	remove_meta_box('commentstatusdiv', 'post', 'normal');
 	remove_meta_box('authordiv', 'post', 'normal');
