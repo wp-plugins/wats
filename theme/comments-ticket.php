@@ -5,20 +5,25 @@
  */
 
 // Do not delete these lines
-	if (!empty($_SERVER['SCRIPT_FILENAME']) && 'comments.php' == basename($_SERVER['SCRIPT_FILENAME']))
-		die ('Merci de ne pas lancer cette page directement');
+	if ('comments.php' == basename($_SERVER['SCRIPT_FILENAME']))
+		die ('Please do not load this page directly. Thanks!');
 
-	if ( post_password_required() ) { ?>
-		<p class="nocomments">Cet article est protégé par un mot de passe. Entrez ce mot de passe pour lire les commentaires.</p>
-	<?php
-		return;
+	if (!empty($post->post_password)) { // if there's a password
+		if ($_COOKIE['wp-postpass_' . COOKIEHASH] != $post->post_password) {  // and it doesn't match the cookie
+			?>
+
+			<p class="nocomments">This post is password protected. Enter the password to view comments.</p>
+
+			<?php
+			return;
+		}
 	}
 ?>
 
 <!-- You can start editing here. -->
 
 <?php if ( have_comments() ) : ?>
-	<h3 id="comments"><?php comments_number('Aucune note', 'Une note', '% notes' );?> sur &#8220;<?php the_title(); ?>&#8221;</h3>
+	<h3 id="comments"><?php comments_number('No Responses', 'One Response', '% Responses' );?> to &#8220;<?php the_title(); ?>&#8221;</h3>
 
 	<div class="navigation">
 		<div class="alignleft"><?php previous_comments_link() ?></div>
@@ -40,7 +45,7 @@
 
 	 <?php else : // comments are closed ?>
 		<!-- If comments are closed. -->
-		<p class="nocomments">Le commentaires sont fermés.</p>
+		<p class="nocomments">Comments are closed.</p>
 
 	<?php endif; ?>
 <?php endif; ?>

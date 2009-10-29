@@ -293,7 +293,7 @@ function wats_taxomony_template($template)
 
 	if ($wp_query->is_ticket == true)
 	{
-		if (file_exists(TEMPLATEPATH.'single-ticket.php')) $template = TEMPLATEPATH.'/single-ticket.php';
+		if (file_exists(TEMPLATEPATH.'/single-ticket.php')) $template = TEMPLATEPATH.'/single-ticket.php';
 		else $template = WATS_THEME_PATH.'/single-ticket.php';
 	}
 	
