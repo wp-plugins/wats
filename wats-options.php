@@ -418,15 +418,15 @@ function wats_options_admin_menu()
 	echo __('WATS is free to use, cool isn\'t it? It has however required hundreds of hours to be developed.','WATS');
 	echo __(' It still requires a huge amount of time in order to provide technical support for users and new releases with bugfixes and new features.','WATS');
 	echo __(' By making a donation, you recognize my work and encourage me to go on with the development and support of WATS. Thanks for this!','WATS');
-	echo '<br /><br /><p align="center"><form action="https://www.paypal.com/cgi-bin/webscr" enctype="application/x-www-form-urlencoded" method="post">';
+	echo '<br /><br /><p align="center"><center><form action="https://www.paypal.com/cgi-bin/webscr" enctype="application/x-www-form-urlencoded" method="post">';
 	echo '<input name="cmd" type="hidden" value="_s-xclick" />';
 	echo '<input name="hosted_button_id" type="hidden" value="6412724" />';
-	echo '<input alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypal.com/en_US/FR/i/btn/btn_donateCC_LG.gif" type="image" style="border: none" /> <img src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" border="0" alt="pixel WATS going on..." width="1" height="1" title="WATS going on..." /><br /></form></p>';
+	echo '<input alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypal.com/en_US/FR/i/btn/btn_donateCC_LG.gif" type="image" style="border: none" /> <img src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" border="0" alt="pixel WATS going on..." width="1" height="1" title="WATS going on..." /><br /></form></center></p>';
 		
 	echo '<form action="" method="post">';
 	wp_nonce_field('update-wats-options');
 	
-	echo '<h3>'.__('Ticket numerotation','WATS').' :</h3>';
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("group1_tip");>'.__('Ticket numerotation','WATS').' :</a></h3>';
 	echo '<table class="form-table">';
 	echo '<tr><td><input type="radio" name="group1" value="0" ';
 	echo ($wats_settings['numerotation'] == 0) ? 'checked' : '';
@@ -436,29 +436,34 @@ function wats_options_admin_menu()
 	echo '>'.__('Dated','WATS').' (ex : 090601-00001)</td></tr>';
 	echo '<tr><td><input type="radio" name="group1" value="2" ';
 	echo ($wats_settings['numerotation'] == 2) ? 'checked' : '';
-	echo '>'.__('Numbered','WATS').' (ex : 1)</td></tr></table>';
+	echo '>'.__('Numbered','WATS').' (ex : 1)</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="group1_tip">';
+	echo __('Select the preferred option. Based on this, a number will be associated to a ticket and displayed at the beginning of the title.','WATS').'</div></td></tr></table><br />';
 	
 	if ($wats_settings['numerotation'] > 0)
 	{
 		echo '<h3>'.__('Latest ticket ID','WATS').' : '.wats_get_latest_ticket_number().'</h3><br />';
 	}
 	
-	echo '<h3>'.__('Tickets display','WATS').' :</h3>';
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("wats_home_display_tip");>'.__('Tickets display','WATS').' :</a></h3>';
 	echo '<table class="form-table">';
 	echo '<tr><td><input type="checkbox" name="homedisplay"';
 	if ($wats_settings['wats_home_display'] == 1)
 		echo ' checked';
-	echo '> '.__('Include tickets on homepage together with posts','WATS').'</td></tr></table><br />';
-
-	echo '<h3>'.__('Notification','WATS').' :</h3>';
+	echo '> '.__('Include tickets on homepage together with posts','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="wats_home_display_tip">';
+	echo __('Check this option if you want to display tickets on homepage along with usual posts. If the option is unchecked, only posts will be displayed.','WATS').'</div></td></tr></table><br />';
+	
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("new_ticket_notification_admin_tip");>'.__('Notification','WATS').' :</a></h3>';
 	echo '<table class="form-table">';
 	echo '<tr><td><input type="checkbox" name="new_ticket_notification_admin"';
 	if ($wats_settings['new_ticket_notification_admin'] == 1)
 		echo ' checked';
-	echo '> '.__('Notify admin by email upon new ticket submission','WATS').'</td></tr></table><br />';
-
+	echo '> '.__('Notify admin by email upon new ticket submission','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="new_ticket_notification_admin_tip">';
+	echo __('Check this option if you want the system to send a mail to all administrators upon new ticket creation.','WATS').'</div></td></tr></table><br />';
 	
-	echo '<h3>'.__('Tickets visibility','WATS').' :</h3>';
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("group2_tip");>'.__('Tickets visibility','WATS').' :</a></h3>';
 	echo '<table class="form-table">';
 	echo '<tr><td><input type="radio" name="group2" value="0" ';
 	echo ($wats_settings['visibility'] == 0) ? 'checked' : '';
@@ -468,9 +473,11 @@ function wats_options_admin_menu()
 	echo '>'.__('Only registered users can see tickets','WATS').'</td></tr>';
 	echo '<tr><td><input type="radio" name="group2" value="2" ';
 	echo ($wats_settings['visibility'] == 2) ? 'checked' : '';
-	echo '>'.__('Only ticket creator and admins can see tickets','WATS').'</td></tr></table>';
+	echo '>'.__('Only ticket creator and admins can see tickets','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="group2_tip">';
+	echo __('Select the preferred option. Tickets access and display in frontend and admin sides will be adjusted based on this option and user privileges.','WATS').'</div></td></tr></table><br />';
 	
-	echo '<h3>'.__('Tickets assignment','WATS').' :</h3>';
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("group3_tip");>'.__('Tickets assignment','WATS').' :</a></h3>';
 	echo '<table class="form-table">';
 	echo '<tr><td><input type="radio" name="group3" value="0" ';
 	echo ($wats_settings['ticket_assign'] == 0) ? 'checked' : '';
@@ -480,45 +487,51 @@ function wats_options_admin_menu()
 	echo '>'.__('Everybody can assign a ticket','WATS').'</td></tr>';
 	echo '<tr><td><input type="radio" name="group3" value="2" ';
 	echo ($wats_settings['ticket_assign'] == 2) ? 'checked' : '';
-	echo '>'.__('Only registered users can assign a ticket','WATS').'</td></tr></table>';
+	echo '>'.__('Only registered users can assign a ticket','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="group3_tip">';
+	echo __('Select the preferred option. Tickets assignment possibilities in frontend and admin sides will be adjusted based on this option and user privileges.','WATS').'</div></td></tr></table><br />';
 
-	echo '<h3>'.__('Ticket assignment capability minimum level requirement','WATS').' : ';
-	echo '<td><select name="ticket_assign_level" id="ticket_assign_level" size="1">';
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("ticket_assign_level_tip");>'.__('Ticket assignment capability minimum level requirement','WATS').' : </a></h3>';
+	echo '<table class="form-table"><tr><td>'.__('Level','WATS').' : <select name="ticket_assign_level" id="ticket_assign_level" size="1">';
 	for ($i = 0; $i != 11; $i++)
 	{
         echo '<option value="'.$i.'" ';
         if ($i == $wats_settings['ticket_assign_level']) echo 'selected';
 			echo '>'.$i.'</option>';
 	}
-	echo '</select></td></tr>';
-	echo '</h3><br />';
+	echo '</select></td></tr><tr><td>';
+	echo '<div class="wats_tip" id="ticket_assign_level_tip">';
+	echo __('Select the level. Only users with this minimum level value will be able to assign tickets. To learn more about users levels, check out this page : ','WATS').'<a href="http://codex.wordpress.org/Roles_and_Capabilities">WP roles and capabilities</a></div></td></tr></table><br />';
 
-	echo '<h3>'.__('Admin menu access','WATS').' : ';
-	echo '</h3>';
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("comment_menuitem_visibility_tip");>'.__('Admin menu access','WATS').' : </a></h3>';
 	echo '<table class="form-table">';
 	echo '<tr><td><input type="checkbox" name="comment_menuitem_visibility"';
 	if ($wats_settings['comment_menuitem_visibility'] == 1)
 		echo ' checked';
-	echo '> '.__('Block comments menu access for users without moderate_comments capability','WATS').'</td></tr></table><br />';
+	echo '> '.__('Block comments menu access for users without moderate_comments capability','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="comment_menuitem_visibility_tip">';
+	echo __('Check this option if you want to prevent users without the comments moderation capability to browse the comments list page (on this page, they could see updates on all tickets).','WATS').'</div></td></tr></table><br />';
 
-	echo '<h3>'.__('Tickets tagging','WATS').' : ';
-	echo '</h3>';
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("tickets_tagging_tip");>'.__('Tickets tagging','WATS').' : </a></h3>';
 	echo '<table class="form-table">';
 	echo '<tr><td><input type="checkbox" name="tickets_tagging"';
 	if ($wats_settings['tickets_tagging'] == 1)
 		echo ' checked';
-	echo '> '.__('Allow tickets tagging','WATS').'</td></tr></table><br />';
+	echo '> '.__('Allow tickets tagging','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="tickets_tagging_tip">';
+	echo __('Check this option if you want to allow tag association to tickets.','WATS').'</div></td></tr></table><br />';
 	
-	echo '<h3>'.__('Custom fields','WATS').' : ';
-	echo '</h3>';
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("tickets_custom_fields_tip");>'.__('Custom fields','WATS').' : </a></h3>';
 	echo '<table class="form-table">';
 	echo '<tr><td><input type="checkbox" name="tickets_custom_fields"';
 	if ($wats_settings['tickets_custom_fields'] == 1)
 		echo ' checked';
-	echo '> '.__('Allow custom fields association to tickets','WATS').'</td></tr></table><br />';
+	echo '> '.__('Allow custom fields association to tickets','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="tickets_custom_fields_tip">';
+	echo __('Check this option if you want to allow custom fields association to tickets.','WATS').'</div></td></tr></table><br />';
 	
-	echo '<h3>'.__('Guest user','WATS').' : ';
-	echo '<td><select name="guestlist" id="guestlist" size="1">';
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("guestlist_tip");>'.__('Shared guest user','WATS').' : </a></h3>';
+	echo '<table class="form-table"><tr><td>'.__('User','WATS').' : <select name="guestlist" id="guestlist" size="1">';
 	$userlist = wats_build_user_list(1,__("None",'WATS'));
 	for ($i = 0; $userlist[$i] != false; $i++)
 	{
@@ -526,9 +539,12 @@ function wats_options_admin_menu()
         if ($userlist[$i] == $wats_settings['wats_guest_user']) echo 'selected';
 			echo '>'.$userlist[$i].'</option>';
 	}
-	echo '</select></td></tr>';
-	echo '</h3><br />';
-
+	echo '</select></td></tr><tr><td>';
+	echo '<div class="wats_tip" id="guestlist_tip">';
+	echo __('The shared guest user is a user that must have at least contributor user level. This user will only have access to the ticket creation page on the admin side. You can share the guest user login/password with your visitors so that they can submit tickets without having to register first. This is a shared account.','WATS').'</div></td></tr></table><br />';
+	
+	echo '<p class="submit">';
+	echo '<input class="button-primary" type="submit" name="save" value="'.__('Save','WATS').'" /></p><br />';
 	
 	echo '<h3>'.__('Ticket types','WATS').' :</h3><br />';
 	echo '<table class="widefat" cellspacing="0" id="tabletype" style="text-align:center;"><thead><tr class="thead">';
@@ -566,8 +582,7 @@ function wats_options_admin_menu()
     wats_admin_display_options_list('wats_categories','catcheck');
 	wats_admin_add_category_interface('resultsupcat','resultaddcat','idsupcat','idaddcat','Category','idcat');
 	
-	echo '<p class="submit">';
-	echo '<input class="button-primary" type="submit" name="save" value="'.__('Save','WATS').'" /></p></form>';
+	echo '</form><br /><br />';
 }
 
 ?>

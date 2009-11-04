@@ -1,5 +1,15 @@
 <?php
 ?>
+function wats_invert_visibility(id)
+{
+    var cell = document.getElementById(id);
+    
+	if(cell.style.display == 'block')
+		cell.style.display = 'none';
+    else
+        cell.style.display = 'block';
+}
+
 function wats_loading(cell,msg)
 {
      cell.style.display = 'inline';

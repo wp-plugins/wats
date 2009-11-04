@@ -276,7 +276,9 @@ function wats_parse_query()
 
 function wats_wp_footer()
 {
-	echo '<div style="text-align:center;"><a href="'.WATS_BACKLINK.'">'.WATS_ANCHOR.'</a> is powered by <a href="'.WATS_BACKLINK2.'">'.WATS_ANCHOR2.'</a></div>';
+
+	if (is_home() && !is_paged())
+		echo '<div style="text-align:center;">Wordpress advanced <a href="'.WATS_BACKLINK.'">'.WATS_ANCHOR.'</a> from <a href="'.WATS_BACKLINK2.'">'.WATS_ANCHOR2.'</a></div>';
 	
 	return;
 }

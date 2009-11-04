@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.5
-Stable tag: 1.0.26
+Stable tag: 1.0.27
 
 == Description ==
 
@@ -48,6 +48,9 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.27 (04/11/2009) =
+* added inline help to items in the options page
 
 = V1.0.26 (29/10/2009) =
 * fixed a bug preventing single-ticket.php template from being overriden
