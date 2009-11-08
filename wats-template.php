@@ -277,7 +277,7 @@ function wats_parse_query()
 function wats_wp_footer()
 {
 
-	if (is_home() && !is_paged())
+	if (is_front_page() && (!is_paged()))
 		echo '<div style="text-align:center;">Wordpress advanced <a href="'.WATS_BACKLINK.'">'.WATS_ANCHOR.'</a> from <a href="'.WATS_BACKLINK2.'">'.WATS_ANCHOR2.'</a></div>';
 	
 	return;
