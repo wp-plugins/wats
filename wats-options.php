@@ -36,6 +36,7 @@ function wats_load_settings()
 		$default['comment_menuitem_visibility'] = 0;
 		$default['tickets_tagging'] = 0;
 		$default['tickets_custom_fields'] = 0;
+		$default['dashboard_stats_widget_level'] = 0;
    	    add_option('wats', $default);
 	}
         
@@ -82,6 +83,11 @@ function wats_load_settings()
 		if (!isset($wats_settings['tickets_custom_fields']))
 		{
 			$wats_settings['tickets_custom_fields'] = 0;
+		}
+		
+		if (!isset($wats_settings['dashboard_stats_widget_level']))
+		{
+			$wats_settings['dashboard_stats_widget_level'] = 0;
 		}
 		
 		$wats_settings['wats_version'] = $wats_version;
@@ -407,6 +413,7 @@ function wats_options_admin_menu()
 		$wats_settings['comment_menuitem_visibility'] = isset($_POST['comment_menuitem_visibility']) ? 1 : 0;
 		$wats_settings['tickets_tagging'] = isset($_POST['tickets_tagging']) ? 1 : 0;
 		$wats_settings['tickets_custom_fields'] = isset($_POST['tickets_custom_fields']) ? 1 : 0;
+		$wats_settings['dashboard_stats_widget_level'] = $_POST['dashboard_stats_widget_level'];
 		update_option('wats', $wats_settings);
 	}
 	
@@ -501,7 +508,7 @@ function wats_options_admin_menu()
 	}
 	echo '</select></td></tr><tr><td>';
 	echo '<div class="wats_tip" id="ticket_assign_level_tip">';
-	echo __('Select the level. Only users with this minimum level value will be able to assign tickets. To learn more about users levels, check out this page : ','WATS').'<a href="http://codex.wordpress.org/Roles_and_Capabilities">WP roles and capabilities</a></div></td></tr></table><br />';
+	echo __('Select the level. Only users with this minimum level value will be able to assign tickets. To learn more about users levels, check out this page : ','WATS').'<a href="http://codex.wordpress.org/Roles_and_Capabilities">WP roles and capabilities</a>.</div></td></tr></table><br />';
 
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("comment_menuitem_visibility_tip");>'.__('Admin menu access','WATS').' : </a></h3>';
 	echo '<table class="form-table">';
@@ -529,6 +536,18 @@ function wats_options_admin_menu()
 	echo '> '.__('Allow custom fields association to tickets','WATS').'</td></tr><tr><td>';
 	echo '<div class="wats_tip" id="tickets_custom_fields_tip">';
 	echo __('Check this option if you want to allow custom fields association to tickets.','WATS').'</div></td></tr></table><br />';
+	
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("dashboard_stats_widget_level_tip");>'.__('Statistics dashboad widget visibility','WATS').' : </a></h3>';
+	echo '<table class="form-table"><tr><td>'.__('Minimum required level','WATS').' : <select name="dashboard_stats_widget_level" id="dashboard_stats_widget_level" size="1">';
+	for ($i = 0; $i != 11; $i++)
+	{
+        echo '<option value="'.$i.'" ';
+        if ($i == $wats_settings['dashboard_stats_widget_level']) echo 'selected';
+			echo '>'.$i.'</option>';
+	}
+	echo '</select></td></tr><tr><td>';
+	echo '<div class="wats_tip" id="dashboard_stats_widget_level_tip">';
+	echo __('Select the level. Only users with this minimum level value will be view the statistics widget under the dashboard. To learn more about users levels, check out this page : ','WATS').'<a href="http://codex.wordpress.org/Roles_and_Capabilities">WP roles and capabilities</a>.</div></td></tr></table><br />';
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("guestlist_tip");>'.__('Shared guest user','WATS').' : </a></h3>';
 	echo '<table class="form-table"><tr><td>'.__('User','WATS').' : <select name="guestlist" id="guestlist" size="1">';

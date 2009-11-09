@@ -85,11 +85,11 @@ function wats_dashboard_widget_tickets()
 	return;
 }
 
-/*********************************************/
-/*                                                                                      */
+/****************************************************/
+/*                                                  */
 /* Fonction pour le widget des commentaires récents */
-/*                                                                                      */
-/*********************************************/
+/*                                                  */
+/****************************************************/
 
 function wp_dashboard_wats_recent_comments()
 {
@@ -158,9 +158,11 @@ function wp_dashboard_wats_recent_comments()
 
 function wats_dashboard_setup()
 {
-	global $wp_meta_boxes;
+	global $wp_meta_boxes, $current_user, $wats_settings;
 
-	wp_add_dashboard_widget('my_wp_dashboard_wats', 'Tickets', 'wats_dashboard_widget_tickets');
+	if ($current_user->user_level >= $wats_settings['dashboard_stats_widget_level'])
+		wp_add_dashboard_widget('my_wp_dashboard_wats', 'Tickets', 'wats_dashboard_widget_tickets');
+		
 	unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_recent_comments']);
 	$recent_comments_title = __( 'Recent Comments' );
 	wp_add_dashboard_widget( 'dashboard_recent_comments', $recent_comments_title, 'wp_dashboard_wats_recent_comments' );
