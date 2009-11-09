@@ -1,0 +1,1064 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WATS\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-09-26 17:42+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: wats-dashboard.php:13
+#: wats-dashboard.php:73
+msgid "Global stats :"
+msgstr "Globale Statistik:"
+
+#: wats-dashboard.php:14
+#: wats-dashboard.php:22
+msgid "Tickets created :"
+msgstr "Tickets erstellt :"
+
+#: wats-dashboard.php:16
+#: wats-dashboard.php:24
+msgid "Tickets closed :"
+msgstr "Ticket-Bearbeiter : "
+
+#: wats-dashboard.php:21
+#: wats-dashboard.php:79
+msgid "Your stats :"
+msgstr "User Statistik:"
+
+#: wats-dashboard.php:43
+#: wats-dashboard.php:58
+#: wats-head.php:126
+#: wats-head.php:132
+msgid "Tickets"
+msgstr "Tickets"
+
+#: wats-dashboard.php:74
+#: wats-dashboard.php:80
+msgid "Number of tickets created : "
+msgstr "Tickets erstellt :"
+
+#: wats-dashboard.php:76
+#: wats-dashboard.php:82
+msgid "Number of tickets closed : "
+msgstr "Tickets geschlossen :"
+
+#: wats-edit-form-advanced.php:14
+#, php-format
+msgid "Ticket updated. <a href=\"%s\">View ticket</a>"
+msgstr "Ticket aktualisiert. <a href=\"%s\">Ticket anzeigen</a>"
+
+#: wats-edit-form-advanced.php:15
+msgid "Custom field updated."
+msgstr ""
+
+#: wats-edit-form-advanced.php:16
+msgid "Custom field deleted."
+msgstr ""
+
+#: wats-edit-form-advanced.php:17
+msgid "Ticket updated."
+msgstr "Ticket aktualisiert."
+
+#: wats-edit-form-advanced.php:18
+#, php-format
+msgid "Ticket published. <a href=\"%s\">View ticket</a>"
+msgstr "Ticket ver&ouml;ffentlicht <a href=\"%s\">Ticket anzeigen</a>"
+
+#: wats-edit-form-advanced.php:19
+msgid "Post saved."
+msgstr ""
+
+#: wats-edit-form-advanced.php:20
+#, php-format
+msgid "Ticket submitted. <a href=\"%s\">Preview ticket</a>"
+msgstr "Ticket gespeichert. <a href=\"%s\">Ticket-Vorschau</a>"
+
+#: wats-edit-form-advanced.php:23
+#, php-format
+msgid "Ticket restored to revision from %s"
+msgstr "Ticket wiederhergestellt von Version %s"
+
+#: wats-edit-form-advanced.php:26
+#, php-format
+msgid "There is an autosave of this ticket that is more recent than the version below.  <a href=\"%s\">View the autosave</a>."
+msgstr "Es gibt eine neuere Auto-Save Version dieses Tickets als die folgende. <a href=\"%s\">Auto-Save anzeigen</a>."
+
+#: wats-edit-form-advanced.php:86
+msgid "Preview Changes"
+msgstr ""
+
+#: wats-edit-form-advanced.php:89
+#: wats-edit-post-rows.php:197
+msgid "Preview"
+msgstr ""
+
+#: wats-edit-form-advanced.php:101
+msgid "Status:"
+msgstr "Status:"
+
+#: wats-edit-form-advanced.php:106
+#: wats-edit-form-advanced.php:132
+msgid "Privately Published"
+msgstr ""
+
+#: wats-edit-form-advanced.php:109
+#: wats-edit-form-advanced.php:130
+#: wats-edit-post-rows.php:169
+#: wats-edit.php:17
+msgid "Published"
+msgstr ""
+
+#: wats-edit-form-advanced.php:112
+#: wats-edit-form-advanced.php:134
+#: wats-edit-post-rows.php:174
+#: wats-edit.php:18
+msgid "Scheduled"
+msgstr ""
+
+#: wats-edit-form-advanced.php:115
+#: wats-edit-form-advanced.php:136
+#: wats-edit.php:19
+msgid "Pending Review"
+msgstr ""
+
+#: wats-edit-form-advanced.php:118
+#: wats-edit-form-advanced.php:137
+#: wats-edit.php:20
+msgid "Draft"
+msgstr ""
+
+#: wats-edit-form-advanced.php:124
+#: wats-edit-form-advanced.php:164
+#: wats-edit-form-advanced.php:213
+#: wats-edit-post-rows.php:191
+#: wats-edit-post-rows.php:279
+#: wats-edit.php:254
+#: wats-edit.php:334
+msgid "Edit"
+msgstr ""
+
+#: wats-edit-form-advanced.php:139
+#: wats-edit-form-advanced.php:179
+msgid "OK"
+msgstr ""
+
+#: wats-edit-form-advanced.php:140
+#: wats-edit-form-advanced.php:180
+msgid "Cancel"
+msgstr ""
+
+#: wats-edit-form-advanced.php:147
+msgid "Visibility:"
+msgstr ""
+
+#: wats-edit-form-advanced.php:152
+#: wats-edit-form-advanced.php:176
+#: wats-edit.php:21
+msgid "Private"
+msgstr ""
+
+#: wats-edit-form-advanced.php:155
+#: wats-edit-form-advanced.php:174
+msgid "Password protected"
+msgstr ""
+
+#: wats-edit-form-advanced.php:158
+msgid "Public, Sticky"
+msgstr ""
+
+#: wats-edit-form-advanced.php:161
+#: wats-edit-form-advanced.php:172
+msgid "Public"
+msgstr ""
+
+#: wats-edit-form-advanced.php:173
+msgid "Stick this post to the front page"
+msgstr ""
+
+#: wats-edit-form-advanced.php:175
+msgid "Password:"
+msgstr ""
+
+#: wats-edit-form-advanced.php:190
+msgid "M j, Y @ G:i"
+msgstr ""
+
+#: wats-edit-form-advanced.php:193
+#, php-format
+msgid "Scheduled for: <b>%1$s</b>"
+msgstr ""
+
+#: wats-edit-form-advanced.php:195
+#, php-format
+msgid "Published on: <b>%1$s</b>"
+msgstr ""
+
+#: wats-edit-form-advanced.php:197
+#: wats-edit-form-advanced.php:205
+msgid "Publish <b>immediately</b>"
+msgstr ""
+
+#: wats-edit-form-advanced.php:199
+#, php-format
+msgid "Schedule for: <b>%1$s</b>"
+msgstr ""
+
+#: wats-edit-form-advanced.php:201
+#, php-format
+msgid "Publish on: <b>%1$s</b>"
+msgstr ""
+
+#: wats-edit-form-advanced.php:227
+#, php-format
+msgid ""
+"You are about to delete this draft '%s'\n"
+"  'Cancel' to stop, 'OK' to delete."
+msgstr ""
+
+#: wats-edit-form-advanced.php:227
+#, php-format
+msgid ""
+"You are about to delete this post '%s'\n"
+"  'Cancel' to stop, 'OK' to delete."
+msgstr ""
+
+#: wats-edit-form-advanced.php:227
+#: wats-edit-post-rows.php:193
+#: wats-edit-post-rows.php:285
+#: wats-edit.php:255
+#: wats-edit.php:335
+msgid "Delete"
+msgstr ""
+
+#: wats-edit-form-advanced.php:248
+#: wats-edit-form-advanced.php:249
+msgid "Update Ticket"
+msgstr "Ticket Aktualisieren"
+
+#: wats-edit-form-advanced.php:259
+msgid "Publish"
+msgstr ""
+
+#: wats-edit-form-advanced.php:271
+msgid "Separate tags with commas."
+msgstr ""
+
+#: wats-edit-form-advanced.php:276
+msgid "Add or remove tags"
+msgstr ""
+
+#: wats-edit-form-advanced.php:287
+#, php-format
+msgid "Choose from the most used tags in %s"
+msgstr ""
+
+#: wats-edit-form-advanced.php:311
+msgid "All Categories"
+msgstr ""
+
+#: wats-edit-form-advanced.php:312
+msgid "Most Used"
+msgstr ""
+
+#: wats-edit-form-advanced.php:329
+msgid "+ Add New Category"
+msgstr ""
+
+#: wats-edit-form-advanced.php:331
+msgid "Add New Category"
+msgstr ""
+
+#: wats-edit-form-advanced.php:332
+msgid "Parent category"
+msgstr ""
+
+#: wats-edit-form-advanced.php:341
+#: wats-template.php:393
+msgid "Categories"
+msgstr ""
+
+#: wats-edit-form-advanced.php:352
+msgid "Keep this post private"
+msgstr ""
+
+#: wats-edit-form-advanced.php:353
+msgid "Post Password"
+msgstr ""
+
+#: wats-edit-form-advanced.php:354
+msgid "Password Protect This Post"
+msgstr ""
+
+#: wats-edit-form-advanced.php:355
+msgid "Setting a password will require people who visit your blog to enter the above password to view this post and its comments."
+msgstr ""
+
+#: wats-edit-form-advanced.php:369
+#: wats-edit-form-advanced.php:373
+msgid "Excerpt"
+msgstr ""
+
+#: wats-edit-form-advanced.php:370
+msgid "Excerpts are optional hand-crafted summaries of your content that can be used in your theme. <a href=\"http://codex.wordpress.org/Excerpt\" target=\"_blank\">Learn more about manual excerpts.</a>"
+msgstr ""
+
+#: wats-edit-form-advanced.php:385
+msgid "Already pinged:"
+msgstr ""
+
+#: wats-edit-form-advanced.php:394
+msgid "Send trackbacks to:"
+msgstr ""
+
+#: wats-edit-form-advanced.php:394
+msgid "Separate multiple URLs with spaces"
+msgstr ""
+
+#: wats-edit-form-advanced.php:395
+msgid "Trackbacks are a way to notify legacy blog systems that you&#8217;ve linked to them. If you link other WordPress blogs they&#8217;ll be notified automatically using <a href=\"http://codex.wordpress.org/Introduction_to_Blogging#Managing_Comments\" target=\"_blank\">pingbacks</a>, no other action necessary."
+msgstr ""
+
+#: wats-edit-form-advanced.php:400
+msgid "Send Trackbacks"
+msgstr ""
+
+#: wats-edit-form-advanced.php:418
+msgid "Custom fields can be used to add extra metadata to a post that you can <a href=\"http://codex.wordpress.org/Using_Custom_Fields\" target=\"_blank\">use in your theme</a>."
+msgstr ""
+
+#: wats-edit-form-advanced.php:421
+msgid "Custom Fields"
+msgstr ""
+
+#: wats-edit-form-advanced.php:436
+msgid "Allow comments on this post"
+msgstr ""
+
+#: wats-edit-form-advanced.php:437
+msgid "Allow <a href=\"http://codex.wordpress.org/Introduction_to_Blogging#Managing_Comments\" target=\"_blank\">trackbacks and pingbacks</a> on this post"
+msgstr ""
+
+#: wats-edit-form-advanced.php:440
+msgid "Discussion"
+msgstr ""
+
+#: wats-edit-form-advanced.php:455
+msgid "No comments yet."
+msgstr ""
+
+#: wats-edit-form-advanced.php:464
+#: wats-template.php:170
+msgid "Author"
+msgstr "Author"
+
+#: wats-edit-form-advanced.php:470
+msgid "Show comments"
+msgstr ""
+
+#: wats-edit-form-advanced.php:479
+msgid "Comments"
+msgstr ""
+
+#: wats-edit-form-advanced.php:490
+#: wats-edit-form-advanced.php:494
+msgid "Post Slug"
+msgstr ""
+
+#: wats-edit-form-advanced.php:513
+#: wats-edit-form-advanced.php:516
+msgid "Post Author"
+msgstr ""
+
+#: wats-edit-form-advanced.php:530
+msgid "Post Revisions"
+msgstr ""
+
+#: wats-edit-form-advanced.php:589
+#: wats-template.php:168
+msgid "Title"
+msgstr "Titel"
+
+#: wats-edit-form-advanced.php:620
+#, php-format
+msgid "Last edited by %1$s on %2$s at %3$s"
+msgstr ""
+
+#: wats-edit-form-advanced.php:622
+#, php-format
+msgid "Last edited on %1$s at %2$s"
+msgstr ""
+
+#: wats-edit-post-rows.php:13
+#: wats-options.php:482
+#: wats-template.php:173
+msgid "Type"
+msgstr "Typ"
+
+#: wats-edit-post-rows.php:14
+#: wats-options.php:491
+#: wats-template.php:174
+msgid "Priority"
+msgstr "Priorit&auml;t"
+
+#: wats-edit-post-rows.php:15
+#: wats-options.php:500
+#: wats-template.php:175
+msgid "Status"
+msgstr "Status"
+
+#: wats-edit-post-rows.php:16
+msgid "Ticket"
+msgstr "Ticket"
+
+#: wats-edit-post-rows.php:138
+msgid "Unpublished"
+msgstr ""
+
+#: wats-edit-post-rows.php:140
+msgid "Y/m/d g:i:s A"
+msgstr ""
+
+#: wats-edit-post-rows.php:148
+#, php-format
+msgid "%s from now"
+msgstr ""
+
+#: wats-edit-post-rows.php:156
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#: wats-edit-post-rows.php:158
+msgid "Y/m/d"
+msgstr ""
+
+#: wats-edit-post-rows.php:172
+msgid "Missed schedule"
+msgstr ""
+
+#: wats-edit-post-rows.php:176
+msgid "Last Modified"
+msgstr ""
+
+#: wats-edit-post-rows.php:184
+#, php-format
+msgid "Edit \"%s\""
+msgstr ""
+
+#: wats-edit-post-rows.php:191
+msgid "Edit this post"
+msgstr ""
+
+#: wats-edit-post-rows.php:193
+msgid "Delete this post"
+msgstr ""
+
+#: wats-edit-post-rows.php:193
+#, php-format
+msgid ""
+"You are about to delete this draft '%s'\n"
+" 'Cancel' to stop, 'OK' to delete."
+msgstr ""
+
+#: wats-edit-post-rows.php:193
+#, php-format
+msgid ""
+"You are about to delete this post '%s'\n"
+" 'Cancel' to stop, 'OK' to delete."
+msgstr ""
+
+#: wats-edit-post-rows.php:197
+#, php-format
+msgid "Preview \"%s\""
+msgstr ""
+
+#: wats-edit-post-rows.php:199
+#, php-format
+msgid "View \"%s\""
+msgstr ""
+
+#: wats-edit-post-rows.php:199
+#: wats-edit-post-rows.php:273
+msgid "View"
+msgstr ""
+
+#: wats-edit-post-rows.php:228
+#: wats-template.php:202
+msgid "Uncategorized"
+msgstr ""
+
+#: wats-edit-post-rows.php:244
+msgid "No Tags"
+msgstr ""
+
+#: wats-edit-post-rows.php:254
+#, php-format
+msgid "%s pending"
+msgstr ""
+
+#: wats-edit-post-rows.php:257
+msgid "0"
+msgstr ""
+
+#: wats-edit-post-rows.php:257
+msgid "1"
+msgstr ""
+
+#: wats-edit-post-rows.php:257
+msgid "%"
+msgstr ""
+
+#: wats-edit.php:17
+msgid "Published posts"
+msgstr ""
+
+#: wats-edit.php:18
+msgid "Scheduled posts"
+msgstr ""
+
+#: wats-edit.php:19
+msgid "Pending posts"
+msgstr ""
+
+#: wats-edit.php:21
+msgid "Private posts"
+msgstr ""
+
+#: wats-edit.php:82
+msgid "You are not allowed to delete this post."
+msgstr ""
+
+#: wats-edit.php:86
+#: wats-edit.php:89
+#: wats-ticket.php:179
+#: wats-ticket.php:182
+msgid "Error in deleting..."
+msgstr ""
+
+#: wats-edit.php:131
+#: wats-head.php:133
+msgid "Edit Tickets"
+msgstr "Tickets bearbeiten"
+
+#: wats-edit.php:156
+#, php-format
+msgid "Search results for &#8220;%s&#8221;"
+msgstr ""
+
+#: wats-edit.php:161
+msgid "Your ticket has been saved."
+msgstr "Das Ticket wurde gespeichert."
+
+#: wats-edit.php:161
+msgid "View post"
+msgstr ""
+
+#: wats-edit.php:161
+msgid "Edit ticket"
+msgstr "Ticket bearbeiten"
+
+#: wats-edit.php:224
+#: wats-edit.php:226
+msgid "Search Tickets"
+msgstr "Tickets suchen"
+
+#: wats-edit.php:243
+msgid "&laquo;"
+msgstr ""
+
+#: wats-edit.php:244
+msgid "&raquo;"
+msgstr ""
+
+#: wats-edit.php:253
+#: wats-edit.php:333
+msgid "Bulk Actions"
+msgstr ""
+
+#: wats-edit.php:257
+#: wats-edit.php:337
+msgid "Apply"
+msgstr "Anwenden"
+
+#: wats-edit.php:272
+msgid "Show all dates"
+msgstr ""
+
+#: wats-edit.php:293
+msgid "View all categories"
+msgstr ""
+
+#: wats-edit.php:298
+#: wats-template.php:84
+msgid "Filter"
+msgstr ""
+
+#: wats-edit.php:304
+#, php-format
+msgid "Displaying %s&#8211;%s of %s"
+msgstr ""
+
+#: wats-edit.php:313
+msgid "List View"
+msgstr ""
+
+#: wats-edit.php:314
+msgid "Excerpt View"
+msgstr ""
+
+#: wats-edit.php:345
+msgid "No ticket found"
+msgstr "Kein Ticket gefunden"
+
+#: wats-head.php:126
+msgid "New Ticket"
+msgstr "Neues Ticket"
+
+#: wats-head.php:127
+#: wats-head.php:136
+msgid "New ticket"
+msgstr "Neues ticket"
+
+#: wats-head.php:132
+msgid "Modify"
+msgstr "Bearbeiten"
+
+#: wats-link-template.php:66
+msgid "Edit post"
+msgstr ""
+
+#: wats-options-ajax.php:4
+msgid "Error : there is nothing to remove!"
+msgstr "Fehler: es gibt nichts zu l&ouml;schen"
+
+#: wats-options-ajax.php:5
+msgid "Error : please select an entry to remove!"
+msgstr "Fehler: bitte w&auml;hle einen Eintrag zum l&ouml;schen aus!"
+
+#: wats-options-ajax.php:6
+#: wats-options.php:337
+#: wats-template.php:220
+msgid "No entry"
+msgstr "Kein Eintrag"
+
+#: wats-options-ajax.php:7
+msgid "Please correct the errors"
+msgstr "Bitte Fehler korrigieren"
+
+#: wats-options-ajax.php:8
+msgid "Adding entry"
+msgstr "Eintrag wird hinzugef&uuml;gt"
+
+#: wats-options-ajax.php:9
+msgid "Error : the string contains invalid caracters!"
+msgstr "Fehler: der String beinhaltet unerlaubte Zeichen!"
+
+#: wats-options.php:95
+#: wats-options.php:109
+#: wats-options.php:206
+msgid "Error : please enter an entry!"
+msgstr "Fehler: bitte Eintrag eingeben!"
+
+#: wats-options.php:127
+msgid "Error : entry not found!"
+msgstr "Fehler: Kein Eintrag gefunden"
+
+#: wats-options.php:131
+msgid "Error : another entry has the same value!"
+msgstr "Fehler: ein anderer Eintrag hat den selben Wert"
+
+#: wats-options.php:140
+msgid "Entry successfully updated!"
+msgstr "Eintrag erfolgreich Aktualisiert!"
+
+#: wats-options.php:144
+#: wats-options.php:245
+msgid "Error : the entry contains invalid characters!"
+msgstr "Fehler: der Eintrag beinhaltet unerlaubte Zeichen!"
+
+#: wats-options.php:176
+msgid "Entry successfully removed!"
+msgstr "Eintrag erfolgreich gel&ouml;scht!"
+
+#: wats-options.php:180
+msgid "Error : entry not existing!"
+msgstr "Fehler: Eintrag existiert nicht!"
+
+#: wats-options.php:228
+msgid "Error : already existing entry!"
+msgstr "Fehler: Eintrag existiert bereits!"
+
+#: wats-options.php:241
+msgid "Entry successfully added!"
+msgstr "Eintrag erfolgreich hinzugef&uuml;gt!"
+
+#: wats-options.php:263
+#: wats-options.php:289
+msgid "Remove"
+msgstr "L&ouml;schen"
+
+#: wats-options.php:275
+#: wats-options.php:294
+msgid "Add"
+msgstr "Hinzuf&uuml;gen"
+
+#: wats-options.php:398
+msgid "Ticket numerotation"
+msgstr "Ticket Nummerierung"
+
+#: wats-options.php:402
+#: wats-options.php:468
+#: wats-template.php:210
+#: wats-ticket-metas.php:294
+msgid "None"
+msgstr "Kein/e"
+
+#: wats-options.php:405
+msgid "Dated"
+msgstr "Datum"
+
+#: wats-options.php:408
+msgid "Numbered"
+msgstr "Nummeriert"
+
+#: wats-options.php:412
+msgid "Latest ticket ID"
+msgstr "Letzte Ticket ID"
+
+#: wats-options.php:415
+msgid "Tickets display"
+msgstr "Ticket Anzeige"
+
+#: wats-options.php:420
+msgid "Include tickets on homepage together with posts"
+msgstr "Tickets auf der Homepage zusammen mit Posts anzeigen"
+
+#: wats-options.php:422
+msgid "Notification"
+msgstr "Benachrichtigung"
+
+#: wats-options.php:427
+msgid "Notify admin by email upon new ticket submission"
+msgstr "Administrator per E-mail benachrichtigen wenn neue Tickets erstellt werden"
+
+#: wats-options.php:430
+msgid "Tickets visibility"
+msgstr "Ticket Sichtbarkeit"
+
+#: wats-options.php:434
+msgid "Everybody can see all tickets"
+msgstr "Jeder kann alle Tickets sehen"
+
+#: wats-options.php:437
+msgid "Only registered users can see tickets"
+msgstr "Nur registrierte Benutzer k&ouml;nnen Tickets sehen"
+
+#: wats-options.php:440
+msgid "Only ticket creator and admins can see tickets"
+msgstr "Nur Ersteller des Tickets und Administratoren k&ouml;nnen Tickets sehen"
+
+#: wats-options.php:442
+msgid "Tickets assignment"
+msgstr "Ticket-Zuweisung"
+
+#: wats-options.php:446
+msgid "No assignment possible"
+msgstr "Keine Zuweisung erm&ouml;glichen"
+
+#: wats-options.php:449
+msgid "Everybody can assign a ticket"
+msgstr "Jeder kann ein Ticket zuweisen"
+
+#: wats-options.php:452
+msgid "Only registered users can assign a ticket"
+msgstr "Nur registrierte Benutzer k&ouml;nnen Tickets zuweisen"
+
+#: wats-options.php:454
+msgid "Ticket assignment capability minimum level requirement"
+msgstr "Minimales Userlevel f&uuml;r die Ticket-Zuweisung"
+
+#: wats-options.php:466
+msgid "Guest user"
+msgstr "Gast User"
+
+#: wats-options.php:479
+msgid "Ticket types"
+msgstr "Arten von Tickets"
+
+#: wats-options.php:483
+#: wats-options.php:492
+#: wats-options.php:501
+#: wats-options.php:510
+msgid "Selection"
+msgstr "Auswahl"
+
+#: wats-options.php:488
+msgid "Ticket priorities"
+msgstr "Ticket-Priorit&auml;ten"
+
+#: wats-options.php:497
+msgid "Ticket statuses"
+msgstr "Ticket-Status"
+
+#: wats-options.php:506
+msgid "Categories opened to submission"
+msgstr "F&uuml; die Ticketeingabe freigegebene Kategorien"
+
+#: wats-options.php:509
+#: wats-template.php:169
+msgid "Category"
+msgstr "Kategorie"
+
+#: wats-options.php:516
+msgid "Save"
+msgstr "Speichern"
+
+#: wats-template.php:55
+#: wats-ticket-metas.php:258
+msgid "Ticket type"
+msgstr "Ticket-Typ"
+
+#: wats-template.php:57
+#: wats-template.php:64
+#: wats-template.php:71
+#: wats-template.php:77
+#: wats-template.php:125
+msgid "Any"
+msgstr "Alle"
+
+#: wats-template.php:62
+#: wats-ticket-metas.php:269
+msgid "Ticket priority"
+msgstr "Ticket-Priorit&auml;t"
+
+#: wats-template.php:69
+#: wats-ticket-metas.php:280
+msgid "Ticket status"
+msgstr "Ticket-Status"
+
+#: wats-template.php:76
+#: wats-ticket-metas.php:293
+msgid "Ticket owner"
+msgstr "Ticket-Bearbeiter"
+
+#: wats-template.php:171
+msgid "Owner"
+msgstr "Bearbeiter"
+
+#: wats-template.php:172
+msgid "Creation date"
+msgstr "Erstellungsdatum"
+
+#: wats-ticket-list-ajax.php:4
+msgid "Filtering table..."
+msgstr "Filtere Tabelle..."
+
+#: wats-ticket-metas.php:17
+msgid "Current ticket owner : "
+msgstr "Ticket-Bearbeiter : "
+
+#: wats-ticket-metas.php:166
+msgid "New ticket submitted"
+msgstr "Neues Ticket eingereicht"
+
+#: wats-ticket-metas.php:167
+msgid "Hello "
+msgstr "Servus "
+
+#: wats-ticket-metas.php:168
+msgid "A new ticket has been submitted into the system."
+msgstr "Ein neues Ticket wurde in das System eingetragen."
+
+#: wats-ticket-metas.php:169
+msgid "You can view it there :"
+msgstr "Hier kannst du es ansehen:"
+
+#: wats-ticket-metas.php:170
+msgid "+ Frontend side : "
+msgstr ""
+
+#: wats-ticket-metas.php:171
+msgid "+ Admin side : "
+msgstr ""
+
+#: wats-ticket-metas.php:172
+msgid "Regards"
+msgstr "Gr&uuml;&szlig;e"
+
+#: wats-ticket-metas.php:173
+msgid "WATS Notification engine"
+msgstr "WATS Benachrichtigungsdienst"
+
+#: wats-ticket-metas.php:201
+msgid "Ticket details"
+msgstr "Ticket-Details"
+
+#: wats-ticket-metas.php:232
+msgid "Here is the ticket history"
+msgstr "Hier ist der Ticket-Verlauf"
+
+#: wats-ticket-metas.php:310
+msgid "Ticket originator : "
+msgstr "Ticket-Ersteller : "
+
+#: wats-ticket-new.php:3
+msgid "Add New Ticket"
+msgstr "Neues Ticket hinzuf&uuml;gen"
+
+#: wats-ticket-new.php:18
+#, php-format
+msgid ""
+"Since you&#8217;re a newcomer, you&#8217;ll have to wait for an admin to add the <code>edit_posts</code> capability to your user, in order to be authorized to post.<br />\n"
+"You can also <a href=\"mailto:%s?subject=Promotion?\">e-mail the admin</a> to ask for a promotion.<br />\n"
+"When you&#8217;re promoted, just reload this page and you&#8217;ll be able to blog. :)"
+msgstr ""
+
+#: wats-ticket.php:107
+msgid "You attempted to edit a ticket that doesn't exist. Perhaps it was deleted?"
+msgstr "Du hast versucht ein Ticket zu bearbeiten das nicht existiert. Wurde es vielleicht gel&ouml;scht?"
+
+#: wats-ticket.php:120
+msgid "Somebody"
+msgstr "Irgendwer"
+
+#: wats-ticket.php:121
+#, php-format
+msgid "Warning: %s is currently editing this ticket"
+msgstr "Warnung: %s bearbeitet gerade dieses Ticket"
+
+#: wats-ticket.php:130
+msgid "Edit Ticket"
+msgstr "Ticket bearbeiten"
+
+#: wats-ticket.php:133
+msgid "You are not allowed to edit this ticket."
+msgstr "Nicht gen&uuml;gend Rechte um das Ticket zu bearbeiten."
+
+#: wats-ticket.php:175
+msgid "You are not allowed to delete this ticket."
+msgstr "Nicht gen&uuml;gend Rechte um das Ticket zu l&ouml;schen"
+
+#: theme/comments-ticket.php:53
+msgid "Leave an update"
+msgstr "Aktualisierung eintragen"
+
+#: theme/comments-ticket.php:53
+#, php-format
+msgid "Leave an update for %s"
+msgstr "Aktualisierung f&uuml; %s eintragen"
+
+#: theme/comments-ticket.php:60
+#, php-format
+msgid "You must be <a href=\"%s\">logged in</a> to post an update."
+msgstr "Du musst dich <a href=\"%s\">einloggen</a> um eine Aktualisierung vorzunehmen."
+
+#: theme/comments-ticket.php:67
+#, php-format
+msgid "Logged in as <a href=\"%1$s\">%2$s</a>."
+msgstr "Eingeloggt als <a href=\"%1$s\">%2$s</a>."
+
+#: theme/comments-ticket.php:67
+msgid "Log out of this account"
+msgstr "Von diesem Account abmelden"
+
+#: theme/comments-ticket.php:67
+msgid "Log out &raquo;"
+msgstr "Abmelden &raquo;"
+
+#: theme/comments-ticket.php:72
+msgid "Name"
+msgstr "Name"
+
+#: theme/comments-ticket.php:72
+#: theme/comments-ticket.php:75
+msgid "(required)"
+msgstr "(obligatorisch)"
+
+#: theme/comments-ticket.php:75
+msgid "Mail (will not be published)"
+msgstr "Mail (wird nicht ver&ouml;ffentlicht)"
+
+#: theme/comments-ticket.php:78
+msgid "Website"
+msgstr "Website"
+
+#: theme/comments-ticket.php:82
+#, php-format
+msgid "<strong>XHTML:</strong> You can use these tags: <code>%s</code>"
+msgstr "<strong>XHTML:</strong>Du kannst diese Tags benutzen: <code>%s</code>"
+
+#: theme/comments-ticket.php:88
+msgid "Submit update"
+msgstr "Update abschicken"
+
+#: theme/single-ticket.php:18
+msgid "Current priority : "
+msgstr "Aktuelle Priorit&auml;t : "
+
+#: theme/single-ticket.php:19
+msgid "Current status : "
+msgstr "Aktueller Status : "
+
+#: theme/single-ticket.php:20
+msgid "Ticket type : "
+msgstr "Aktueller Ticket-Typ : "
+
+#: theme/single-ticket.php:29
+#, php-format
+msgid "This entry was submited %1$s on %2$s at %3$s and is filed under %4$s."
+msgstr "Dieser Eintrag wurde eingereicht %1$s am %2$s um %3$s und ist in der Kategorie %4$s."
+
+#: theme/single-ticket.php:29
+msgid "l, F jS, Y"
+msgstr "l, d.m.Y"
+
+#: theme/single-ticket.php:30
+#, php-format
+msgid "You can follow any responses to this entry through the <a href='%s'>RSS 2.0</a> feed."
+msgstr "Du kannst allen Antworten auf diesen Eintrag mit dem <a href='%s'>RSS 2.0-Feed</a> folgen."
+
+#: theme/single-ticket.php:33
+#, php-format
+msgid "You can <a href=\"#respond\">leave an update</a>, or <a href=\"%s\" rel=\"trackback\">trackback</a> from your own site."
+msgstr "Du kannst eine <a href=\"#respond\">Aktualisierung einreichen</a>, oder einen <a href=\"%s\" rel=\"trackback\">Trackback</a> von deiner eigenen Seite."
+
+#: theme/single-ticket.php:37
+#, php-format
+msgid "Responses are currently closed, but you can <a href=\"%s\" rel=\"trackback\">trackback</a> from your own site."
+msgstr "Antworten sind momentan nicht erlaubt aber du kannst einen <a href=\"%s\" rel=\"trackback\">Trackback</a> von deiner eigenen Seite erstellen."
+
+#: theme/single-ticket.php:41
+msgid "You can skip to the end and leave an update. Pinging is currently not allowed."
+msgstr "Du kannst bis zum Ende springen und ein Update hinterlassen. Pingen ist momentan nicht erlaubt."
+
+#: theme/single-ticket.php:45
+msgid "Both comments and pings are currently closed."
+msgstr "Kommentare und Trackbacks sind momentan nicht erlaubt."
+
+#: theme/single-ticket.php:47
+msgid "Edit this entry"
+msgstr "Ticket bearbeiten"
+
+#: theme/single-ticket.php:57
+msgid "Sorry, you don't have the rights to browse this ticket."
+msgstr "Entschuldigung, nicht gen&uuml;gend Rechte um das Ticket anzuzeigen."
+
+#: theme/single-ticket.php:62
+msgid "Sorry, no tickets matched your criteria."
+msgstr "Entschuldigung, keine Tickets zu den Suchkriterien gefunden."
+
+#~ msgid "Page generated by "
+#~ msgstr "Seite erstellt von"
+#~ msgid "Ticket history"
+#~ msgstr "Ticket-Verlauf"
+#~ msgid "Ticket title"
+#~ msgstr "Ticket-Titel"
+

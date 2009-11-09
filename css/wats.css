@@ -1,0 +1,84 @@
+.wats_loading {
+	background: url('../img/indicator.gif') left center no-repeat;
+        margin-left:10px;
+        padding-left:20px;
+}
+
+.wats_stop_loading {
+        margin-left:10px;
+        padding-left:20px;
+}
+
+.wats_tip {
+	background: url('../img/help.png') left center no-repeat;
+	display:none;
+	padding-left:25px;
+}
+
+.wats_editable {
+	background: url('../img/modify.png') right center no-repeat;
+}
+
+.wats_editableaccept {
+	background: url('../img/accept.png') right center no-repeat;
+}
+
+li.wats {
+	margin-left:10px;
+}
+
+.alternate {
+	background-color:#edfbfc;
+}
+
+.wats_table {
+	border-color: #dfdfdf;
+	border-width: 1px;
+	border-style: solid;
+	border-collapse: separate;
+	border-spacing: 0;
+	width: 100%;
+	clear: both;
+}
+
+.wats_table * {
+	word-wrap: break-word;
+}
+
+.wats_table td,
+.wats_table th {
+	border-color: #dfdfdf;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	font-size: 11px;
+}
+
+.wats_table td {
+	padding: 3px 5px;
+	vertical-align: top;
+}
+
+.wats_table thead {
+	background: #dfdfdf url(../img/blue-grad.png) repeat-x scroll left top;
+	line-height: 1.3em;height:100%;
+	text-shadow: rgba(255,255,255,0.8) 0 1px 0;
+}
+
+.wats_table thead tr th,
+.wats_table tfoot tr th {
+	background: url(../img/small.gif) no-repeat center right;
+	_background-color: #C6DDF1;
+	cursor: pointer;
+	padding-right:12px;
+	border-right: 1px solid #dfdfdf;
+}
+
+.wats_table thead tr th.headerSortUp {
+	background: url(../img/smallasc.gif) no-repeat center right;
+	background-color: #8dbdd8;
+}
+
+.wats_table thead tr th.headerSortDown {
+	background: url(../img/smalldesc.gif) no-repeat center right;
+	background-color: #8dbdd8;
+}
