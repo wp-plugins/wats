@@ -1,12 +1,4 @@
 <?php
-include('../../../wp-config.php');
-$site_url = get_option('siteurl');
-$watsmsg[0] = __('Error : there is nothing to remove!','WATS');
-$watsmsg[1] = __('Error : please select an entry to remove!','WATS');
-$watsmsg[2] = __('No entry','WATS');
-$watsmsg[3] = __('Please correct the errors','WATS');
-$watsmsg[4] = __('Adding entry','WATS');
-$watsmsg[5] = __('Error : the string contains invalid caracters!','WATS');
 ?>
 jQuery(document).ready(function() {
 	function wats_options_editable_init()
@@ -39,7 +31,7 @@ jQuery(document).ready(function() {
 				var idtable = jQuery(this).parent("tr").parent("tbody").parent("table").attr("id");
 				var idvalue = content.current;
 				var idprevvalue = content.previous;
-				jQuery.post("<?php echo $site_url; ?>/wp-admin/admin-ajax.php", {action:"wats_admin_update_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, idtable:idtable, idprevvalue:idprevvalue},
+				jQuery.post(ajaxurl, {action:"wats_admin_update_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, idtable:idtable, idprevvalue:idprevvalue},
 				function(res)
 				{
 					var message_result = eval('(' + res + ')');
@@ -52,7 +44,7 @@ jQuery(document).ready(function() {
 			}
 			else
 			{
-				alert('<?php echo $watsmsg[5]; ?>');
+				alert(watsmsg[5]);
 				jQuery(this).html(content.previous);
 			}
 		}
@@ -66,9 +58,9 @@ jQuery(document).ready(function() {
 		{
 			var type = "wats_types";
 			var idvalue = jQuery("#idtype").val();
-			wats_loading(document.getElementById("resultaddtype"),"<?php echo $watsmsg[4]; ?>");
+			wats_loading(document.getElementById("resultaddtype"),watsmsg[4]);
 			var idcat = 0;
-			jQuery.post("<?php echo $site_url; ?>/wp-admin/admin-ajax.php", {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+			jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 			function(res)
 			{
 				var message_result = eval('(' + res + ')');
@@ -85,15 +77,15 @@ jQuery(document).ready(function() {
 			});
 		}
 		else
-			wats_stop_loading(document.getElementById("resultaddtype"),"<?php echo $watsmsg[3]; ?>");
+			wats_stop_loading(document.getElementById("resultaddtype"),watsmsg[3]);
 		return false;
 	});
 
 	jQuery('#idsuptype').click(function() {
 		if (jQuery("input[name=typecheck]").length == 0)
-			wats_stop_loading(document.getElementById("resultsuptype"),"<?php echo $watsmsg[0]; ?>");
+			wats_stop_loading(document.getElementById("resultsuptype"),watsmsg[0]);
 		else if (jQuery("input[name=typecheck]:checked").length == 0)
-			wats_stop_loading(document.getElementById("resultsuptype"),"<?php echo $watsmsg[1]; ?>");
+			wats_stop_loading(document.getElementById("resultsuptype"),watsmsg[1]);
 		var type = "wats_types";
 	    jQuery("input[name=typecheck]:checked").each(function()
 		{
@@ -101,7 +93,7 @@ jQuery(document).ready(function() {
 			{
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
-				jQuery.post("<?php echo $site_url; ?>/wp-admin/admin-ajax.php", {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
 					var message_result = eval('(' + res + ')');
@@ -112,7 +104,7 @@ jQuery(document).ready(function() {
 						parenttoremove.parentNode.removeChild(parenttoremove);
 					}
 					if (jQuery("input[name=typecheck]").length == 0)
-						wats_js_add_blank_cell("tabletype",3,"<?php echo $watsmsg[2]; ?>");
+						wats_js_add_blank_cell("tabletype",3,watsmsg[2]);
 				});
 			}
 		});
@@ -128,8 +120,8 @@ jQuery(document).ready(function() {
 			var type = "wats_priorities";
 			var idvalue = jQuery("#idpriority").val();
 			var idcat = 0;
-			wats_loading(document.getElementById("resultaddpriority"),"<?php echo $watsmsg[4]; ?>");
-			jQuery.post("<?php echo $site_url; ?>/wp-admin/admin-ajax.php", {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+			wats_loading(document.getElementById("resultaddpriority"),watsmsg[4]);
+			jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 			function(res)
 			{
 				var message_result = eval('(' + res + ')');
@@ -146,15 +138,15 @@ jQuery(document).ready(function() {
 			});
 		}
 		else
-			wats_stop_loading(document.getElementById("resultaddpriority"),"<?php echo $watsmsg[3]; ?>");
+			wats_stop_loading(document.getElementById("resultaddpriority"),watsmsg[3]);
 		return false;
 	});
 
 	jQuery('#idsuppriority').click(function() {
 		if (jQuery("input[name=prioritycheck]").length == 0)
-			wats_stop_loading(document.getElementById("resultsuppriority"),"<?php echo $watsmsg[0]; ?>");
+			wats_stop_loading(document.getElementById("resultsuppriority"),watsmsg[0]);
 		else if (jQuery("input[name=prioritycheck]:checked").length == 0)
-			wats_stop_loading(document.getElementById("resultsuppriority"),"<?php echo $watsmsg[1]; ?>");
+			wats_stop_loading(document.getElementById("resultsuppriority"),watsmsg[1]);
 		var type = "wats_priorities";
 	    jQuery("input[name=prioritycheck]:checked").each(function()
 		{
@@ -162,7 +154,7 @@ jQuery(document).ready(function() {
 			{
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
-				jQuery.post("<?php echo $site_url; ?>/wp-admin/admin-ajax.php", {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
 					var message_result = eval('(' + res + ')');
@@ -173,7 +165,7 @@ jQuery(document).ready(function() {
 						parenttoremove.parentNode.removeChild(parenttoremove);
 					}
 					if (jQuery("input[name=prioritycheck]").length == 0)
-						wats_js_add_blank_cell("tablepriority",3,"<?php echo $watsmsg[2]; ?>");
+						wats_js_add_blank_cell("tablepriority",3,watsmsg[2]);
 				});
 			}
 		});
@@ -188,9 +180,9 @@ jQuery(document).ready(function() {
 		{
 			var type = "wats_statuses";
 			var idvalue = jQuery("#idstatus").val();
-			wats_loading(document.getElementById("resultaddstatus"),"<?php echo $watsmsg[4]; ?>");
+			wats_loading(document.getElementById("resultaddstatus"),watsmsg[4]);
 			var idcat = 0;
-			jQuery.post("<?php echo $site_url; ?>/wp-admin/admin-ajax.php", {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+			jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 			function(res)
 			{
 				var message_result = eval('(' + res + ')');
@@ -207,15 +199,15 @@ jQuery(document).ready(function() {
 			});
 		}
 		else
-			wats_stop_loading(document.getElementById("resultaddstatus"),"<?php echo $watsmsg[3]; ?>");
+			wats_stop_loading(document.getElementById("resultaddstatus"),watsmsg[3]);
 		return false;
 	});
 
 	jQuery('#idsupstatus').click(function() {
 		if (jQuery("input[name=statuscheck]").length == 0)
-			wats_stop_loading(document.getElementById("resultsupstatus"),"<?php echo $watsmsg[0]; ?>");
+			wats_stop_loading(document.getElementById("resultsupstatus"),watsmsg[0]);
 		else if (jQuery("input[name=statuscheck]:checked").length == 0)
-			wats_stop_loading(document.getElementById("resultsupstatus"),"<?php echo $watsmsg[1]; ?>");
+			wats_stop_loading(document.getElementById("resultsupstatus"),watsmsg[1]);
 		var type = "wats_statuses";
 	    jQuery("input[name=statuscheck]:checked").each(function()
 		{
@@ -223,7 +215,7 @@ jQuery(document).ready(function() {
 			{
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
-				jQuery.post("<?php echo $site_url; ?>/wp-admin/admin-ajax.php", {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
 					var message_result = eval('(' + res + ')');
@@ -234,7 +226,7 @@ jQuery(document).ready(function() {
 						parenttoremove.parentNode.removeChild(parenttoremove);
 					}
 					if (jQuery("input[name=statuscheck]").length == 0)
-						wats_js_add_blank_cell("tablestatus",3,"<?php echo $watsmsg[2]; ?>");
+						wats_js_add_blank_cell("tablestatus",3,watsmsg[2]);
 				});
 			}
 		});
@@ -245,8 +237,8 @@ jQuery(document).ready(function() {
 		var type = "wats_categories";
 		var idvalue = jQuery('#catlist option:selected').text();
 		var idcat = jQuery('#catlist option:selected').val();
-		wats_loading(document.getElementById("resultaddcat"),"<?php echo $watsmsg[4]; ?>");
-		jQuery.post("<?php echo $site_url; ?>/wp-admin/admin-ajax.php", {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+		wats_loading(document.getElementById("resultaddcat"),watsmsg[4]);
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 		function(res)
 		{
 			var message_result = eval('(' + res + ')');
@@ -265,9 +257,9 @@ jQuery(document).ready(function() {
 
 	jQuery('#idsupcat').click(function() {
 		if (jQuery("input[name=catcheck]").length == 0)
-			wats_stop_loading(document.getElementById("resultsupcat"),"<?php echo $watsmsg[0]; ?>");
+			wats_stop_loading(document.getElementById("resultsupcat"),watsmsg[0]);
 		else if (jQuery("input[name=catcheck]:checked").length == 0)
-			wats_stop_loading(document.getElementById("resultsupcat"),"<?php echo $watsmsg[1]; ?>");
+			wats_stop_loading(document.getElementById("resultsupcat"),watsmsg[1]);
 		var type = "wats_categories";
 	    jQuery("input[name=catcheck]:checked").each(function()
 		{
@@ -275,7 +267,7 @@ jQuery(document).ready(function() {
 			{
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
-				jQuery.post("<?php echo $site_url; ?>/wp-admin/admin-ajax.php", {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
 					var message_result = eval('(' + res + ')');
@@ -286,7 +278,7 @@ jQuery(document).ready(function() {
 						parenttoremove.parentNode.removeChild(parenttoremove);
 					}
 					if (jQuery("input[name=catcheck]").length == 0)
-						wats_js_add_blank_cell("tablecat",3,"<?php echo $watsmsg[2]; ?>");
+						wats_js_add_blank_cell("tablecat",3,watsmsg[2]);
 				});
 			}
 		});

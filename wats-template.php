@@ -1,5 +1,11 @@
 <?php
 
+/*********************************************************/
+/*                                                       */
+/* Fonction de vérification de la visibilité des tickets */
+/*                                                       */
+/*********************************************************/
+
 function wats_check_visibility_rights()
 {
 	global $wats_settings, $current_user, $post;
@@ -12,6 +18,31 @@ function wats_check_visibility_rights()
 		return true;
 		
 	return false;
+}
+
+/*******************************************************/
+/*                                                     */
+/* Fonction de processing Ajax de la liste des tickets */
+/*                                                     */
+/*******************************************************/
+
+function wats_ticket_list_ajax_processing()
+{
+	global $wats_settings;
+
+	check_ajax_referer('filter-wats-tickets-list');
+	if ($_POST[view] == 1)
+	{
+		$idtype = $_POST[idtype];
+		$idpriority = $_POST[idpriority];
+		$idstatus = $_POST[idstatus];
+		$idowner = $_POST[idowner];
+		$categoryfilter = $_POST[categoryfilter];
+		$categorylistfilter = $_POST[categorylistfilter];
+		echo wats_list_tickets($categoryfilter, $categorylistfilter, 1, $idtype, $idpriority, $idstatus, $idowner);
+	}
+	
+	exit;
 }
 
 /********************************************************************************/
@@ -28,7 +59,7 @@ function wats_list_tickets_filter($content)
 function wats_list_tickets_args($args)
 {
 	global $wpdb;
-	
+
 	$args = explode(" ", rtrim($args[0], "]"));
 	
 	$cats = get_the_category();
@@ -86,12 +117,12 @@ function wats_list_tickets_filters()
 	return($output);
 }
 
-/*************************************************/
-/*                                               */
-/* Fonction d'affichage du listing des tickets   */
+/********************************************************/
+/*                                                      */
+/* Fonction d'affichage du listing des tickets          */
 /* Argument 1 : filtre catégorie (0 : all, 1 : current) */
-/*                                               */
-/*************************************************/
+/*                                                      */
+/********************************************************/
 
 function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriority, $idstatus, $idowner)
 {
@@ -202,7 +233,11 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 			$output .= '<td>'.__('Uncategorized','WATS').'</td>';
 		}
 		
-		$output .= '<td>'.get_the_author_meta('nickname',$ticket->post_author).'</td>';
+		if (function_exists('get_the_author_meta'))
+			$output .= '<td>'.get_the_author_meta('nickname',$ticket->post_author).'</td>';
+		else
+			$output .= '<td>'.get_the_author($ticket->post_author).'</td>';
+		
 		$ticket_owner = get_post_meta($ticket->ID,'wats_ticket_owner',true);
 		if ($ticket_owner)
 			$output .= '<td>'.get_post_meta($ticket->ID,'wats_ticket_owner',true).'</td>';

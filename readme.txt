@@ -3,8 +3,8 @@ Contributors: Olivier
 Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
-Tested up to: 2.8.5
-Stable tag: 1.0.28
+Tested up to: 2.8.6
+Stable tag: 1.0.29
 
 == Description ==
 
@@ -48,6 +48,10 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.29 (18/11/2009) =
+* modified all ajax calls to match WP guidelines (removed wp-config inclusion, used admin-ajax in the frontend)
+* modified statistics dashboard widget visibility option to apply only to global stats (all users can now view their own stats)
 
 = V1.0.28 (09/11/2009) =
 * added an option for statistics dashboard widget visibility

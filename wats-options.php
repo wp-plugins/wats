@@ -537,7 +537,7 @@ function wats_options_admin_menu()
 	echo '<div class="wats_tip" id="tickets_custom_fields_tip">';
 	echo __('Check this option if you want to allow custom fields association to tickets.','WATS').'</div></td></tr></table><br />';
 	
-	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("dashboard_stats_widget_level_tip");>'.__('Statistics dashboad widget visibility','WATS').' : </a></h3>';
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("dashboard_stats_widget_level_tip");>'.__('Global statistics dashboad widget visibility','WATS').' : </a></h3>';
 	echo '<table class="form-table"><tr><td>'.__('Minimum required level','WATS').' : <select name="dashboard_stats_widget_level" id="dashboard_stats_widget_level" size="1">';
 	for ($i = 0; $i != 11; $i++)
 	{
@@ -547,7 +547,7 @@ function wats_options_admin_menu()
 	}
 	echo '</select></td></tr><tr><td>';
 	echo '<div class="wats_tip" id="dashboard_stats_widget_level_tip">';
-	echo __('Select the level. Only users with this minimum level value will be view the statistics widget under the dashboard. To learn more about users levels, check out this page : ','WATS').'<a href="http://codex.wordpress.org/Roles_and_Capabilities">WP roles and capabilities</a>.</div></td></tr></table><br />';
+	echo __('Select the level. Only users with this minimum level value will be able to view the global statistics under the stats widget on the dashboard. To learn more about users levels, check out this page : ','WATS').'<a href="http://codex.wordpress.org/Roles_and_Capabilities">WP roles and capabilities</a>.</div></td></tr></table><br />';
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("guestlist_tip");>'.__('Shared guest user','WATS').' : </a></h3>';
 	echo '<table class="form-table"><tr><td>'.__('User','WATS').' : <select name="guestlist" id="guestlist" size="1">';

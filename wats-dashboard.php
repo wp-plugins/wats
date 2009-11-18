@@ -68,19 +68,22 @@ add_action('plugins_loaded','wats_frontend_widget_stats_init');
 
 function wats_dashboard_widget_tickets()
 {
-	global $current_user;
+	global $current_user, $wats_settings;
 
-	echo __('Global stats :','WATS').'<br />';
-	echo '<li class="wats">'.__('Number of tickets created : ','WATS');
-	echo ' '.wats_get_number_of_tickets_by_status(0,0).'</li>';
-	echo '<li class="wats">'.__('Number of tickets closed : ','WATS');
-	echo ' '.wats_get_number_of_tickets_by_status(wats_get_closed_status_id(),0).'</li><br /><br />';
+	if ($current_user->user_level >= $wats_settings['dashboard_stats_widget_level'])
+	{
+		echo '<div>'.__('Global stats :','WATS').'<br /><br />';
+		echo '<li class="wats">'.__('Number of tickets created : ','WATS');
+		echo ' '.wats_get_number_of_tickets_by_status(0,0).'</li>';
+		echo '<li class="wats">'.__('Number of tickets closed : ','WATS');
+		echo ' '.wats_get_number_of_tickets_by_status(wats_get_closed_status_id(),0).'</li></div><br /><br />';
+	}
 	
-	echo __('Your stats :','WATS').'<br />';
+	echo '<div>'.__('Your stats :','WATS').'<br /><br />';
 	echo '<li class="wats">'.__('Number of tickets created : ','WATS');
 	echo ' '.wats_get_number_of_tickets_by_status(0,$current_user->ID).'</li>';
 	echo '<li class="wats">'.__('Number of tickets closed : ','WATS');
-	echo ' '.wats_get_number_of_tickets_by_status(wats_get_closed_status_id(),$current_user->ID).'</li>';
+	echo ' '.wats_get_number_of_tickets_by_status(wats_get_closed_status_id(),$current_user->ID).'</li></div>';
 	
 	return;
 }
@@ -160,8 +163,7 @@ function wats_dashboard_setup()
 {
 	global $wp_meta_boxes, $current_user, $wats_settings;
 
-	if ($current_user->user_level >= $wats_settings['dashboard_stats_widget_level'])
-		wp_add_dashboard_widget('my_wp_dashboard_wats', 'Tickets', 'wats_dashboard_widget_tickets');
+	wp_add_dashboard_widget('my_wp_dashboard_wats', 'Tickets', 'wats_dashboard_widget_tickets');
 		
 	unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_recent_comments']);
 	$recent_comments_title = __( 'Recent Comments' );

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WATS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-09 11:39+0100\n"
+"POT-Creation-Date: 2009-11-18 14:52+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Olivier <autremonde75@gmail.com>\n"
 "Language-Team: \n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 #: wats-dashboard.php:13
-#: wats-dashboard.php:73
+#: wats-dashboard.php:75
 msgid "Global stats :"
 msgstr "Statistiques globales :"
 
@@ -29,37 +29,37 @@ msgid "Tickets closed :"
 msgstr "Tickets fermés :"
 
 #: wats-dashboard.php:21
-#: wats-dashboard.php:79
+#: wats-dashboard.php:82
 msgid "Your stats :"
 msgstr "Vos statistiques :"
 
 #: wats-dashboard.php:43
 #: wats-dashboard.php:58
-#: wats-head.php:126
-#: wats-head.php:147
+#: wats-head.php:133
+#: wats-head.php:154
 msgid "Tickets"
 msgstr "Tickets"
 
-#: wats-dashboard.php:74
-#: wats-dashboard.php:80
+#: wats-dashboard.php:76
+#: wats-dashboard.php:83
 msgid "Number of tickets created : "
 msgstr "Nombre de tickets soumis :"
 
-#: wats-dashboard.php:76
-#: wats-dashboard.php:82
+#: wats-dashboard.php:78
+#: wats-dashboard.php:85
 msgid "Number of tickets closed : "
 msgstr "Nombre de tickets fermés :"
 
-#: wats-dashboard.php:143
+#: wats-dashboard.php:146
 msgid "View all"
 msgstr ""
 
-#: wats-dashboard.php:148
+#: wats-dashboard.php:151
 #: wats-edit-form-advanced.php:455
 msgid "No comments yet."
 msgstr ""
 
-#: wats-dashboard.php:167
+#: wats-dashboard.php:169
 msgid "Recent Comments"
 msgstr ""
 
@@ -294,7 +294,7 @@ msgid "Parent category"
 msgstr ""
 
 #: wats-edit-form-advanced.php:341
-#: wats-template.php:395
+#: wats-template.php:430
 msgid "Categories"
 msgstr ""
 
@@ -364,7 +364,7 @@ msgid "Discussion"
 msgstr ""
 
 #: wats-edit-form-advanced.php:464
-#: wats-template.php:170
+#: wats-template.php:201
 msgid "Author"
 msgstr "Auteur"
 
@@ -391,7 +391,7 @@ msgid "Post Revisions"
 msgstr ""
 
 #: wats-edit-form-advanced.php:589
-#: wats-template.php:168
+#: wats-template.php:199
 msgid "Title"
 msgstr "Titre"
 
@@ -407,19 +407,19 @@ msgstr ""
 
 #: wats-edit-post-rows.php:13
 #: wats-options.php:571
-#: wats-template.php:173
+#: wats-template.php:204
 msgid "Type"
 msgstr "Type"
 
 #: wats-edit-post-rows.php:14
 #: wats-options.php:580
-#: wats-template.php:174
+#: wats-template.php:205
 msgid "Priority"
 msgstr "Priorité"
 
 #: wats-edit-post-rows.php:15
 #: wats-options.php:589
-#: wats-template.php:175
+#: wats-template.php:206
 msgid "Status"
 msgstr "Status"
 
@@ -500,7 +500,7 @@ msgid "View"
 msgstr ""
 
 #: wats-edit-post-rows.php:228
-#: wats-template.php:202
+#: wats-template.php:233
 msgid "Uncategorized"
 msgstr ""
 
@@ -553,7 +553,7 @@ msgid "Error in deleting..."
 msgstr ""
 
 #: wats-edit.php:131
-#: wats-head.php:148
+#: wats-head.php:155
 msgid "Edit Tickets"
 msgstr "Editer les tickets"
 
@@ -606,7 +606,7 @@ msgid "View all categories"
 msgstr ""
 
 #: wats-edit.php:298
-#: wats-template.php:84
+#: wats-template.php:115
 msgid "Filter"
 msgstr "Filtre"
 
@@ -627,48 +627,52 @@ msgstr ""
 msgid "No ticket found"
 msgstr "Aucun ticket trouvé"
 
-#: wats-head.php:126
+#: wats-head.php:32
+msgid "Filtering table..."
+msgstr "Filtrage de la table en cours..."
+
+#: wats-head.php:133
 msgid "New Ticket"
 msgstr "Nouveau ticket"
 
-#: wats-head.php:127
-#: wats-head.php:151
+#: wats-head.php:134
+#: wats-head.php:158
 msgid "New ticket"
 msgstr "Nouveau ticket"
 
-#: wats-head.php:147
+#: wats-head.php:154
 msgid "Modify"
 msgstr "Modifier"
+
+#: wats-head.php:180
+msgid "Error : there is nothing to remove!"
+msgstr "Erreur : il n&#180;y a rien à supprimer!"
+
+#: wats-head.php:181
+msgid "Error : please select an entry to remove!"
+msgstr "Erreur : veuillez sélectionner une entrée à supprimer!"
+
+#: wats-head.php:182
+#: wats-options.php:361
+#: wats-template.php:255
+msgid "No entry"
+msgstr "Aucune entrée"
+
+#: wats-head.php:183
+msgid "Please correct the errors"
+msgstr "Merci de corriger les erreurs"
+
+#: wats-head.php:184
+msgid "Adding entry"
+msgstr "Ajout d'entrée en cours"
+
+#: wats-head.php:185
+msgid "Error : the string contains invalid caracters!"
+msgstr "Erreur : la chaîne contient des caractères invalides!"
 
 #: wats-link-template.php:66
 msgid "Edit post"
 msgstr ""
-
-#: wats-options-ajax.php:4
-msgid "Error : there is nothing to remove!"
-msgstr "Erreur : il n&#180;y a rien à supprimer!"
-
-#: wats-options-ajax.php:5
-msgid "Error : please select an entry to remove!"
-msgstr "Erreur : veuillez sélectionner une entrée à supprimer!"
-
-#: wats-options-ajax.php:6
-#: wats-options.php:361
-#: wats-template.php:220
-msgid "No entry"
-msgstr "Aucune entrée"
-
-#: wats-options-ajax.php:7
-msgid "Please correct the errors"
-msgstr "Merci de corriger les erreurs"
-
-#: wats-options-ajax.php:8
-msgid "Adding entry"
-msgstr "Ajout d'entrée en cours"
-
-#: wats-options-ajax.php:9
-msgid "Error : the string contains invalid caracters!"
-msgstr "Erreur : la chaîne contient des caractères invalides!"
 
 #: wats-options.php:119
 #: wats-options.php:133
@@ -755,7 +759,7 @@ msgstr "Numérotation des tickets"
 
 #: wats-options.php:440
 #: wats-options.php:554
-#: wats-template.php:210
+#: wats-template.php:245
 #: wats-ticket-metas.php:296
 msgid "None"
 msgstr "Aucun"
@@ -889,16 +893,16 @@ msgid "Check this option if you want to allow custom fields association to ticke
 msgstr "Sélectionner cette option si vous souhaitez permettre l'association de champs personnalisés aux tickets."
 
 #: wats-options.php:540
-msgid "Statistics dashboad widget visibility"
-msgstr "Widget des statistiques sur le tableau de bord"
+msgid "Global statistics dashboad widget visibility"
+msgstr "Widget des statistiques (globales) sur le tableau de bord"
 
 #: wats-options.php:541
 msgid "Minimum required level"
 msgstr "Niveau minimum requis"
 
 #: wats-options.php:550
-msgid "Select the level. Only users with this minimum level value will be view the statistics widget under the dashboard. To learn more about users levels, check out this page : "
-msgstr "Sélectionner le niveau. Seuls les utilisateurs avec un niveau supérieur ou égal à la valeur sélectionnée pourront voir le widget des statistiques sur le tableau de bord. Pour en savoir plus sur les différents niveaux d'utilisateurs, vous pouvez vous rendre sur cette page : "
+msgid "Select the level. Only users with this minimum level value will be able to view the global statistics under the stats widget on the dashboard. To learn more about users levels, check out this page : "
+msgstr "Sélectionner le niveau. Seuls les utilisateurs avec un niveau supérieur ou égal à la valeur sélectionnée pourront voir les statistiques globales du widget des statistiques sur le tableau de bord. Pour en savoir plus sur les différents niveaux d'utilisateurs, vous pouvez vous rendre sur cette page : "
 
 #: wats-options.php:552
 msgid "Shared guest user"
@@ -940,53 +944,49 @@ msgid "Categories opened to submission"
 msgstr "Catégories ouvertes pour la soumission de nouveaux tickets"
 
 #: wats-options.php:598
-#: wats-template.php:169
+#: wats-template.php:200
 msgid "Category"
 msgstr "Catégorie"
 
-#: wats-template.php:55
+#: wats-template.php:86
 #: wats-ticket-metas.php:260
 msgid "Ticket type"
 msgstr "Type du ticket"
 
-#: wats-template.php:57
-#: wats-template.php:64
-#: wats-template.php:71
-#: wats-template.php:77
-#: wats-template.php:125
+#: wats-template.php:88
+#: wats-template.php:95
+#: wats-template.php:102
+#: wats-template.php:108
+#: wats-template.php:156
 msgid "Any"
 msgstr "Tous"
 
-#: wats-template.php:62
+#: wats-template.php:93
 #: wats-ticket-metas.php:271
 msgid "Ticket priority"
 msgstr "Priorité du ticket"
 
-#: wats-template.php:69
+#: wats-template.php:100
 #: wats-ticket-metas.php:282
 msgid "Ticket status"
 msgstr "Status du ticket"
 
-#: wats-template.php:76
+#: wats-template.php:107
 #: wats-ticket-metas.php:295
 msgid "Ticket owner"
 msgstr "Propriétaire du ticket"
 
-#: wats-template.php:171
+#: wats-template.php:202
 msgid "Owner"
 msgstr "Propriétaire"
 
-#: wats-template.php:172
+#: wats-template.php:203
 msgid "Creation date"
 msgstr "Date de création"
 
-#: wats-template.php:396
+#: wats-template.php:431
 msgid "Post Tags"
 msgstr ""
-
-#: wats-ticket-list-ajax.php:4
-msgid "Filtering table..."
-msgstr "Filtrage de la table en cours..."
 
 #: wats-ticket-metas.php:17
 msgid "Current ticket owner : "

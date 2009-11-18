@@ -25,6 +25,13 @@ function wats_enqueue_script_frontend()
 	wp_enqueue_script('tablesorter',$ajaxfileloc,array('jquery'));
 	$ajaxfileloc = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) . '/wats-js-commons.php';
     wp_enqueue_script('wats-js-commons', $ajaxfileloc);
+?>
+	<script type="text/javascript">
+	var ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
+	var watsmsg = Array();
+	watsmsg[0] = "<?php _e('Filtering table...','WATS'); ?>";
+	</script>
+<?php
 	$ajaxfileloc = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) .'/wats-ticket-list-ajax.php';
 	wp_enqueue_script('wats-ticket-list',$ajaxfileloc);
 		
@@ -167,7 +174,17 @@ function wats_add_admin_page()
 function wats_options_admin_head()
 {
 	wats_admin_scripts();
-
+?>
+<script type="text/javascript">
+	var watsmsg = Array();
+   	watsmsg[0] = "<?php _e('Error : there is nothing to remove!','WATS'); ?>";
+	watsmsg[1] = "<?php _e('Error : please select an entry to remove!','WATS'); ?>";
+	watsmsg[2] = "<?php _e('No entry','WATS'); ?>";
+	watsmsg[3] = "<?php _e('Please correct the errors','WATS'); ?>";
+	watsmsg[4] = "<?php _e('Adding entry','WATS'); ?>";
+	watsmsg[5] = "<?php _e('Error : the string contains invalid caracters!','WATS'); ?>";
+</script> 
+<?php
 	$ajaxfileloc = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) . '/wats-options-ajax.php';
     wp_enqueue_script('wats-options-ajax', $ajaxfileloc);
 
