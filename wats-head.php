@@ -51,6 +51,9 @@ function wats_add_my_stylesheet()
     wp_register_style('wats_css', $myStyleFile); 
     wp_enqueue_style('wats_css');
 	
+	if (is_admin())
+		wp_admin_css('thickbox');
+	
 	return;
 }
 
@@ -114,7 +117,8 @@ function wats_add_admin_page()
 
 	wats_load_settings();
 	$plugin_url = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) .'/';
-	
+	add_filter('media_upload_tabs','wats_media_upload_tabs');
+
 	if ($current_user->user_login == $wats_settings['wats_guest_user'])
 	{
 		wats_customize_guest_admin();
@@ -209,6 +213,25 @@ function wats_ticket_edit_admin_head()
 	return;
 }
 
+/**********************************************************/
+/*                                                        */
+/* Fonction de filtrage des tabs pour l'upload des médias */
+/*                                                        */
+/**********************************************************/
+
+function wats_media_upload_tabs($tabs)
+{
+	global $wats_settings;
+	
+	if ($wats_settings['ticket_edition_media_upload_tabs'] == 0)
+	{
+		unset($tabs['gallery']);
+		unset($tabs['library']);
+	}
+
+	return($tabs);
+}
+
 /*************************************************************/
 /*                                                           */
 /* Fonction de chargement des scripts de la page de création */
@@ -217,14 +240,16 @@ function wats_ticket_edit_admin_head()
 
 function wats_ticket_creation_admin_head()
 {
+	global $wats_settings;
+	
 	add_filter('list_terms_exclusions','wats_list_terms_exclusions');
     //wats_admin_scripts();
 	
-	remove_action('media_buttons','media_buttons');
+	if ($wats_settings['ticket_edition_media_upload'] == 0)
+		remove_action('media_buttons','media_buttons');
+		
 	wats_ticket_meta_boxes();
-	
-	wp_admin_css('thickbox');
-	add_thickbox();
+
 	wp_enqueue_script('jquery-schedule');
 	wp_print_scripts('autosave');
 	wp_print_scripts('suggest');
@@ -234,8 +259,9 @@ function wats_ticket_creation_admin_head()
 	wp_print_scripts('postbox');
 	wp_print_scripts('slug');
 	wp_print_scripts('post');
-	wp_print_scripts('editor');
 	wp_print_scripts('thickbox');
+	wp_print_scripts('editor');
+//	add_thickbox();
 	wp_print_scripts('media-upload');
 	wp_print_scripts('word-count');
 		

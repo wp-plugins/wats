@@ -37,6 +37,8 @@ function wats_load_settings()
 		$default['tickets_tagging'] = 0;
 		$default['tickets_custom_fields'] = 0;
 		$default['dashboard_stats_widget_level'] = 0;
+		$default['ticket_edition_media_upload'] = 0;
+		$default['ticket_edition_media_upload_tabs'] = 0;
    	    add_option('wats', $default);
 	}
         
@@ -88,6 +90,16 @@ function wats_load_settings()
 		if (!isset($wats_settings['dashboard_stats_widget_level']))
 		{
 			$wats_settings['dashboard_stats_widget_level'] = 0;
+		}
+		
+		if (!isset($wats_settings['ticket_edition_media_upload']))
+		{
+			$wats_settings['ticket_edition_media_upload'] = 0;
+		}
+		
+		if (!isset($wats_settings['ticket_edition_media_upload_tabs']))
+		{
+			$wats_settings['ticket_edition_media_upload_tabs'] = 0;
 		}
 		
 		$wats_settings['wats_version'] = $wats_version;
@@ -414,6 +426,8 @@ function wats_options_admin_menu()
 		$wats_settings['tickets_tagging'] = isset($_POST['tickets_tagging']) ? 1 : 0;
 		$wats_settings['tickets_custom_fields'] = isset($_POST['tickets_custom_fields']) ? 1 : 0;
 		$wats_settings['dashboard_stats_widget_level'] = $_POST['dashboard_stats_widget_level'];
+		$wats_settings['ticket_edition_media_upload'] = isset($_POST['ticket_edition_media_upload']) ? 1 : 0;
+		$wats_settings['ticket_edition_media_upload_tabs'] = isset($_POST['ticket_edition_media_upload_tabs']) ? 1 : 0;
 		update_option('wats', $wats_settings);
 	}
 	
@@ -548,6 +562,24 @@ function wats_options_admin_menu()
 	echo '</select></td></tr><tr><td>';
 	echo '<div class="wats_tip" id="dashboard_stats_widget_level_tip">';
 	echo __('Select the level. Only users with this minimum level value will be able to view the global statistics under the stats widget on the dashboard. To learn more about users levels, check out this page : ','WATS').'<a href="http://codex.wordpress.org/Roles_and_Capabilities">WP roles and capabilities</a>.</div></td></tr></table><br />';
+	
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("ticket_edition_media_upload_tip");>'.__('Media upload','WATS').' : </a></h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="checkbox" name="ticket_edition_media_upload"';
+	if ($wats_settings['ticket_edition_media_upload'] == 1)
+		echo ' checked';
+	echo '> '.__('Allow media upload on ticket creation and edition pages','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="ticket_edition_media_upload_tip">';
+	echo __('Check this option if you want to allow media upload while creating and editing tickets. This will allow users to attach media files to tickets.','WATS').'</div></td></tr></table><br />';
+	
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("ticket_edition_media_upload_tabs_tip");>'.__('Media upload tabs','WATS').' : </a></h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="checkbox" name="ticket_edition_media_upload_tabs"';
+	if ($wats_settings['ticket_edition_media_upload_tabs'] == 1)
+		echo ' checked';
+	echo '> '.__('Allow media library browsing during media upload','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="ticket_edition_media_upload_tabs_tip">';
+	echo __('Check this option if you want to allow media library browsing during media upload while creating and editing tickets. This will allow users to view the library and insert files directly from it.','WATS').'</div></td></tr></table><br />';
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("guestlist_tip");>'.__('Shared guest user','WATS').' : </a></h3>';
 	echo '<table class="form-table"><tr><td>'.__('User','WATS').' : <select name="guestlist" id="guestlist" size="1">';
