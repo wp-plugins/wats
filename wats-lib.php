@@ -181,6 +181,36 @@ function wats_get_closed_status_id()
 	return $closed;
 }
 
+/****************************************************************************/
+/*								     										*/
+/* Fonction de construction d'une liste d'utilisateurs ayant une capabilité */
+/* - Type 0 : user ID  			    									    */
+/* - Type 1 : user login			    									    */
+/*									    									*/
+/****************************************************************************/
+
+function wats_get_user_list_with_cap($cap,$type)
+{
+	global $wpdb;
+
+    $users = $wpdb->get_results("SELECT ID FROM `{$wpdb->prefix}users`");
+
+	$list = array();
+    foreach ($users AS $user)
+    {
+        $my_user = new WP_User($user->ID);
+        if ($my_user->has_cap($cap))
+		{
+			if ($type == 0)
+				$list[] = $my_user->ID;
+			else
+				$list[] = $my_user->user_login;
+		}
+    }
+
+    return $list;
+}
+
 /***********************************************************/
 /*                                                         */
 /* Fonction included for backward compatibility before 2.8 */

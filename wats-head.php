@@ -166,6 +166,10 @@ function wats_add_admin_page()
 	
 	$_registered_pages[get_plugin_page_hookname('wats/wats-ticket.php','')] = true;
 	
+	add_action('show_user_profile', 'wats_admin_edit_user_profile');
+    add_action('edit_user_profile', 'wats_admin_edit_user_profile');
+    add_action('profile_update', 'wats_admin_save_user_profile');
+		
 	return;
 }
 

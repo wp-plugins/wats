@@ -39,6 +39,7 @@ function wats_load_settings()
 		$default['dashboard_stats_widget_level'] = 0;
 		$default['ticket_edition_media_upload'] = 0;
 		$default['ticket_edition_media_upload_tabs'] = 0;
+		$default['ticket_assign_user_list'] = 0;
    	    add_option('wats', $default);
 	}
         
@@ -100,6 +101,11 @@ function wats_load_settings()
 		if (!isset($wats_settings['ticket_edition_media_upload_tabs']))
 		{
 			$wats_settings['ticket_edition_media_upload_tabs'] = 0;
+		}
+		
+		if (!isset($wats_settings['ticket_assign_user_list']))
+		{
+			$wats_settings['ticket_assign_user_list'] = 0;
 		}
 		
 		$wats_settings['wats_version'] = $wats_version;
@@ -418,6 +424,7 @@ function wats_options_admin_menu()
 		$wats_settings['numerotation'] = $_POST['group1'];
 		$wats_settings['visibility'] = $_POST['group2'];
 		$wats_settings['ticket_assign'] = $_POST['group3'];
+		$wats_settings['ticket_assign_user_list'] = $_POST['group4'];
 		$wats_settings['ticket_assign_level'] = $_POST['ticket_assign_level'];
 		$wats_settings['wats_guest_user'] = $_POST['guestlist'];
 		$wats_settings['wats_home_display'] = isset($_POST['homedisplay']) ? 1 : 0;
@@ -512,6 +519,20 @@ function wats_options_admin_menu()
 	echo '<div class="wats_tip" id="group3_tip">';
 	echo __('Select the preferred option. Tickets assignment possibilities in frontend and admin sides will be adjusted based on this option and user privileges.','WATS').'</div></td></tr></table><br />';
 
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("group4_tip");>'.__('Target users for tickets assignment','WATS').' :</a></h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="radio" name="group4" value="0" ';
+	echo ($wats_settings['ticket_assign_user_list'] == 0) ? 'checked' : '';
+	echo '>'.__('Any registered user','WATS').' </td></tr>';
+	echo '<tr><td><input type="radio" name="group4" value="1" ';
+	echo ($wats_settings['ticket_assign_user_list'] == 1) ? 'checked' : '';
+	echo '>'.__('Ticket originator and admins','WATS').'</td></tr>';
+	echo '<tr><td><input type="radio" name="group4" value="2" ';
+	echo ($wats_settings['ticket_assign_user_list'] == 2) ? 'checked' : '';
+	echo '>'.__('Ticket originator and any user with wats_ticket_ownership capability','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="group4_tip">';
+	echo __('Select the preferred option. The list of users a ticket can be assigned to will be adjusted based on this option. The wats_ticket_ownership capability can be granted under user profile by admins.','WATS').'</div></td></tr></table><br />';
+	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("ticket_assign_level_tip");>'.__('Ticket assignment capability minimum level requirement','WATS').' : </a></h3>';
 	echo '<table class="form-table"><tr><td>'.__('Level','WATS').' : <select name="ticket_assign_level" id="ticket_assign_level" size="1">';
 	for ($i = 0; $i != 11; $i++)

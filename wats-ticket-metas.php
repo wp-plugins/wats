@@ -290,23 +290,41 @@ function wats_ticket_details_meta_box($post)
 	}
 	echo '</select><br /><br />';
 	
+	setup_postdata($post);
+	
 	if ($wats_ticket_assign == 1 || ($wats_ticket_assign == 2 && $wats_ticket_assign_level <= $current_user->user_level))
 	{
 		echo __('Ticket owner','WATS').' : ';
-		$userlist = wats_build_user_list(0,__("None",'WATS'));
+		if ($wats_settings['ticket_assign_user_list'] == 0)
+		{
+			$userlist = wats_build_user_list(0,__("None",'WATS'));
+		}
+		else if ($wats_settings['ticket_assign_user_list'] == 1)
+		{
+			$userlist = wats_build_user_list(10,__("None",'WATS'));
+			if ($post->ID && !in_array(get_the_author(),$userlist))
+				array_splice($userlist, 1, 0, get_the_author());
+		}
+		else if ($wats_settings['ticket_assign_user_list'] == 2)
+		{
+			$userlist = wats_get_user_list_with_cap('wats_ticket_ownership',1);
+			array_splice($userlist, 0, 0, __("None",'WATS'));
+			if ($post->ID && !in_array(get_the_author(),$userlist))
+				array_splice($userlist, 1, 0, get_the_author());
+		}
+		
 		echo '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner">';
 		for ($i = 0; $userlist[$i] != false; $i++)
 		{
-			echo '<option value="'.$userlist[$i].'" ';
-			if ($userlist[$i] == $ticket_owner) echo 'selected';
-				echo '>'.$userlist[$i].'</option>';
+				echo '<option value="'.$userlist[$i].'" ';
+				if ($userlist[$i] == $ticket_owner) echo 'selected';
+					echo '>'.$userlist[$i].'</option>';
 		}
 		echo '</select>';
 	}
 
 	if (is_admin())
 	{
-		setup_postdata($post);
 		if ($post->ID)
 		{
 			echo '<br /><br />'.__('Ticket originator : ','WATS');

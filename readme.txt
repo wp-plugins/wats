@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.6
-Stable tag: 1.0.30
+Stable tag: 1.0.31
 
 == Description ==
 
@@ -48,6 +48,10 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.31 (28/11/2009) =
+* added wats_ticket_ownership capability which can be granted individually under user profile by admins
+* added an option to restrict user list for ticket assignation
 
 = V1.0.30 (26/11/2009) =
 * added an option to allow media upload on ticket creation and edition pages
