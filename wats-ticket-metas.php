@@ -115,6 +115,8 @@ function wats_ticket_save_meta($postID)
 	
 	if ($newticket == 1)
 		wats_fire_admin_notification($postID);
+	else
+		wats_fire_ticket_update_notification($postID);
 	
 	return;
 }
@@ -141,6 +143,74 @@ function wats_mail_from_name()
 	return get_option('blogname');
 }
 
+/*******************************************************/
+/*                                                     */
+/* Fonction de notification de mise à jour d'un ticket */
+/*                                                     */
+/*******************************************************/
+
+function wats_fire_ticket_update_notification($postID)
+{
+	global $wats_settings, $wpdb;
+
+	wats_load_settings();
+
+	$ticket_author_id = 0;
+	if ($wats_settings['ticket_update_notification_my_tickets'] == 1)
+	{
+		$post = get_post($postID);
+		$userid = $post->post_author;
+		add_filter('wp_mail_from', 'wats_mail_from');
+		add_filter('wp_mail_from_name', 'wats_mail_from_name');
+		$ticketnumber = get_post_meta($postID,'wats_ticket_number',true);
+		$user = new WP_user($userid);
+		$notifications = get_usermeta($user->ID,'wats_notifications');
+		if (!isset($notifications['ticket_update_notification_my_tickets']) || $notifications['ticket_update_notification_my_tickets'] != 0)
+		{
+			$ticket_author_id = $userid;
+			$subject = __('Ticket ','WATS').$ticketnumber.__(' has been updated','WATS');
+			$output = __('Hello ','WATS').get_usermeta($user->ID, 'first_name').",\r\n\r\n";
+			$output .= __('Ticket ','WATS').$ticketnumber.__(' has been updated.','WATS');
+			$output .= __('You can view it there :','WATS')."\r\n";
+			$output .= __('+ Frontend side : ','WATS').get_permalink($postID)."\r\n\r\n";
+			$output .= __('+ Admin side : ','WATS').wats_get_edit_ticket_link($postID)."\r\n\r\n";
+			$output .= __('Regards','WATS').",\r\n\r\n";
+			$output .= __('WATS Notification engine','WATS');
+			wp_mail($user->user_email,$subject,$output);
+		}
+	}
+	
+	if ($wats_settings['ticket_update_notification_all_tickets'] == 1)
+	{
+		add_filter('wp_mail_from', 'wats_mail_from');
+		add_filter('wp_mail_from_name', 'wats_mail_from_name');
+		$users = $wpdb->get_results("SELECT ID FROM `{$wpdb->prefix}users`");
+		$ticketnumber = get_post_meta($postID,'wats_ticket_number',true);
+		foreach ($users AS $user)
+		{
+			if ($user->ID != $ticket_author_id)
+			{
+				$user = new WP_user($user->ID);
+				$notifications = get_usermeta($user->ID,'wats_notifications');
+				if (!isset($notifications['ticket_update_notification_all_tickets']) || $notifications['ticket_update_notification_all_tickets'] != 0)
+				{
+					$subject = __('Ticket ','WATS').$ticketnumber.__(' has been updated','WATS');
+					$output = __('Hello ','WATS').get_usermeta($user->ID, 'first_name').",\r\n\r\n";
+					$output .= __('Ticket ','WATS').$ticketnumber.__(' has been updated.','WATS');
+					$output .= __('You can view it there :','WATS')."\r\n";
+					$output .= __('+ Frontend side : ','WATS').get_permalink($postID)."\r\n\r\n";
+					$output .= __('+ Admin side : ','WATS').wats_get_edit_ticket_link($postID)."\r\n\r\n";
+					$output .= __('Regards','WATS').",\r\n\r\n";
+					$output .= __('WATS Notification engine','WATS');
+					wp_mail($user->user_email,$subject,$output);
+				}
+			}
+		}
+	}
+
+	return;
+}
+
 /****************************************************/
 /*                                                  */
 /* Fonction de notification de création d'un ticket */
@@ -163,15 +233,19 @@ function wats_fire_admin_notification($postID)
 			$user = new WP_user($user->ID);
 			if ($user->user_level == 10)
 			{
-				$subject = __('New ticket submitted','WATS');
-				$output = __('Hello ','WATS').get_usermeta($user->ID, 'first_name').",\r\n\r\n";
-				$output .= __('A new ticket has been submitted into the system.','WATS');
-				$output .= __('You can view it there :','WATS')."\r\n";
-				$output .= __('+ Frontend side : ','WATS').get_permalink($postID)."\r\n\r\n";
-				$output .= __('+ Admin side : ','WATS').wats_get_edit_ticket_link($postID)."\r\n\r\n";
-				$output .= __('Regards','WATS').",\r\n\r\n";
-				$output .= __('WATS Notification engine','WATS');
-				wp_mail($user->user_email,$subject,$output);
+				$notifications = get_usermeta($user->ID,'wats_notifications');
+				if (!isset($notifications['new_ticket_notification_admin']) || $notifications['new_ticket_notification_admin'] != 0)
+				{
+					$subject = __('New ticket submitted','WATS');
+					$output = __('Hello ','WATS').get_usermeta($user->ID, 'first_name').",\r\n\r\n";
+					$output .= __('A new ticket has been submitted into the system.','WATS');
+					$output .= __('You can view it there :','WATS')."\r\n";
+					$output .= __('+ Frontend side : ','WATS').get_permalink($postID)."\r\n\r\n";
+					$output .= __('+ Admin side : ','WATS').wats_get_edit_ticket_link($postID)."\r\n\r\n";
+					$output .= __('Regards','WATS').",\r\n\r\n";
+					$output .= __('WATS Notification engine','WATS');
+					wp_mail($user->user_email,$subject,$output);
+				}
 			}
 		}
 	}

@@ -40,6 +40,9 @@ function wats_load_settings()
 		$default['ticket_edition_media_upload'] = 0;
 		$default['ticket_edition_media_upload_tabs'] = 0;
 		$default['ticket_assign_user_list'] = 0;
+		$default['ticket_update_notification_all_tickets'] = 0;
+		$default['ticket_update_notification_my_tickets'] = 0;
+		
    	    add_option('wats', $default);
 	}
         
@@ -106,6 +109,16 @@ function wats_load_settings()
 		if (!isset($wats_settings['ticket_assign_user_list']))
 		{
 			$wats_settings['ticket_assign_user_list'] = 0;
+		}
+		
+		if (!isset($wats_settings['ticket_update_notification_all_tickets']))
+		{
+			$wats_settings['ticket_update_notification_all_tickets'] = 0;
+		}
+		
+		if (!isset($wats_settings['ticket_update_notification_my_tickets']))
+		{
+			$wats_settings['ticket_update_notification_my_tickets'] = 0;
 		}
 		
 		$wats_settings['wats_version'] = $wats_version;
@@ -429,6 +442,8 @@ function wats_options_admin_menu()
 		$wats_settings['wats_guest_user'] = $_POST['guestlist'];
 		$wats_settings['wats_home_display'] = isset($_POST['homedisplay']) ? 1 : 0;
 		$wats_settings['new_ticket_notification_admin'] = isset($_POST['new_ticket_notification_admin']) ? 1 : 0;
+		$wats_settings['ticket_update_notification_all_tickets'] = isset($_POST['ticket_update_notification_all_tickets']) ? 1 : 0;
+		$wats_settings['ticket_update_notification_my_tickets'] = isset($_POST['ticket_update_notification_my_tickets']) ? 1 : 0;
 		$wats_settings['comment_menuitem_visibility'] = isset($_POST['comment_menuitem_visibility']) ? 1 : 0;
 		$wats_settings['tickets_tagging'] = isset($_POST['tickets_tagging']) ? 1 : 0;
 		$wats_settings['tickets_custom_fields'] = isset($_POST['tickets_custom_fields']) ? 1 : 0;
@@ -482,14 +497,27 @@ function wats_options_admin_menu()
 	echo '<div class="wats_tip" id="wats_home_display_tip">';
 	echo __('Check this option if you want to display tickets on homepage along with usual posts. If the option is unchecked, only posts will be displayed.','WATS').'</div></td></tr></table><br />';
 	
-	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("new_ticket_notification_admin_tip");>'.__('Notification','WATS').' :</a></h3>';
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("notification_admin_tip");>'.__('Notifications','WATS').' :</a></h3>';
 	echo '<table class="form-table">';
 	echo '<tr><td><input type="checkbox" name="new_ticket_notification_admin"';
 	if ($wats_settings['new_ticket_notification_admin'] == 1)
 		echo ' checked';
 	echo '> '.__('Notify admin by email upon new ticket submission','WATS').'</td></tr><tr><td>';
-	echo '<div class="wats_tip" id="new_ticket_notification_admin_tip">';
-	echo __('Check this option if you want the system to send a mail to all administrators upon new ticket creation.','WATS').'</div></td></tr></table><br />';
+	echo '<tr><td><input type="checkbox" name="ticket_update_notification_all_tickets"';
+	if ($wats_settings['ticket_update_notification_all_tickets'] == 1)
+		echo ' checked';
+	echo '> '.__('Notify user by email when ticket is updated. Applies to all tickets.','WATS').'</td></tr><tr><td>';
+	echo '<tr><td><input type="checkbox" name="ticket_update_notification_my_tickets"';
+	if ($wats_settings['ticket_update_notification_my_tickets'] == 1)
+		echo ' checked';
+	echo '> '.__('Notify user by email when ticket is updated. Applies only to tickets originated by the user.','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="notification_admin_tip">';
+	echo __('Check the options according to the notifications you want the system to send to users after specific events happened. ','WATS');
+	echo __('These are global options which can be enabled or disabled individually under user profile. ','WATS');
+	echo __('If the option is enabled here, then by default, it will be enabled for the user but he can disable it under his profile. ','WATS');
+	echo __('If the option is disabled here, then it will be disabled for everybody and it couldn\'t be enabled individually. ','WATS');
+	echo __('The update notification is fired upon the following events : new comment added to a ticket, ownership, priority, status or type change in the ticket edition admin page.','WATS').'<br /><br />';
+	echo __('Warning : with these options enabled, the system may send a lot of emails, especially if you have many users. So please make sure that you really understand the implications before enabling these.','WATS').'</div></td></tr></table><br />';
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("group2_tip");>'.__('Tickets visibility','WATS').' :</a></h3>';
 	echo '<table class="form-table">';

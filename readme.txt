@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.6
-Stable tag: 1.0.31
+Stable tag: 1.0.32
 
 == Description ==
 
@@ -48,6 +48,13 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.32 (02/12/2009) =
+* added a global option for notification of updates on all tickets (wats options page)
+* added a global option for notification of updates on user own tickets (wats options page)
+* added a profile option for notification of new ticket submissions (user profile page, can only be set by admins)
+* added a profile option for notification of updates on all tickets (user profile page, can only be set by admins)
+* added a profile option for notification of updates on user own tickets (user profile page, can only be set by admins)
 
 = V1.0.31 (28/11/2009) =
 * added wats_ticket_ownership capability which can be granted individually under user profile by admins

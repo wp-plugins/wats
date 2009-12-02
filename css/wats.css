@@ -15,6 +15,11 @@
 	padding-left:25px;
 }
 
+.wats_tip_visible {
+	background: url('../img/help.png') left center no-repeat;
+	padding-left:25px;
+}
+
 .wats_editable {
 	background: url('../img/modify.png') right center no-repeat;
 }

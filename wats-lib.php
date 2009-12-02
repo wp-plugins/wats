@@ -185,7 +185,7 @@ function wats_get_closed_status_id()
 /*								     										*/
 /* Fonction de construction d'une liste d'utilisateurs ayant une capabilité */
 /* - Type 0 : user ID  			    									    */
-/* - Type 1 : user login			    									    */
+/* - Type 1 : user login			    								    */
 /*									    									*/
 /****************************************************************************/
 
@@ -209,6 +209,38 @@ function wats_get_user_list_with_cap($cap,$type)
     }
 
     return $list;
+}
+
+/*****************************************************/
+/*                                                   */
+/* Fonction de remplissage de la table des capacités */
+/*                                                   */
+/*****************************************************/
+
+function wats_init_capabilities_table()
+{
+	
+	$wats_capabilities_table = array();
+	$wats_capabilities_table['wats_ticket_ownership'] = __('Tickets can be assigned to this user','WATS');
+	
+	return ($wats_capabilities_table);
+}
+
+/*********************************************************/
+/*                                                       */
+/* Fonction de remplissage de la table des notifications */
+/*                                                       */
+/*********************************************************/
+
+function wats_init_notification_table()
+{
+	
+	$wats_notification_table = array();
+	$wats_notification_table['new_ticket_notification_admin'] = __('Get a mail notification when a new ticket is submitted (admin only)','WATS');
+	$wats_notification_table['ticket_update_notification_all_tickets'] = __('Get a mail notification when any ticket is updated','WATS');
+	$wats_notification_table['ticket_update_notification_my_tickets'] = __('Get a mail notification when a ticket originated by me is updated','WATS');
+	
+	return ($wats_notification_table);
 }
 
 /***********************************************************/

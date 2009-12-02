@@ -8,7 +8,7 @@
 
 function wats_admin_save_user_profile()
 {
-	global $current_user, $wpdb;
+	global $current_user, $wpdb, $wats_settings;
 
 	if ($_POST['submit'])
 	{	
@@ -20,8 +20,10 @@ function wats_admin_save_user_profile()
 
 		if ($_GET['user_id'])
 			set_current_user($_GET['user_id']);
-
-		$wats_capabilities_table['wats_ticket_ownership'] = __('Tickets can be assigned to this user','WATS');
+		
+		$wats_capabilities_table = wats_init_capabilities_table();
+		$wats_notifications_table = wats_init_notification_table();
+		
 		foreach ($wats_capabilities_table as $key => $value)
 		{
 			$result = $_POST[$key];
@@ -30,6 +32,20 @@ function wats_admin_save_user_profile()
 			if (($result == "no") && (current_user_can($key) == 1))
 				$current_user->remove_cap($key);
 		}
+		
+		$notifications = get_usermeta($current_user->ID,'wats_notifications');
+		foreach ($wats_notifications_table as $key => $value)
+		{
+			if ($wats_settings[$key] != 0)
+			{
+				$result = $_POST[$key];
+				if ($result == "yes")
+					$notifications[$key] = 1;
+				else
+					$notifications[$key] = 0;
+			}
+		}
+		update_usermeta($current_user->ID,'wats_notifications',$notifications);
 		
 		set_current_user($old_user->ID);
 	}
@@ -45,15 +61,19 @@ function wats_admin_save_user_profile()
 
 function wats_admin_edit_user_profile()
 {
-    global $wpdb,$user_ID,$current_user;
+    global $wpdb,$user_ID,$current_user,$wats_settings;
 
 	if ($current_user->user_level < 10)
 		return;
 
-	$wats_capabilities_table['wats_ticket_ownership'] = __('Tickets can be assigned to this user','WATS');
+	$wats_capabilities_table = wats_init_capabilities_table();
+	$wats_notifications_table = wats_init_notification_table();
+	
     $old_user = $current_user;
     if ($_GET['user_id'])
         set_current_user($_GET['user_id']);
+	
+	$notifications = get_usermeta($current_user->ID,'wats_notifications');
 
 	echo '<h3>'.__('Ticket system capabilities','WATS').'</h3><table class="form-table"><tbody>';
 	foreach ($wats_capabilities_table as $key => $value)
@@ -66,8 +86,26 @@ function wats_admin_edit_user_profile()
 		if ($right == 0) echo ' selected';
 		echo ' >'.__('No','WATS').'</option></td></tr>';
 	}
-
-	echo "</tbody></table><br /><br /><br />";
+	echo '</tbody></table><br />';
+	
+	echo '<h3>'.__('Ticket system notifications','WATS').'</h3><table class="form-table"><tbody>';
+	foreach ($wats_notifications_table as $key => $value)
+	{
+		echo '<tr><th><label>'.$value.'</label></th><td><select name="'.$key.'" id="'.$key.'" size=1 ';
+		if ($wats_settings[$key] == 0)
+			echo 'disabled=disabled ';
+		echo '>';
+		echo '<option value="yes"';
+		if ($notifications[$key] == 1) echo ' selected';
+		echo ' >'.__('Yes','WATS').'</option><option value="no"';
+		if ($notifications[$key] == 0) echo ' selected';
+		echo ' >'.__('No','WATS').'</option></td></tr>';
+	}
+	echo '</tbody></table><br /><br /><div class="wats_tip_visible">';
+	echo __('Note : you can\'t set an option if it has been disabled globally by the admin.','WATS').'</div><br /><br />';
+	
+	echo '<br /><br />';
+	
 	set_current_user($old_user->ID);
 	
 	return;
