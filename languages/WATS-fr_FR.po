@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WATS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-02 15:51+0100\n"
+"POT-Creation-Date: 2009-12-03 15:38+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Olivier <autremonde75@gmail.com>\n"
 "Language-Team: \n"
@@ -294,7 +294,7 @@ msgid "Parent category"
 msgstr ""
 
 #: wats-edit-form-advanced.php:341
-#: wats-template.php:430
+#: wats-template.php:432
 msgid "Categories"
 msgstr ""
 
@@ -364,7 +364,7 @@ msgid "Discussion"
 msgstr ""
 
 #: wats-edit-form-advanced.php:464
-#: wats-template.php:201
+#: wats-template.php:203
 msgid "Author"
 msgstr "Auteur"
 
@@ -391,7 +391,7 @@ msgid "Post Revisions"
 msgstr ""
 
 #: wats-edit-form-advanced.php:589
-#: wats-template.php:199
+#: wats-template.php:201
 msgid "Title"
 msgstr "Titre"
 
@@ -406,20 +406,20 @@ msgid "Last edited on %1$s at %2$s"
 msgstr ""
 
 #: wats-edit-post-rows.php:13
-#: wats-options.php:652
-#: wats-template.php:204
+#: wats-options.php:660
+#: wats-template.php:206
 msgid "Type"
 msgstr "Type"
 
 #: wats-edit-post-rows.php:14
-#: wats-options.php:661
-#: wats-template.php:205
+#: wats-options.php:669
+#: wats-template.php:207
 msgid "Priority"
 msgstr "Priorité"
 
 #: wats-edit-post-rows.php:15
-#: wats-options.php:670
-#: wats-template.php:206
+#: wats-options.php:678
+#: wats-template.php:208
 msgid "Status"
 msgstr "Status"
 
@@ -500,7 +500,7 @@ msgid "View"
 msgstr ""
 
 #: wats-edit-post-rows.php:228
-#: wats-template.php:233
+#: wats-template.php:235
 msgid "Uncategorized"
 msgstr ""
 
@@ -606,7 +606,7 @@ msgid "View all categories"
 msgstr ""
 
 #: wats-edit.php:298
-#: wats-template.php:115
+#: wats-template.php:117
 msgid "Filter"
 msgstr "Filtre"
 
@@ -653,8 +653,8 @@ msgid "Error : please select an entry to remove!"
 msgstr "Erreur : veuillez sélectionner une entrée à supprimer!"
 
 #: wats-head.php:190
-#: wats-options.php:392
-#: wats-template.php:255
+#: wats-options.php:404
+#: wats-template.php:257
 msgid "No entry"
 msgstr "Aucune entrée"
 
@@ -670,19 +670,19 @@ msgstr "Ajout d'entrée en cours"
 msgid "Error : the string contains invalid caracters!"
 msgstr "Erreur : la chaîne contient des caractères invalides!"
 
-#: wats-lib.php:224
+#: wats-lib.php:194
 msgid "Tickets can be assigned to this user"
 msgstr "Les tickets peuvent être assignés à cet utilisateur"
 
-#: wats-lib.php:239
+#: wats-lib.php:209
 msgid "Get a mail notification when a new ticket is submitted (admin only)"
 msgstr "Recevoir une notification par email lorsqu'un nouveau ticket est soumis (seulement pour les administrateurs)"
 
-#: wats-lib.php:240
+#: wats-lib.php:210
 msgid "Get a mail notification when any ticket is updated"
 msgstr "Recevoir une notification par email quand un ticket est mis à jour"
 
-#: wats-lib.php:241
+#: wats-lib.php:211
 msgid "Get a mail notification when a ticket originated by me is updated"
 msgstr "Recevoir une notification par email lorsque l'un de mes tickets est mis à jour"
 
@@ -690,354 +690,384 @@ msgstr "Recevoir une notification par email lorsque l'un de mes tickets est mis 
 msgid "Edit post"
 msgstr ""
 
-#: wats-options.php:150
-#: wats-options.php:164
-#: wats-options.php:261
+#: wats-options.php:162
+#: wats-options.php:176
+#: wats-options.php:273
 msgid "Error : please enter an entry!"
 msgstr "Erreur : veuillez entrer une valeur!"
 
-#: wats-options.php:182
+#: wats-options.php:194
 msgid "Error : entry not found!"
 msgstr "Erreur : entrée introuvable!"
 
-#: wats-options.php:186
+#: wats-options.php:198
 msgid "Error : another entry has the same value!"
 msgstr "Erreur : une autre entrée a la même valeur!"
 
-#: wats-options.php:195
+#: wats-options.php:207
 msgid "Entry successfully updated!"
 msgstr "Entrée mise à jour avec succès!"
 
-#: wats-options.php:199
-#: wats-options.php:300
+#: wats-options.php:211
+#: wats-options.php:312
 msgid "Error : the entry contains invalid characters!"
 msgstr "Erreur : la chaîne contient des caractères invalides!"
 
-#: wats-options.php:231
+#: wats-options.php:243
 msgid "Entry successfully removed!"
 msgstr "Entrée supprimée avec succès!"
 
-#: wats-options.php:235
+#: wats-options.php:247
 msgid "Error : entry not existing!"
 msgstr "Erreur : entrée introuvable!"
 
-#: wats-options.php:283
+#: wats-options.php:295
 msgid "Error : already existing entry!"
 msgstr "Erreur : entrée déjà existante!"
 
-#: wats-options.php:296
+#: wats-options.php:308
 msgid "Entry successfully added!"
 msgstr "Entrée ajoutée avec succès!"
 
-#: wats-options.php:318
-#: wats-options.php:344
+#: wats-options.php:330
+#: wats-options.php:356
 msgid "Remove"
 msgstr "Supprimer"
 
-#: wats-options.php:330
-#: wats-options.php:349
+#: wats-options.php:342
+#: wats-options.php:361
 msgid "Add"
 msgstr "Ajouter"
 
-#: wats-options.php:460
+#: wats-options.php:451
 msgid "Donation"
 msgstr "Don"
 
-#: wats-options.php:461
+#: wats-options.php:452
 msgid "WATS is free to use, cool isn't it? It has however required hundreds of hours to be developed."
 msgstr "WATS est gratuit, sympa n'est ce pas? Il a pourtant nécessité des centaines d'heures pour être développé."
 
-#: wats-options.php:462
+#: wats-options.php:453
 msgid " It still requires a huge amount of time in order to provide technical support for users and new releases with bugfixes and new features."
 msgstr " Il nécessite encore un très grand nombre d'heures pour être l'assistance aux utilisateurs et le développement de nouvelles versions intégrant des correctifs et de nouvelles fonctionnalités."
 
-#: wats-options.php:463
+#: wats-options.php:454
 msgid " By making a donation, you recognize my work and encourage me to go on with the development and support of WATS. Thanks for this!"
 msgstr " En faisant un don, vous reconnaissez mon travail et vous m'encouragez à poursuivre le développement et le support de WATS. Merci!"
 
-#: wats-options.php:472
+#: wats-options.php:463
+#: wats-options.php:482
 #: wats-options.php:491
-#: wats-options.php:500
-#: wats-options.php:522
-#: wats-options.php:536
-#: wats-options.php:550
-#: wats-options.php:564
+#: wats-options.php:513
+#: wats-options.php:527
+#: wats-options.php:541
+#: wats-options.php:555
+#: wats-options.php:567
 #: wats-options.php:576
 #: wats-options.php:585
 #: wats-options.php:594
-#: wats-options.php:603
+#: wats-options.php:606
 #: wats-options.php:615
 #: wats-options.php:624
-#: wats-options.php:633
+#: wats-options.php:637
+#: wats-options.php:646
 msgid "Click to get some help!"
 msgstr "Cliquer pour obtenir de l'aide!"
 
-#: wats-options.php:472
+#: wats-options.php:463
 msgid "Ticket numerotation"
 msgstr "Numérotation des tickets"
 
-#: wats-options.php:476
-#: wats-options.php:635
-#: wats-template.php:245
-#: wats-ticket-metas.php:374
-#: wats-ticket-metas.php:378
-#: wats-ticket-metas.php:385
+#: wats-options.php:467
+#: wats-options.php:626
+#: wats-template.php:247
+#: wats-ticket-metas.php:389
+#: wats-ticket-metas.php:393
+#: wats-ticket-metas.php:403
 msgid "None"
 msgstr "Aucun"
 
-#: wats-options.php:479
+#: wats-options.php:470
 msgid "Dated"
 msgstr "Daté"
 
-#: wats-options.php:482
+#: wats-options.php:473
 msgid "Numbered"
 msgstr "Numéroté"
 
-#: wats-options.php:484
+#: wats-options.php:475
 msgid "Select the preferred option. Based on this, a number will be associated to a ticket and displayed at the beginning of the title."
 msgstr "Sélectionner l'option voulue. En fonction de votre choix, un numéro sera associé au ticket et affiché en début de titre."
 
-#: wats-options.php:488
+#: wats-options.php:479
 msgid "Latest ticket ID"
 msgstr "Dernier identifiant de ticket"
 
-#: wats-options.php:491
+#: wats-options.php:482
 msgid "Tickets display"
 msgstr "Affichage des tickets"
 
-#: wats-options.php:496
+#: wats-options.php:487
 msgid "Include tickets on homepage together with posts"
 msgstr "Afficher les tickets sur la page d'accueil avec les articles"
 
-#: wats-options.php:498
+#: wats-options.php:489
 msgid "Check this option if you want to display tickets on homepage along with usual posts. If the option is unchecked, only posts will be displayed."
 msgstr "Sélectionner cette option si vous souhaitez afficher les tickets sur la page d'accueil avec les articles habituels. Si cette option n'est pas sélectionnée, seuls les articles seront affichés."
 
-#: wats-options.php:500
+#: wats-options.php:491
 msgid "Notifications"
 msgstr "Notifications"
 
-#: wats-options.php:505
+#: wats-options.php:496
 msgid "Notify admin by email upon new ticket submission"
 msgstr "Notifier l'administrateur par email lors de la soumission d'un nouveau ticket"
 
-#: wats-options.php:509
+#: wats-options.php:500
 msgid "Notify user by email when ticket is updated. Applies to all tickets."
 msgstr "Notifier l'utilisateur par email lorsqu'un ticket est mis à jour. S'applique à tous les tickets."
 
-#: wats-options.php:513
+#: wats-options.php:504
 msgid "Notify user by email when ticket is updated. Applies only to tickets originated by the user."
 msgstr "Notifier l'utilisateur par email lorsqu'un ticket est mis à jour. S'applique uniquement aux tickets ouverts par l'utilisateur."
 
-#: wats-options.php:515
+#: wats-options.php:506
 msgid "Check the options according to the notifications you want the system to send to users after specific events happened. "
 msgstr "Sélectioner les options en fonction des notifications que vous voulez que le système envoie aux utilisateurs quand des événements spécifiques se produisent. "
 
-#: wats-options.php:516
+#: wats-options.php:507
 msgid "These are global options which can be enabled or disabled individually under user profile. "
 msgstr "Ce sont des options globales qui peuvent également être activées ou désactivées individuellement sous chaque profil utilisateur. "
 
-#: wats-options.php:517
+#: wats-options.php:508
 msgid "If the option is enabled here, then by default, it will be enabled for the user but he can disable it under his profile. "
 msgstr "Si l'option est activée ici, alors par défaut, elle sera activée pour l'utilisateur mais il pourra la désactiver sous son profil. "
 
-#: wats-options.php:518
+#: wats-options.php:509
 msgid "If the option is disabled here, then it will be disabled for everybody and it couldn't be enabled individually. "
 msgstr "Si l'option est désactivée ici, alors elle sera inactive pour tous les utilisateurs et ne pourra pas être activée individuellement. "
 
-#: wats-options.php:519
+#: wats-options.php:510
 msgid "The update notification is fired upon the following events : new comment added to a ticket, ownership, priority, status or type change in the ticket edition admin page."
 msgstr "La notification de mise à jour d'un ticket est envoyée lors des événements suivants : ajout d'un nouveau commentaire sur un ticket ou changement de propriétaire, de priorité, de type ou de status d'un ticket dans la page d'édition d'un ticket."
 
-#: wats-options.php:520
+#: wats-options.php:511
 msgid "Warning : with these options enabled, the system may send a lot of emails, especially if you have many users. So please make sure that you really understand the implications before enabling these."
 msgstr "Attention : avec l'activation de ces options, le système peut envoyer un nombre important d'emails, en particulier si vous avez beaucoup d'utilisateurs. Donc assurez vous de bien comprendre les implications avant de les activer."
 
-#: wats-options.php:522
+#: wats-options.php:513
 msgid "Tickets visibility"
 msgstr "Visibilité des tickets"
 
-#: wats-options.php:526
+#: wats-options.php:517
 msgid "Everybody can see all tickets"
 msgstr "Tout le monde peut voir les tickets"
 
-#: wats-options.php:529
+#: wats-options.php:520
 msgid "Only registered users can see tickets"
 msgstr "Seuls les utilisateurs enregistrés peuvent voir les tickets"
 
-#: wats-options.php:532
+#: wats-options.php:523
 msgid "Only ticket creator and admins can see tickets"
 msgstr "Seuls le créateur du ticket et les administrateurs peuvent voir les tickets"
 
-#: wats-options.php:534
+#: wats-options.php:525
 msgid "Select the preferred option. Tickets access and display in frontend and admin sides will be adjusted based on this option and user privileges."
 msgstr "Sélectionner l'option voulue. L'accès et l'affichage des tickets dans la partie site et la partie admin seront ajustés en fonction de cette option et des privilèges de l'utilisateur."
 
-#: wats-options.php:536
+#: wats-options.php:527
 msgid "Tickets assignment"
 msgstr "Assignation des tickets"
 
-#: wats-options.php:540
+#: wats-options.php:531
 msgid "No assignment possible"
 msgstr "Aucune assignation possible"
 
-#: wats-options.php:543
+#: wats-options.php:534
 msgid "Everybody can assign a ticket"
 msgstr "Tout le monde peut assigner les tickets"
 
-#: wats-options.php:546
+#: wats-options.php:537
 msgid "Only registered users can assign a ticket"
 msgstr "Seuls les utilisateurs enregistrés peuvent assigner les tickets"
 
-#: wats-options.php:548
+#: wats-options.php:539
 msgid "Select the preferred option. Tickets assignment possibilities in frontend and admin sides will be adjusted based on this option and user privileges."
 msgstr "Sélectionner l'option voulue. Les possibilités d'assignation des tickets dans la partie site et la partie admin seront ajustées en fonction de cette option et des privilèges de l'utilisateur."
 
-#: wats-options.php:550
+#: wats-options.php:541
 msgid "Target users for tickets assignment"
 msgstr "Utilisateurs pouvant être assignés à des tickets"
 
-#: wats-options.php:554
+#: wats-options.php:545
 msgid "Any registered user"
 msgstr "Tous les utilisateurs enregistrés"
 
-#: wats-options.php:557
+#: wats-options.php:548
 msgid "Ticket originator and admins"
 msgstr "Seuls le créateur du ticket et les administrateurs"
 
-#: wats-options.php:560
+#: wats-options.php:551
 msgid "Ticket originator and any user with wats_ticket_ownership capability"
 msgstr "Seuls le créateur du ticket et les utilisateurs avec la capacité wats_ticket_ownership"
 
-#: wats-options.php:562
+#: wats-options.php:553
 msgid "Select the preferred option. The list of users a ticket can be assigned to will be adjusted based on this option. The wats_ticket_ownership capability can be granted under user profile by admins."
 msgstr "Sélectionner l'option voulue. La liste des utilisateurs pouvant être assignés à un ticket sera ajustée en fonction de cette option. La capacité wats_ticket_ownership peut être donnée à un utilisateur dans l'éditeur de profil utilisateur par les administrateurs."
 
-#: wats-options.php:564
+#: wats-options.php:555
 msgid "Ticket assignment capability minimum level requirement"
 msgstr "Niveau minimum requis pour pouvoir assigner un ticket"
 
-#: wats-options.php:565
+#: wats-options.php:556
 msgid "Level"
 msgstr "Niveau"
 
-#: wats-options.php:574
+#: wats-options.php:565
 msgid "Select the level. Only users with this minimum level value will be able to assign tickets. To learn more about users levels, check out this page : "
 msgstr "Sélectionner le niveau. Seuls les utilisateurs avec un niveau supérieur ou égal à la valeur sélectionnée pourront assigner des tickets. Pour en savoir plus sur les différents niveaux d'utilisateurs, vous pouvez vous rendre sur cette page : "
 
-#: wats-options.php:576
+#: wats-options.php:567
 msgid "Admin menu access"
 msgstr "Accès aux menus d'administration"
 
-#: wats-options.php:581
+#: wats-options.php:572
 msgid "Block comments menu access for users without moderate_comments capability"
 msgstr "Bloquer l'accès à la page d'édition des commentaires pour les utilisateurs sans la capacité moderate_comments"
 
-#: wats-options.php:583
+#: wats-options.php:574
 msgid "Check this option if you want to prevent users without the comments moderation capability to browse the comments list page (on this page, they could see updates on all tickets)."
 msgstr "Sélectionner cette option si vous souhaitez empêcher aux utilisateurs sans la capacité de modération des commentaires d'accéder à la liste des commentaires (sur cette page, ils peuvent visualiser toutes les mises à jour des tickets)."
 
-#: wats-options.php:585
+#: wats-options.php:576
 msgid "Tickets tagging"
 msgstr "Tagging des tickets"
 
-#: wats-options.php:590
+#: wats-options.php:581
 msgid "Allow tickets tagging"
 msgstr "Permettre l'association de tags aux tickets"
 
-#: wats-options.php:592
+#: wats-options.php:583
 msgid "Check this option if you want to allow tag association to tickets."
 msgstr "Sélectionner cette option si vous souhaitez permettre l'association de mots clés aux tickets."
 
-#: wats-options.php:594
+#: wats-options.php:585
 msgid "Custom fields"
 msgstr "Champs personnalisés"
 
-#: wats-options.php:599
+#: wats-options.php:590
 msgid "Allow custom fields association to tickets"
 msgstr "Permettre l'association de champs personnalisés aux tickets"
 
-#: wats-options.php:601
+#: wats-options.php:592
 msgid "Check this option if you want to allow custom fields association to tickets."
 msgstr "Sélectionner cette option si vous souhaitez permettre l'association de champs personnalisés aux tickets."
 
-#: wats-options.php:603
+#: wats-options.php:594
 msgid "Global statistics dashboad widget visibility"
 msgstr "Widget des statistiques (globales) sur le tableau de bord"
 
-#: wats-options.php:604
+#: wats-options.php:595
 msgid "Minimum required level"
 msgstr "Niveau minimum requis"
 
-#: wats-options.php:613
+#: wats-options.php:604
 msgid "Select the level. Only users with this minimum level value will be able to view the global statistics under the stats widget on the dashboard. To learn more about users levels, check out this page : "
 msgstr "Sélectionner le niveau. Seuls les utilisateurs avec un niveau supérieur ou égal à la valeur sélectionnée pourront voir les statistiques globales du widget des statistiques sur le tableau de bord. Pour en savoir plus sur les différents niveaux d'utilisateurs, vous pouvez vous rendre sur cette page : "
 
-#: wats-options.php:615
+#: wats-options.php:606
 msgid "Media upload"
 msgstr "Ajout de médias"
 
-#: wats-options.php:620
+#: wats-options.php:611
 msgid "Allow media upload on ticket creation and edition pages"
 msgstr "Permettre l'ajout de médias sur les pages de création et d'édition des tickets"
 
-#: wats-options.php:622
+#: wats-options.php:613
 msgid "Check this option if you want to allow media upload while creating and editing tickets. This will allow users to attach media files to tickets."
 msgstr "Sélectionner cette option si vous souhaitez permettre l'ajout de médias durant la création et l'édition de tickets. Ceci permettra aux utilisateurs d'attacher des fichiers aux tickets."
 
-#: wats-options.php:624
+#: wats-options.php:615
 msgid "Media upload tabs"
 msgstr "Fonctions d'ajout de médias"
 
-#: wats-options.php:629
+#: wats-options.php:620
 msgid "Allow media library browsing during media upload"
 msgstr "Permettre l'accès à la bibliothèque durant l'ajout de médias"
 
-#: wats-options.php:631
+#: wats-options.php:622
 msgid "Check this option if you want to allow media library browsing during media upload while creating and editing tickets. This will allow users to view the library and insert files directly from it."
 msgstr "Sélectionner cette option si vous souhaitez permettre l'accès à la bibliothèque des médias durant la création et l'édition des tickets. Ceci permettra aux utilisateurs de parcourir la bibliothèque et insérer des fichiers directement à partir de celle-ci."
 
-#: wats-options.php:633
+#: wats-options.php:624
 msgid "Shared guest user"
 msgstr "Utilisateur invité partagé"
 
-#: wats-options.php:634
+#: wats-options.php:625
 msgid "User"
 msgstr "Utilisateur"
 
-#: wats-options.php:644
+#: wats-options.php:635
 msgid "The shared guest user is a user that must have at least contributor user level. This user will only have access to the ticket creation page on the admin side. You can share the guest user login/password with your visitors so that they can submit tickets without having to register first. This is a shared account."
 msgstr "L'utilisateur invité partagé est un utilisateur qui doit avoir un niveau minimum de contributeur. Cet utilisateur aura seulement accès à la page de création des tickets dans l'admin. Vous pouvez partager les login et password de l'utilisateur invité avec vos visiteurs afin qu'ils puissent soumettre des tickets sans avoir à s'enregistrer préalablement. C'est un compte partagé."
 
-#: wats-options.php:647
+#: wats-options.php:637
+msgid "Call center ticket creation"
+msgstr "Création de ticket par un centre d'appel"
+
+#: wats-options.php:642
+msgid "Allow admins to create a ticket on behalf of any user."
+msgstr "Permettre aux administrateurs de créer un ticket pour le compte d'un autre utilisateur."
+
+#: wats-options.php:644
+msgid "Check this option if you want to allow admins to create tickets on behalf of any user. This will allow them to set the ticket originator while submitting a new ticket."
+msgstr "Sélectionner cette option si vous souhaitez permettre aux administrateurs de créer des tickets pour le compte d'autres utilisateurs. Ceci leur permettra de spécifier le propriétaire du ticket lors de la soumission d'un nouveau ticket."
+
+#: wats-options.php:646
+msgid "User selector format"
+msgstr "Format du sélecteur utilisateur"
+
+#: wats-options.php:648
+msgid "Format : "
+msgstr "Format : "
+
+#: wats-options.php:650
+msgid "Using user meta keys, set the user format you would like to use for user selectors. This format will be applied to all user selectors. If it is empty, the default key \"user_login\" will be applied. The following user meta keys can be used : user_login, "
+msgstr "En utilisant les clés meta des utilisateurs, définissez le format souhaité pour les sélecteurs d'utilisateurs. Ce format sera appliqué à tous les sélecteurs d'utilisateurs. S'il est vide, par défaut, la clé \"user_login\" sera utilisée. Les clés suivantes peuvent être utilisées : user_login, "
+
+#: wats-options.php:651
+msgid "Warning : you need to make sure that the combination of keys used will make each entry unique and different from each other. Therefore, it is a good idea to use user_login as this key is unique for each user."
+msgstr "Attention : vous devez vous assurer que la combinaison des clés utilisées soit unique et différente pour chaque utilisateur. Aussi, c'est une bonne idée d'utiliser la clé user_login étant donnée qu'elle est unique pour chaque utilisateur."
+
+#: wats-options.php:655
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: wats-options.php:649
+#: wats-options.php:657
 msgid "Ticket types"
 msgstr "Types des tickets"
 
-#: wats-options.php:653
-#: wats-options.php:662
-#: wats-options.php:671
-#: wats-options.php:680
+#: wats-options.php:661
+#: wats-options.php:670
+#: wats-options.php:679
+#: wats-options.php:688
 msgid "Selection"
 msgstr "Sélection"
 
-#: wats-options.php:658
+#: wats-options.php:666
 msgid "Ticket priorities"
 msgstr "Priorités des tickets"
 
-#: wats-options.php:667
+#: wats-options.php:675
 msgid "Ticket statuses"
 msgstr "Status des tickets"
 
-#: wats-options.php:676
+#: wats-options.php:684
 msgid "Categories opened to submission"
 msgstr "Catégories ouvertes pour la soumission de nouveaux tickets"
 
-#: wats-options.php:679
-#: wats-template.php:200
+#: wats-options.php:687
+#: wats-template.php:202
 msgid "Category"
 msgstr "Catégorie"
 
@@ -1064,7 +1094,7 @@ msgid "Note : you can't set an option if it has been disabled globally by the ad
 msgstr "Note : vous ne pouvez pas activer ces options si elles sont désactivées globalement par l'administrateur."
 
 #: wats-template.php:86
-#: wats-ticket-metas.php:334
+#: wats-ticket-metas.php:349
 msgid "Ticket type"
 msgstr "Type du ticket"
 
@@ -1072,34 +1102,34 @@ msgstr "Type du ticket"
 #: wats-template.php:95
 #: wats-template.php:102
 #: wats-template.php:108
-#: wats-template.php:156
+#: wats-template.php:158
 msgid "Any"
 msgstr "Tous"
 
 #: wats-template.php:93
-#: wats-ticket-metas.php:345
+#: wats-ticket-metas.php:360
 msgid "Ticket priority"
 msgstr "Priorité du ticket"
 
 #: wats-template.php:100
-#: wats-ticket-metas.php:356
+#: wats-ticket-metas.php:371
 msgid "Ticket status"
 msgstr "Status du ticket"
 
 #: wats-template.php:107
-#: wats-ticket-metas.php:371
+#: wats-ticket-metas.php:386
 msgid "Ticket owner"
 msgstr "Propriétaire du ticket"
 
-#: wats-template.php:202
+#: wats-template.php:204
 msgid "Owner"
 msgstr "Propriétaire"
 
-#: wats-template.php:203
+#: wats-template.php:205
 msgid "Creation date"
 msgstr "Date de création"
 
-#: wats-template.php:431
+#: wats-template.php:433
 msgid "Post Tags"
 msgstr ""
 
@@ -1107,76 +1137,77 @@ msgstr ""
 msgid "Current ticket owner : "
 msgstr "Propriétaire du ticket : "
 
-#: wats-ticket-metas.php:171
-#: wats-ticket-metas.php:173
-#: wats-ticket-metas.php:197
-#: wats-ticket-metas.php:199
+#: wats-ticket-metas.php:186
+#: wats-ticket-metas.php:188
+#: wats-ticket-metas.php:212
+#: wats-ticket-metas.php:214
 msgid "Ticket "
 msgstr "Ticket"
 
-#: wats-ticket-metas.php:171
-#: wats-ticket-metas.php:197
+#: wats-ticket-metas.php:186
+#: wats-ticket-metas.php:212
 msgid " has been updated"
 msgstr " a été mis à jour"
 
-#: wats-ticket-metas.php:172
-#: wats-ticket-metas.php:198
-#: wats-ticket-metas.php:240
+#: wats-ticket-metas.php:187
+#: wats-ticket-metas.php:213
+#: wats-ticket-metas.php:255
 msgid "Hello "
 msgstr "Bonjour "
 
-#: wats-ticket-metas.php:173
-#: wats-ticket-metas.php:199
+#: wats-ticket-metas.php:188
+#: wats-ticket-metas.php:214
 msgid " has been updated."
 msgstr " a été mis à jour."
 
-#: wats-ticket-metas.php:174
-#: wats-ticket-metas.php:200
-#: wats-ticket-metas.php:242
+#: wats-ticket-metas.php:189
+#: wats-ticket-metas.php:215
+#: wats-ticket-metas.php:257
 msgid "You can view it there :"
 msgstr "Vous pouvez le visualiser ici :"
 
-#: wats-ticket-metas.php:175
-#: wats-ticket-metas.php:201
-#: wats-ticket-metas.php:243
+#: wats-ticket-metas.php:190
+#: wats-ticket-metas.php:216
+#: wats-ticket-metas.php:258
 msgid "+ Frontend side : "
 msgstr "+ Partie site : "
 
-#: wats-ticket-metas.php:176
-#: wats-ticket-metas.php:202
-#: wats-ticket-metas.php:244
+#: wats-ticket-metas.php:191
+#: wats-ticket-metas.php:217
+#: wats-ticket-metas.php:259
 msgid "+ Admin side : "
 msgstr "+ Partie administration : "
 
-#: wats-ticket-metas.php:177
-#: wats-ticket-metas.php:203
-#: wats-ticket-metas.php:245
+#: wats-ticket-metas.php:192
+#: wats-ticket-metas.php:218
+#: wats-ticket-metas.php:260
 msgid "Regards"
 msgstr "Cordialement"
 
-#: wats-ticket-metas.php:178
-#: wats-ticket-metas.php:204
-#: wats-ticket-metas.php:246
+#: wats-ticket-metas.php:193
+#: wats-ticket-metas.php:219
+#: wats-ticket-metas.php:261
 msgid "WATS Notification engine"
 msgstr "Le système de notification de WATS"
 
-#: wats-ticket-metas.php:239
+#: wats-ticket-metas.php:254
 msgid "New ticket submitted"
 msgstr "Nouveau ticket soumis"
 
-#: wats-ticket-metas.php:241
+#: wats-ticket-metas.php:256
 msgid "A new ticket has been submitted into the system."
 msgstr "Un nouveau ticket a été soumis dans le système."
 
-#: wats-ticket-metas.php:277
+#: wats-ticket-metas.php:292
 msgid "Ticket details"
 msgstr "Détails du ticket"
 
-#: wats-ticket-metas.php:308
+#: wats-ticket-metas.php:323
 msgid "Here is the ticket history"
 msgstr "Historique du ticket"
 
-#: wats-ticket-metas.php:404
+#: wats-ticket-metas.php:426
+#: wats-ticket-metas.php:444
 msgid "Ticket originator : "
 msgstr "Créateur du ticket : "
 

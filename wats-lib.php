@@ -38,7 +38,7 @@ function wats_is_numeric($i)
 
 function wats_is_string($i)
 {
-	return (preg_match("/^[\.\,\;\'\"ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿža-zA-Z-\d ]+$/", $i));
+	return (preg_match("/^[\.\,\;\'\"\-\_()ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿža-zA-Z-\d ]+$/", $i));
 }
 
 /****************************************************/
@@ -181,36 +181,6 @@ function wats_get_closed_status_id()
 	return $closed;
 }
 
-/****************************************************************************/
-/*								     										*/
-/* Fonction de construction d'une liste d'utilisateurs ayant une capabilité */
-/* - Type 0 : user ID  			    									    */
-/* - Type 1 : user login			    								    */
-/*									    									*/
-/****************************************************************************/
-
-function wats_get_user_list_with_cap($cap,$type)
-{
-	global $wpdb;
-
-    $users = $wpdb->get_results("SELECT ID FROM `{$wpdb->prefix}users`");
-
-	$list = array();
-    foreach ($users AS $user)
-    {
-        $my_user = new WP_User($user->ID);
-        if ($my_user->has_cap($cap))
-		{
-			if ($type == 0)
-				$list[] = $my_user->ID;
-			else
-				$list[] = $my_user->user_login;
-		}
-    }
-
-    return $list;
-}
-
 /*****************************************************/
 /*                                                   */
 /* Fonction de remplissage de la table des capacités */
@@ -242,6 +212,145 @@ function wats_init_notification_table()
 	
 	return ($wats_notification_table);
 }
+
+/*********************************************************/
+/*                                                       */
+/* Fonction de construction de la liste des utilisateurs */
+/*                                                       */
+/*********************************************************/
+
+function wats_build_user_list($min_level,$firstitem,$cap)
+{
+    global $wpdb, $wats_settings;
+
+	wats_load_settings();
+	
+    $users = $wpdb->get_results("SELECT ID FROM `{$wpdb->prefix}users`");
+    $userlist = array();
+	if ($firstitem !== 0)
+		$userlist[0] = $firstitem;
+	
+	$metakeylist = wats_get_list_of_user_meta_keys(1);
+	foreach ($metakeylist AS $index => $metakey)
+	{
+		if (!strpos($wats_settings['user_selector_format'],$metakey))
+			unset($metakeylist[$index]);
+	}
+	
+	foreach ($users AS $user)
+    {
+		$user = new WP_user($user->ID);
+		if ($user->user_level >= $min_level && ($cap == 0 || $user->has_cap($cap)))
+		{
+			$output = $wats_settings['user_selector_format'];
+			foreach ($metakeylist AS $metakey)
+			{
+				if (strpos($wats_settings['user_selector_format'],$metakey))
+					$output = str_replace($metakey,get_usermeta($user->ID,$metakey),$output);
+			}
+			$output = str_replace('user_login',$user->user_login,$output);
+			if (wats_is_string(stripcslashes($output)))
+				$userlist[$user->user_login] = stripcslashes($output);
+			else
+				$userlist[$user->user_login] = $user->user_login;
+		}
+	}
+        
+    return ($userlist);
+}
+
+/*******************************************/
+/*                                         */
+/* Fonction de construction du nom formaté */
+/*                                         */
+/*******************************************/
+
+function wats_build_formatted_name($ID)
+{
+    global $wpdb, $wats_settings;
+
+    $userlist = array();
+	$metakeylist = wats_get_list_of_user_meta_keys(1);
+	foreach ($metakeylist AS $index => $metakey)
+	{
+		if (!strpos($wats_settings['user_selector_format'],$metakey))
+			unset($metakeylist[$index]);
+	}
+	
+	$user = new WP_user($ID);
+	$output = $wats_settings['user_selector_format'];
+	foreach ($metakeylist AS $metakey)
+	{
+		if (strpos($wats_settings['user_selector_format'],$metakey))
+			$output = str_replace($metakey,get_usermeta($user->ID,$metakey),$output);
+	}
+	$output = str_replace('user_login',$user->user_login,$output);
+	if (wats_is_string($output))
+		$userlist[$user->user_login] = $output;
+	else
+		$userlist[$user->user_login] = $user->user_login;
+
+    return ($userlist);
+}
+
+/*******************************************************/
+/*                                                     */
+/* Fonction de remplissage de la liste des meta values */
+/* view 0 : string contenant les meta values           */
+/* view 1 : table contenant les meta values            */
+/*                                                     */
+/*******************************************************/
+
+function wats_get_list_of_user_meta_keys($view)
+{
+	global $wpdb;
+	
+	$keys = $wpdb->get_results("SELECT DISTINCT meta_key FROM $wpdb->usermeta");
+	if ($view == 0)
+	{
+		$list = '';
+		$x = 0;
+		foreach ($keys AS $key)
+		{
+			if (wats_is_string($key->meta_key))
+			{
+				if ($x != 0)
+					$list .= ', ';
+				else
+					$x = 1;
+				$list .= $key->meta_key;
+			}
+		}
+		$list .= '.';
+	}
+	else
+	{
+		$list = array();
+		foreach ($keys AS $key)
+		{
+			if (wats_is_string($key->meta_key))
+				$list[] = $key->meta_key;
+		}
+	}
+	
+	return($list);
+}
+
+/******************************************************/
+/*                                                    */
+/* Fonction de récupération de l'ID à partir du login */
+/*                                                    */
+/******************************************************/
+
+function wats_get_user_ID_from_user_login($login)
+{
+	global $wpdb;
+	
+	$id = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE user_login=\"$login\"");
+	
+	return($id);
+}
+
 
 /***********************************************************/
 /*                                                         */

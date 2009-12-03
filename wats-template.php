@@ -105,10 +105,12 @@ function wats_list_tickets_filters()
 	$output .= '</select><br /><br />';
 	
 	$output .= __('Ticket owner','WATS').' : ';
-	$userlist = wats_build_user_list(0,__('Any','WATS'));
+	$userlist = wats_build_user_list(0,__('Any','WATS'),0);
 	$output .= '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner">';
-	for ($i = 0; $userlist[$i] != false; $i++)
-		$output .= '<option value="'.$userlist[$i].'">'.$userlist[$i].'</option>';
+	foreach ($userlist AS $userlogin => $username)
+	{
+        $output .= '<option value="'.$userlogin.'" >'.$username.'</option>';
+	}
 	$output .= '</select><br /></p>';
 	
 	$output .= '<p class="submit">';

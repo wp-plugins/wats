@@ -7,7 +7,7 @@ jQuery(document).ready(function() {
 			var idtype = jQuery('#wats_select_ticket_type option:selected').val();
 			var idpriority = jQuery('#wats_select_ticket_priority option:selected').val();
 			var idstatus = jQuery('#wats_select_ticket_status option:selected').val();
-			var idowner = jQuery('#wats_select_ticket_owner option:selected').text();
+			var idowner = jQuery('#wats_select_ticket_owner option:selected').val();
 			var categoryfilter = jQuery('#categoryfilter').val();
 			var categorylistfilter = jQuery('#categorylistfilter').val();
 

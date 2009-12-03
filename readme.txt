@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.6
-Stable tag: 1.0.32
+Stable tag: 1.0.33
 
 == Description ==
 
@@ -48,6 +48,13 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.33 (03/12/2009) =
+* fixed an issue with admin side edit ticket url encoding on mail notifications
+* added an option to allow admins to create tickets on behalf of any user
+* added an option to set the format of user selector
+* modified all user selectors to work with the format option (owner selector on single ticket page, ticket list owner selector, create/edit ticket owner selector, guest user selector)
+* added owner selector on ticket creation/edition page for admins
 
 = V1.0.32 (02/12/2009) =
 * added a global option for notification of updates on all tickets (wats options page)

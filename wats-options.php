@@ -42,7 +42,9 @@ function wats_load_settings()
 		$default['ticket_assign_user_list'] = 0;
 		$default['ticket_update_notification_all_tickets'] = 0;
 		$default['ticket_update_notification_my_tickets'] = 0;
-		
+		$default['call_center_ticket_creation'] = 0;
+		$default['user_selector_format'] = 'user_login';
+				
    	    add_option('wats', $default);
 	}
         
@@ -119,6 +121,16 @@ function wats_load_settings()
 		if (!isset($wats_settings['ticket_update_notification_my_tickets']))
 		{
 			$wats_settings['ticket_update_notification_my_tickets'] = 0;
+		}
+		
+		if (!isset($wats_settings['call_center_ticket_creation']))
+		{
+			$wats_settings['call_center_ticket_creation'] = 0;
+		}
+		
+		if (!isset($wats_settings['user_selector_format']))
+		{
+			$wats_settings['user_selector_format'] = 'user_login';
 		}
 		
 		$wats_settings['wats_version'] = $wats_version;
@@ -396,30 +408,6 @@ function wats_admin_display_options_list($type,$check)
     return;
 }
 
-/*********************************************************/
-/*                                                       */
-/* Fonction de construction de la liste des utilisateurs */
-/*                                                       */
-/*********************************************************/
-
-function wats_build_user_list($min_level,$firstitem)
-{
-    global $wpdb;
-
-    $users = $wpdb->get_results("SELECT ID FROM `{$wpdb->prefix}users`");
-    $userlist = array();
-	$userlist[] = $firstitem;
-
-    foreach ($users AS $user)
-    {
-		$user = new WP_user($user->ID);
-		if ($user->user_level >= $min_level)
-			$userlist[] = $user->user_login;
-	}
-        
-    return ($userlist);
-}
-
 /***********************************************/
 /*                                             */
 /* Fonction d'affichage de la page des options */
@@ -450,6 +438,9 @@ function wats_options_admin_menu()
 		$wats_settings['dashboard_stats_widget_level'] = $_POST['dashboard_stats_widget_level'];
 		$wats_settings['ticket_edition_media_upload'] = isset($_POST['ticket_edition_media_upload']) ? 1 : 0;
 		$wats_settings['ticket_edition_media_upload_tabs'] = isset($_POST['ticket_edition_media_upload_tabs']) ? 1 : 0;
+		$wats_settings['call_center_ticket_creation'] = isset($_POST['call_center_ticket_creation']) ? 1 : 0;
+		$wats_settings['user_selector_format'] = wats_is_string(stripcslashes($_POST['user_selector_format'])) ? $_POST['user_selector_format'] : 'user_login';
+		
 		update_option('wats', $wats_settings);
 	}
 	
@@ -632,17 +623,34 @@ function wats_options_admin_menu()
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("guestlist_tip");>'.__('Shared guest user','WATS').' : </a></h3>';
 	echo '<table class="form-table"><tr><td>'.__('User','WATS').' : <select name="guestlist" id="guestlist" size="1">';
-	$userlist = wats_build_user_list(1,__("None",'WATS'));
-	for ($i = 0; $userlist[$i] != false; $i++)
+	$userlist = wats_build_user_list(1,__("None",'WATS'),0);
+	foreach ($userlist AS $userlogin => $username)
 	{
-        echo '<option value="'.$userlist[$i].'" ';
-        if ($userlist[$i] == $wats_settings['wats_guest_user']) echo 'selected';
-			echo '>'.$userlist[$i].'</option>';
+        echo '<option value="'.$userlogin.'" ';
+        if ($userlogin == $wats_settings['wats_guest_user']) echo 'selected';
+			echo '>'.$username.'</option>';
 	}
 	echo '</select></td></tr><tr><td>';
 	echo '<div class="wats_tip" id="guestlist_tip">';
 	echo __('The shared guest user is a user that must have at least contributor user level. This user will only have access to the ticket creation page on the admin side. You can share the guest user login/password with your visitors so that they can submit tickets without having to register first. This is a shared account.','WATS').'</div></td></tr></table><br />';
 	
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("call_center_ticket_creation_tip");>'.__('Call center ticket creation','WATS').' : </a></h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="checkbox" name="call_center_ticket_creation"';
+	if ($wats_settings['call_center_ticket_creation'] == 1)
+		echo ' checked';
+	echo '> '.__('Allow admins to create a ticket on behalf of any user.','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="call_center_ticket_creation_tip">';
+	echo __('Check this option if you want to allow admins to create tickets on behalf of any user. This will allow them to set the ticket originator while submitting a new ticket.','WATS').'</div></td></tr></table><br />';
+	
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("user_selector_format_tip");>'.__('User selector format','WATS').' : </a></h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td>'.__('Format : ','WATS').'<input type="text" name="user_selector_format" value="'.htmlspecialchars(stripcslashes($wats_settings['user_selector_format'])).'" size=30></td></tr><tr><td>';
+	echo '<div class="wats_tip" id="user_selector_format_tip">';
+	echo __('Using user meta keys, set the user format you would like to use for user selectors. This format will be applied to all user selectors. If it is empty, the default key "user_login" will be applied. The following user meta keys can be used : user_login, ','WATS').wats_get_list_of_user_meta_keys(0);
+	echo '<br/><br />'.__('Warning : you need to make sure that the combination of keys used will make each entry unique and different from each other. Therefore, it is a good idea to use user_login as this key is unique for each user.','WATS');
+	echo '</div></td></tr></table><br />';
+		
 	echo '<p class="submit">';
 	echo '<input class="button-primary" type="submit" name="save" value="'.__('Save','WATS').'" /></p><br />';
 	
