@@ -54,7 +54,7 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 * added an option to allow admins to create tickets on behalf of any user
 * added an option to set the format of user selector
 * modified all user selectors to work with the format option (owner selector on single ticket page, ticket list owner selector, create/edit ticket owner selector, guest user selector)
-* added owner selector on ticket creation/edition page for admins
+* added originator selector on ticket creation/edition page for admins
 
 = V1.0.32 (02/12/2009) =
 * added a global option for notification of updates on all tickets (wats options page)
