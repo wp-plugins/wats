@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.6
-Stable tag: 1.0.33
+Stable tag: 1.0.34
 
 == Description ==
 
@@ -48,6 +48,11 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.34 (04/12/2009) =
+* fixed a bug with ticket listing filtering when ticket owner is "any"
+* added ticket author selector filter for ticket listing table
+* enhanced ticket visibility option scope to impact owner and author selectors filters for ticket listing table
 
 = V1.0.33 (03/12/2009) =
 * fixed an issue with admin side edit ticket url encoding on mail notifications

@@ -522,7 +522,8 @@ function wats_options_admin_menu()
 	echo ($wats_settings['visibility'] == 2) ? 'checked' : '';
 	echo '>'.__('Only ticket creator and admins can see tickets','WATS').'</td></tr><tr><td>';
 	echo '<div class="wats_tip" id="group2_tip">';
-	echo __('Select the preferred option. Tickets access and display in frontend and admin sides will be adjusted based on this option and user privileges.','WATS').'</div></td></tr></table><br />';
+	echo __('Select the preferred option. Tickets access and display in frontend and admin sides will be adjusted based on this option and user privileges.','WATS');
+	echo __(' This option will also affect author and owner selectors filters display for the ticket listing table which will be available for everybody, only logged in users or only admins based on the selected option.','WATS').'</div></td></tr></table><br />';
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("group3_tip");>'.__('Tickets assignment','WATS').' :</a></h3>';
 	echo '<table class="form-table">';

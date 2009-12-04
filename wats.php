@@ -4,12 +4,16 @@ Plugin Name: Wats
 Plugin URI: http://www.lautre-monde.fr/wats-going-on/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0.33
+Version: 1.0.34
 Author URI: http://www.lautre-monde.fr
 */
 
 /*
 1/ Release history :
+- V1.0.34 (04/12/2009) :
++ fixed a bug with ticket listing filtering when ticket owner is "any"
++ added ticket author selector filter for ticket listing table
++ enhanced ticket visibility option scope to impact owner and author selectors filters for ticket listing table
 - V1.0.33 (03/12/2009) :
 + fixed an issue with admin side edit ticket url encoding on mail notifications
 + added an option to allow admins to create tickets on behalf of any user
@@ -165,7 +169,7 @@ define('WATS_ANCHOR2',"l'autre monde");
 define("WATS_TICKET_LIST_REGEXP", "/\[WATS_TICKET_LIST ([[:print:]]+)\]/");
 
 $wats_settings = array();
-$wats_version = '1.0.33';
+$wats_version = '1.0.34';
 
 $wats_default_ticket_priority = array(1 => "Emergency", 2 => "Critical", 3 => "Major", 4 => "Minor");
 $wats_default_ticket_status = array(1 => "Newly open", 2 => "Under investigation", 3 => "Waiting for reoccurence", 4 => "Waiting for details", 5 => "Solution delivered", 6 => "Closed");

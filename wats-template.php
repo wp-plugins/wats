@@ -28,18 +28,28 @@ function wats_check_visibility_rights()
 
 function wats_ticket_list_ajax_processing()
 {
-	global $wats_settings;
+	global $wats_settings, $current_user;
 
+	wats_load_settings();
 	check_ajax_referer('filter-wats-tickets-list');
 	if ($_POST[view] == 1)
 	{
 		$idtype = $_POST[idtype];
 		$idpriority = $_POST[idpriority];
 		$idstatus = $_POST[idstatus];
-		$idowner = $_POST[idowner];
+		if (($wats_settings['visibility'] == 0) || ($wats_settings['visibility'] == 1 && is_user_logged_in()) || ($wats_settings['visibility'] == 2 && is_user_logged_in() && $current_user->user_level == 10))
+		{
+			$idauthor = $_POST[idauthor];
+			$idowner = $_POST[idowner];
+		}
+		else
+		{
+			$idauthor = "0";
+			$idowner = "0";
+		}
 		$categoryfilter = $_POST[categoryfilter];
 		$categorylistfilter = $_POST[categorylistfilter];
-		echo wats_list_tickets($categoryfilter, $categorylistfilter, 1, $idtype, $idpriority, $idstatus, $idowner);
+		echo wats_list_tickets($categoryfilter, $categorylistfilter, 1, $idtype, $idpriority, $idstatus, $idowner,$idauthor);
 	}
 	
 	exit;
@@ -56,6 +66,12 @@ function wats_list_tickets_filter($content)
     return (preg_replace_callback(WATS_TICKET_LIST_REGEXP, 'wats_list_tickets_args', $content));
 }
 
+/********************************************************************************/
+/*                                                                              */
+/* Fonction de filtrage des paramètres pour l'affichage de la table des tickets */
+/*                                                                              */
+/********************************************************************************/
+
 function wats_list_tickets_args($args)
 {
 	global $wpdb;
@@ -69,12 +85,18 @@ function wats_list_tickets_args($args)
 	}
 	$catlist = implode(',',$catlist);
 	
-	return (wats_list_tickets($args[1],$catlist,0,0,0,0,0));
+	return (wats_list_tickets($args[1],$catlist,0,0,0,0,0,0));
 }
+
+/**************************************************************/
+/*                                                            */
+/* Fonction d'affichage des filtres pour la liste des tickets */
+/*                                                            */
+/**************************************************************/
 
 function wats_list_tickets_filters()
 {
-	global $wats_settings;
+	global $wats_settings, $current_user;
 	
 	$wats_ticket_priority = $wats_settings['wats_priorities'];
 	$wats_ticket_type = $wats_settings['wats_types'];
@@ -104,14 +126,26 @@ function wats_list_tickets_filters()
 		$output .= '<option value='.$key.'>'.__($value,'WATS').'</option>';
 	$output .= '</select><br /><br />';
 	
-	$output .= __('Ticket owner','WATS').' : ';
-	$userlist = wats_build_user_list(0,__('Any','WATS'),0);
-	$output .= '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner">';
-	foreach ($userlist AS $userlogin => $username)
+	if (($wats_settings['visibility'] == 0) || ($wats_settings['visibility'] == 1 && is_user_logged_in()) || ($wats_settings['visibility'] == 2 && is_user_logged_in() && $current_user->user_level == 10))
 	{
-        $output .= '<option value="'.$userlogin.'" >'.$username.'</option>';
+		$output .= __('Ticket author','WATS').' : ';
+		$userlist = wats_build_user_list(0,__('Any','WATS'),0);
+		$output .= '<select name="wats_select_ticket_author" id="wats_select_ticket_author">';
+		foreach ($userlist AS $userlogin => $username)
+		{
+			$output .= '<option value="'.$userlogin.'" >'.$username.'</option>';
+		}
+		$output .= '</select><br /><br />';
+	
+		$output .= __('Ticket owner','WATS').' : ';
+		$userlist = wats_build_user_list(0,__('Any','WATS'),0);
+		$output .= '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner">';
+		foreach ($userlist AS $userlogin => $username)
+		{
+			$output .= '<option value="'.$userlogin.'" >'.$username.'</option>';
+		}
+		$output .= '</select><br /></p>';
 	}
-	$output .= '</select><br /></p>';
 	
 	$output .= '<p class="submit">';
 	$output .= '<input class="button-primary" type="submit" id="filter" name="filter" value="'.__('Filter','WATS').'" /></p></form>';
@@ -126,7 +160,7 @@ function wats_list_tickets_filters()
 /*                                                      */
 /********************************************************/
 
-function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriority, $idstatus, $idowner)
+function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriority, $idstatus, $idowner, $idauthor)
 {
 	global $wpdb, $wats_settings, $current_user;
 
@@ -155,7 +189,13 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 			$where .= " AND (wp3.meta_key = 'wats_ticket_status' AND wp3.meta_value = '$idstatus')";
 			$joinoptions = 1;
 		}
-		if ($idowner != __('Any','WATS'))
+		if ($idauthor != "0")
+		{
+			$idauthor = wats_get_user_ID_from_user_login($idauthor);
+			$where .= " AND $wpdb->posts.post_author = '$idauthor'";
+			$joinoptions = 1;
+		}
+		if ($idowner != "0")
 		{
 			$leftjoin .= " LEFT JOIN $wpdb->postmeta AS wp4 ON $wpdb->posts.ID = wp4.post_id ";
 			$where .= " AND (wp4.meta_key = 'wats_ticket_owner' AND wp4.meta_value = '$idowner')";
