@@ -47,9 +47,13 @@ function wats_ticket_list_ajax_processing()
 			$idauthor = "0";
 			$idowner = "0";
 		}
+		if ($current_user->user_level == 10 && $wats_settings['filter_ticket_listing'] == 1)
+			$idauthormetavalue = wats_fix_single_quotes(esc_html(stripslashes($_POST[idauthormetavalue])));
+		else
+			$idauthormetavalue = "0";
 		$categoryfilter = $_POST[categoryfilter];
 		$categorylistfilter = $_POST[categorylistfilter];
-		echo wats_list_tickets($categoryfilter, $categorylistfilter, 1, $idtype, $idpriority, $idstatus, $idowner,$idauthor);
+		echo wats_list_tickets($categoryfilter, $categorylistfilter, 1, $idtype, $idpriority, $idstatus, $idowner, $idauthor, $idauthormetavalue);
 	}
 	
 	exit;
@@ -85,7 +89,7 @@ function wats_list_tickets_args($args)
 	}
 	$catlist = implode(',',$catlist);
 	
-	return (wats_list_tickets($args[1],$catlist,0,0,0,0,0,0));
+	return (wats_list_tickets($args[1],$catlist,0,0,0,0,0,0,0));
 }
 
 /**************************************************************/
@@ -107,23 +111,23 @@ function wats_list_tickets_filters()
 	
 	$output .= '<p align="left">'.__('Ticket type','WATS').' : ';
 	$output .= '<select name="wats_select_ticket_type" id="wats_select_ticket_type">';
-	$output .= '<option value="0">'.__('Any','WATS').'</option>';
+	$output .= '<option value="0">'.esc_html__('Any','WATS').'</option>';
 	foreach ($wats_ticket_type as $key => $value)
-		$output .= '<option value='.$key.'>'.__($value,'WATS').'</option>';
+		$output .= '<option value='.$key.'>'.esc_html__($value,'WATS').'</option>';
 	$output .= '</select><br /><br />';
 	
 	$output .= __('Ticket priority','WATS').' : ';
 	$output .= '<select name="wats_select_ticket_priority" id="wats_select_ticket_priority">';
-	$output .= '<option value="0">'.__('Any','WATS').'</option>';
+	$output .= '<option value="0">'.esc_html__('Any','WATS').'</option>';
 	foreach ($wats_ticket_priority as $key => $value)
-		$output .= '<option value='.$key.'>'.__($value,'WATS').'</option>';
+		$output .= '<option value='.$key.'>'.esc_html__($value,'WATS').'</option>';
 	$output .= '</select><br /><br />';
 	
 	$output .=  __('Ticket status','WATS').' : ';
 	$output .= '<select name="wats_select_ticket_status" id="wats_select_ticket_status">';
-	$output .= '<option value="0">'.__('Any','WATS').'</option>';
+	$output .= '<option value="0">'.esc_html__('Any','WATS').'</option>';
 	foreach ($wats_ticket_status as $key => $value)
-		$output .= '<option value='.$key.'>'.__($value,'WATS').'</option>';
+		$output .= '<option value='.$key.'>'.esc_html__($value,'WATS').'</option>';
 	$output .= '</select><br /><br />';
 	
 	if (($wats_settings['visibility'] == 0) || ($wats_settings['visibility'] == 1 && is_user_logged_in()) || ($wats_settings['visibility'] == 2 && is_user_logged_in() && $current_user->user_level == 10))
@@ -136,6 +140,19 @@ function wats_list_tickets_filters()
 			$output .= '<option value="'.$userlogin.'" >'.$username.'</option>';
 		}
 		$output .= '</select><br /><br />';
+	
+		if ($current_user->user_level == 10 && $wats_settings['filter_ticket_listing'] == 1)
+		{
+			$output .= __('Ticket author','WATS').' ('.$wats_settings['filter_ticket_listing_meta_key'].') : ';
+			$metakeyvalues = wats_build_list_meta_values($wats_settings['filter_ticket_listing_meta_key']);
+			$output .= '<select name="wats_select_ticket_author_meta_value" id="wats_select_ticket_author_meta_value">';
+			$output .= '<option value="0">'.__('Any','WATS').'</option>';
+			foreach ($metakeyvalues AS $value)
+			{
+				$output .= '<option value="'.esc_attr($value).'" >'.esc_html($value).'</option>';
+			}
+			$output .= '</select><br /><br />';
+		}
 	
 		$output .= __('Ticket owner','WATS').' : ';
 		$userlist = wats_build_user_list(0,__('Any','WATS'),0);
@@ -160,7 +177,7 @@ function wats_list_tickets_filters()
 /*                                                      */
 /********************************************************/
 
-function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriority, $idstatus, $idowner, $idauthor)
+function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriority, $idstatus, $idowner, $idauthor, $idauthormetavalue)
 {
 	global $wpdb, $wats_settings, $current_user;
 
@@ -201,18 +218,25 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 			$where .= " AND (wp4.meta_key = 'wats_ticket_owner' AND wp4.meta_value = '$idowner')";
 			$joinoptions = 1;
 		}
+		if ($idauthormetavalue != "0")
+		{
+			$key = $wats_settings['filter_ticket_listing_meta_key'];
+			$leftjoin .= " LEFT JOIN $wpdb->usermeta AS wp5 ON $wpdb->posts.post_author = wp5.user_id ";
+			$where .= " AND (wp5.meta_key = '$key' AND wp5.meta_value = \"$idauthormetavalue\")";
+			$joinoptions = 1;
+		}
 	}
 
 	if ($filtercategory == 0)
 	{
 		if ($wats_settings['visibility'] == 0)
-			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts ".$leftjoin." WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'".$where));
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts".$leftjoin." WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'".$where));
 		else if ($wats_settings['visibility'] == 1 && is_user_logged_in())
-			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts ".$leftjoin." WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'".$where));
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts".$leftjoin." WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'".$where));
 		else if ($wats_settings['visibility'] == 2 && is_user_logged_in() && $current_user->user_level == 10)
-			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts ".$leftjoin." WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'".$where));
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts".$leftjoin." WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'".$where));
 		else if ($wats_settings['visibility'] == 2 && is_user_logged_in())
-			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts ".$leftjoin." WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_author = $current_user->ID AND $wpdb->posts.post_status = 'publish'".$where));
+			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts".$leftjoin." WHERE $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_author = $current_user->ID AND $wpdb->posts.post_status = 'publish'".$where));
 	}
 	else if ($filtercategory == 1)
 	{
@@ -225,7 +249,7 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 		else if ($wats_settings['visibility'] == 2 && is_user_logged_in())
 			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id ".$leftjoin." WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_author = $current_user->ID AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)".$where));
 	}
-	
+
 	$output = "";
 	if ($view == 0)
 	{
@@ -241,6 +265,8 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 	$output .= '<th scope="col" style="text-align:center;">'.__('Title','WATS').'</th>';
 	$output .= '<th scope="col" style="text-align:center;">'.__('Category','WATS').'</th>';
 	$output .= '<th scope="col" style="text-align:center;">'.__('Author','WATS').'</th>';
+	if ($wats_settings['meta_column_ticket_listing'] == 1 && $current_user->user_level == 10)
+		$output .= '<th scope="col" style="text-align:center;">'.$wats_settings['meta_column_ticket_listing_meta_key'].'</th>';
 	$output .= '<th scope="col" style="text-align:center;">'.__('Owner','WATS').'</th>';
 	$output .= '<th scope="col" style="text-align:center;">'.__('Creation date','WATS').'</th>';
 	$output .= '<th scope="col" style="text-align:center;">'.__('Type','WATS').'</th>';
@@ -249,6 +275,10 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 	$output .= '</tr></thead><tbody>';
    
     $alt = false;
+	if ($wats_settings['meta_column_ticket_listing'] == 1 && $current_user->user_level == 10)
+		$colspan = 10;
+	else
+		$colspan = 9;
 	if ($tickets)
 	foreach ($tickets as $ticket)
 	{
@@ -258,7 +288,7 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 		$output .= ($alt == true) ? ' class="alternate"' : '';
 		if (($wats_settings['numerotation'] == 1) || ($wats_settings['numerotation'] == 2))
 			$output .= '><td>'.wats_get_ticket_number($ticket->ID).'</td>';
-		$output .= '<td><a href="'.get_permalink($ticket).'">'.htmlspecialchars(stripcslashes($ticket->post_title)).'</a></td>';
+		$output .= '<td><a href="'.get_permalink($ticket).'">'.htmlspecialchars(stripslashes($ticket->post_title)).'</a></td>';
 		$categories = get_the_category($ticket->ID);
 		if (!empty($categories))
 		{
@@ -279,7 +309,10 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 			$output .= '<td>'.get_the_author_meta('nickname',$ticket->post_author).'</td>';
 		else
 			$output .= '<td>'.get_the_author($ticket->post_author).'</td>';
-		
+			
+		if ($wats_settings['meta_column_ticket_listing'] == 1 && $current_user->user_level == 10)
+			$output .= '<td>'.esc_html(get_usermeta($ticket->post_author,$wats_settings['meta_column_ticket_listing_meta_key'])).'</td>';
+
 		$ticket_owner = get_post_meta($ticket->ID,'wats_ticket_owner',true);
 		if ($ticket_owner)
 			$output .= '<td>'.get_post_meta($ticket->ID,'wats_ticket_owner',true).'</td>';
@@ -292,10 +325,10 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 		$output .= '</tr>';
 		$alt = !$alt;
 	}
+	
 	if ($x == 0)
-	{
-		$output .= '<tr valign="middle"><td colspan="9" style="text-align:center">'.__('No entry','WATS').'</td></tr>';
-	}
+		$output .= '<tr valign="middle"><td colspan="'.$colspan.'" style="text-align:center">'.__('No entry','WATS').'</td></tr>';
+	
 	$output .= '</tbody></table><br />';
 
 	if ($view == 0)

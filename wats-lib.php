@@ -38,7 +38,7 @@ function wats_is_numeric($i)
 
 function wats_is_string($i)
 {
-	return (preg_match("/^[\.\,\;\'\"\-\_()ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿža-zA-Z-\d ]+$/", $i));
+	return (preg_match("/^[\.\,\#\&\;\'\"\-\_()ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿža-zA-Z-\d ]+$/", $i));
 }
 
 /****************************************************/
@@ -233,7 +233,7 @@ function wats_build_user_list($min_level,$firstitem,$cap)
 	$metakeylist = wats_get_list_of_user_meta_keys(1);
 	foreach ($metakeylist AS $index => $metakey)
 	{
-		if (!strpos($wats_settings['user_selector_format'],$metakey))
+		if (strpos($wats_settings['user_selector_format'],$metakey) === false)
 			unset($metakeylist[$index]);
 	}
 	
@@ -245,12 +245,12 @@ function wats_build_user_list($min_level,$firstitem,$cap)
 			$output = $wats_settings['user_selector_format'];
 			foreach ($metakeylist AS $metakey)
 			{
-				if (strpos($wats_settings['user_selector_format'],$metakey))
+				if (strpos($wats_settings['user_selector_format'],$metakey) !== false)
 					$output = str_replace($metakey,get_usermeta($user->ID,$metakey),$output);
 			}
 			$output = str_replace('user_login',$user->user_login,$output);
-			if (wats_is_string(stripcslashes($output)))
-				$userlist[$user->user_login] = stripcslashes($output);
+			if (wats_is_string(stripslashes($output)))
+				$userlist[$user->user_login] = esc_html(stripslashes($output));
 			else
 				$userlist[$user->user_login] = $user->user_login;
 		}
@@ -273,7 +273,7 @@ function wats_build_formatted_name($ID)
 	$metakeylist = wats_get_list_of_user_meta_keys(1);
 	foreach ($metakeylist AS $index => $metakey)
 	{
-		if (!strpos($wats_settings['user_selector_format'],$metakey))
+		if (strpos($wats_settings['user_selector_format'],$metakey) === false)
 			unset($metakeylist[$index]);
 	}
 	
@@ -281,12 +281,12 @@ function wats_build_formatted_name($ID)
 	$output = $wats_settings['user_selector_format'];
 	foreach ($metakeylist AS $metakey)
 	{
-		if (strpos($wats_settings['user_selector_format'],$metakey))
+		if (strpos($wats_settings['user_selector_format'],$metakey) !== false)
 			$output = str_replace($metakey,get_usermeta($user->ID,$metakey),$output);
 	}
 	$output = str_replace('user_login',$user->user_login,$output);
-	if (wats_is_string($output))
-		$userlist[$user->user_login] = $output;
+	if (wats_is_string(stripslashes($output)))
+		$userlist[$user->user_login] = esc_html(stripslashes($output));
 	else
 		$userlist[$user->user_login] = $user->user_login;
 
@@ -295,9 +295,9 @@ function wats_build_formatted_name($ID)
 
 /*******************************************************/
 /*                                                     */
-/* Fonction de remplissage de la liste des meta values */
-/* view 0 : string contenant les meta values           */
-/* view 1 : table contenant les meta values            */
+/* Fonction de remplissage de la liste des meta keys */
+/* view 0 : string contenant les meta keys           */
+/* view 1 : table contenant les meta keys            */
 /*                                                     */
 /*******************************************************/
 
@@ -336,6 +336,26 @@ function wats_get_list_of_user_meta_keys($view)
 	return($list);
 }
 
+/*******************************************************/
+/*                                                     */
+/* Fonction de remplissage de la liste des meta values */
+/*                                                     */
+/*******************************************************/
+
+function wats_build_list_meta_values($key)
+{
+	global $wpdb;
+	
+	$values = $wpdb->get_results("SELECT DISTINCT meta_value FROM $wpdb->usermeta WHERE meta_key=\"$key\"");
+	$list = array();
+	foreach ($values AS $value)
+	{
+		$list[] = $value->meta_value;
+	}
+	
+	return($list);
+}
+
 /******************************************************/
 /*                                                    */
 /* Fonction de récupération de l'ID à partir du login */
@@ -349,6 +369,20 @@ function wats_get_user_ID_from_user_login($login)
 	$id = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE user_login=\"$login\"");
 	
 	return($id);
+}
+
+/******************************************************/
+/*                                                    */
+/* Fonction de modification du code des single quotes */
+/*                                                    */
+/******************************************************/
+
+function wats_fix_single_quotes($str)
+{
+	
+	$str = str_replace('#039;','#39;',$str);
+	
+	return($str);
 }
 
 

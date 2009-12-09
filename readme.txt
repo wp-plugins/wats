@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.6
-Stable tag: 1.0.34
+Stable tag: 1.0.35
 
 == Description ==
 
@@ -24,9 +24,9 @@ Examples of use of WATS :
 
 Translations :
 
-* English (Minimum release : 1.0, Originator : Olivier from http://www.lautre-monde.fr)
-* French (Minimum release : 1.0, Originator : Olivier from http://www.lautre-monde.fr)
-* German (Minimum release : 1.0.23, Originator : Tobias Kalleder from http://indivisualists.com/)
+* English (Minimum release : 1.0, Originator : Olivier from http://www.lautre-monde.fr )
+* French (Minimum release : 1.0, Originator : Olivier from http://www.lautre-monde.fr )
+* German (Minimum release : 1.0.23, Originator : Tobias Kalleder from http://indivisualists.com/ )
 
 
 == Installation ==
@@ -48,6 +48,11 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.35 (09/12/2009) =
+* added an option to allow admins to filter tickets on ticket listing table page through an additionnal selector based on user meta value
+* added an option to allow admins to get an additionnal column in the ticket listing table filled in with selected meta key meta values
+* fixed a bug with user format in formatted user list when a user meta is used at the beginning of the format string
 
 = V1.0.34 (04/12/2009) =
 * fixed a bug with ticket listing filtering when ticket owner is "any"
@@ -101,9 +106,9 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 * added an option to block access to comments edition menuitem and comments edition page for users without moderate_comments capability (so that they can't view updates on others users tickets)
 
 = V1.0.23 (26/09/2009) =
-* added frontend widget for ticket statistics (code provided by Tobias Kalleder from http://indivisualists.com/)
+* added frontend widget for ticket statistics (code provided by Tobias Kalleder from http://indivisualists.com/ )
 * modified ticket listing filtering in the admin tickets table so that non admin users can only view their own tickets (as per ticket visibility option)
-* added german translation (provided by Tobias Kalleder from http://indivisualists.com/)
+* added german translation (provided by Tobias Kalleder from http://indivisualists.com/ )
 * fixed few translations items
 
 = V1.0.22 (25/09/2009) =

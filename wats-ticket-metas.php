@@ -33,7 +33,7 @@ function wats_ticket_get_priority($post)
 	
 	$wats_ticket_priority = $wats_settings['wats_priorities'];
 	
-	return($wats_ticket_priority[get_post_meta($post->ID,'wats_ticket_priority',true)]);
+	return(esc_html__($wats_ticket_priority[get_post_meta($post->ID,'wats_ticket_priority',true)],'WATS'));
 }
 
 /************************************************/
@@ -48,7 +48,7 @@ function wats_ticket_get_type($post)
 	
 	$wats_ticket_type = $wats_settings['wats_types'];
 
-	return($wats_ticket_type[get_post_meta($post->ID,'wats_ticket_type',true)]);
+	return(esc_html__($wats_ticket_type[get_post_meta($post->ID,'wats_ticket_type',true)],'WATS'));
 }
 
 /**************************************************/
@@ -63,7 +63,7 @@ function wats_ticket_get_status($post)
 	
 	$wats_ticket_status = $wats_settings['wats_statuses'];
 	
-	return($wats_ticket_status[get_post_meta($post->ID,'wats_ticket_status',true)]);
+	return(esc_html__($wats_ticket_status[get_post_meta($post->ID,'wats_ticket_status',true)],'WATS'));
 }
 
 /*************************************************/
@@ -353,7 +353,7 @@ function wats_ticket_details_meta_box($post)
 		echo '<option value='.$key;
 		if ($key == $ticket_type)
 			echo ' selected';
-		echo '>'.__($value,'WATS').'</option>';
+		echo '>'.esc_html__($value,'WATS').'</option>';
 	}
 	echo '</select><br /><br />';
 	
@@ -364,7 +364,7 @@ function wats_ticket_details_meta_box($post)
 		echo '<option value='.$key;
 		if ($key == $ticket_priority)
 			echo ' selected';
-		echo '>'.__($value,'WATS').'</option>';
+		echo '>'.esc_html__($value,'WATS').'</option>';
 	}
 	echo '</select><br /><br />';
 	
@@ -375,7 +375,7 @@ function wats_ticket_details_meta_box($post)
 		echo '<option value='.$key;
 		if ($key == $ticket_status)
 			echo ' selected';
-		echo '>'.__($value,'WATS').'</option>';
+		echo '>'.esc_html__($value,'WATS').'</option>';
 	}
 	echo '</select><br /><br />';
 	

@@ -44,6 +44,10 @@ function wats_load_settings()
 		$default['ticket_update_notification_my_tickets'] = 0;
 		$default['call_center_ticket_creation'] = 0;
 		$default['user_selector_format'] = 'user_login';
+		$default['filter_ticket_listing'] = 0;
+		$default['filter_ticket_listing_meta_key'] = 'None';
+		$default['meta_column_ticket_listing'] = 0;
+		$default['meta_column_ticket_listing_meta_key'] = 'None';
 				
    	    add_option('wats', $default);
 	}
@@ -133,6 +137,26 @@ function wats_load_settings()
 			$wats_settings['user_selector_format'] = 'user_login';
 		}
 		
+		if (!isset($wats_settings['filter_ticket_listing']))
+		{
+			$wats_settings['filter_ticket_listing'] = 0;
+		}
+		
+		if (!isset($wats_settings['filter_ticket_listing_meta_key']))
+		{
+			$wats_settings['filter_ticket_listing_meta_key'] = 'None';
+		}
+		
+		if (!isset($wats_settings['meta_column_ticket_listing']))
+		{
+			$wats_settings['meta_column_ticket_listing'] = 0;
+		}
+		
+		if (!isset($wats_settings['meta_column_ticket_listing_meta_key']))
+		{
+			$wats_settings['meta_column_ticket_listing_meta_key'] = 'None';
+		}
+		
 		$wats_settings['wats_version'] = $wats_version;
 		update_option('wats', $wats_settings);
 	}
@@ -179,13 +203,13 @@ function wats_admin_update_option_entry()
 			$wats_options = $wats_settings[$type];
 			foreach ($wats_options as $key => $value)
 			{
-				if ($value == $idprevvalue)
+				if (esc_html(stripslashes($value)) == esc_html(stripslashes($idprevvalue)))
 					$res = $key;
 			}
 			
 			foreach ($wats_options as $key => $value)
 			{
-				if ($value == $idvalue)
+				if (esc_html(stripslashes($value)) == esc_html(stripslashes($idvalue)))
 					$res = -1;
 			}
 
@@ -199,12 +223,12 @@ function wats_admin_update_option_entry()
 			}
 			else
 			{
-				if (wats_is_string(stripcslashes($idvalue)))
+				if (wats_is_string(stripslashes($idvalue)))
 				{
-					$wats_options[$res] = $idvalue;
+					$wats_options[$res] = esc_html(stripslashes($idvalue));
 					$wats_settings[$type] = $wats_options;
 					update_option('wats', $wats_settings);
-					$message_result = array('id' => "", 'idvalue' => stripcslashes($idvalue),'success' => "TRUE", 'error' => __("Entry successfully updated!",'WATS'));
+					$message_result = array('id' => "", 'idvalue' => stripslashes($idvalue),'success' => "TRUE", 'error' => __("Entry successfully updated!",'WATS'));
 				}
 				else
 				{
@@ -296,16 +320,16 @@ function wats_admin_insert_option_entry()
 		}
         else
         {
-			if (wats_is_string(stripcslashes($idvalue)))
+			if (wats_is_string(stripslashes($idvalue)))
 			{
 				if ($idcat > 0)
 					$length = $idcat;
 				else
 					$length++;
-				$wats_options[$length] = $idvalue;
+				$wats_options[$length] = esc_html(stripslashes($idvalue));
 				$wats_settings[$type] = $wats_options;
 				update_option('wats', $wats_settings);
-				$message_result = array('id' => $length, 'idvalue' => stripcslashes($idvalue),'success' => "TRUE", 'error' => __("Entry successfully added!",'WATS'));
+				$message_result = array('id' => $length, 'idvalue' => stripslashes($idvalue),'success' => "TRUE", 'error' => __("Entry successfully added!",'WATS'));
 			}
 			else
 			{
@@ -391,7 +415,7 @@ function wats_admin_display_options_list($type,$check)
 				echo ' class="wats_editable">';
 			else
 				echo '>';
-			echo htmlspecialchars(stripcslashes($value)).'</td>';
+			echo esc_html(stripslashes($value)).'</td>';
 			echo '<td><input type="checkbox" name="'.$check.'" id="'.$check.'" value="'.$key.'" /></td>';
 			echo '</tr>';
 
@@ -439,8 +463,12 @@ function wats_options_admin_menu()
 		$wats_settings['ticket_edition_media_upload'] = isset($_POST['ticket_edition_media_upload']) ? 1 : 0;
 		$wats_settings['ticket_edition_media_upload_tabs'] = isset($_POST['ticket_edition_media_upload_tabs']) ? 1 : 0;
 		$wats_settings['call_center_ticket_creation'] = isset($_POST['call_center_ticket_creation']) ? 1 : 0;
-		$wats_settings['user_selector_format'] = wats_is_string(stripcslashes($_POST['user_selector_format'])) ? $_POST['user_selector_format'] : 'user_login';
-		
+		$wats_settings['user_selector_format'] = wats_is_string(stripslashes($_POST['user_selector_format'])) ? esc_html(stripslashes($_POST['user_selector_format'])) : 'user_login';
+		$wats_settings['filter_ticket_listing'] = isset($_POST['filter_ticket_listing']) ? 1 : 0;
+		$wats_settings['filter_ticket_listing_meta_key'] = $_POST['metakeylistfilter'];
+		$wats_settings['meta_column_ticket_listing'] = isset($_POST['meta_column_ticket_listing']) ? 1 : 0;
+		$wats_settings['meta_column_ticket_listing_meta_key'] = $_POST['metakeylistcolumn'];
+	
 		update_option('wats', $wats_settings);
 	}
 	
@@ -640,18 +668,53 @@ function wats_options_admin_menu()
 	echo '<tr><td><input type="checkbox" name="call_center_ticket_creation"';
 	if ($wats_settings['call_center_ticket_creation'] == 1)
 		echo ' checked';
-	echo '> '.__('Allow admins to create a ticket on behalf of any user.','WATS').'</td></tr><tr><td>';
+	echo '> '.__('Allow admins to create a ticket on behalf of any user','WATS').'</td></tr><tr><td>';
 	echo '<div class="wats_tip" id="call_center_ticket_creation_tip">';
 	echo __('Check this option if you want to allow admins to create tickets on behalf of any user. This will allow them to set the ticket originator while submitting a new ticket.','WATS').'</div></td></tr></table><br />';
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("user_selector_format_tip");>'.__('User selector format','WATS').' : </a></h3>';
 	echo '<table class="form-table">';
-	echo '<tr><td>'.__('Format : ','WATS').'<input type="text" name="user_selector_format" value="'.htmlspecialchars(stripcslashes($wats_settings['user_selector_format'])).'" size=30></td></tr><tr><td>';
+	echo '<tr><td>'.__('Format : ','WATS').'<input type="text" name="user_selector_format" value="'.esc_attr(stripslashes($wats_settings['user_selector_format'])).'" size=30></td></tr><tr><td>';
 	echo '<div class="wats_tip" id="user_selector_format_tip">';
 	echo __('Using user meta keys, set the user format you would like to use for user selectors. This format will be applied to all user selectors. If it is empty, the default key "user_login" will be applied. The following user meta keys can be used : user_login, ','WATS').wats_get_list_of_user_meta_keys(0);
 	echo '<br/><br />'.__('Warning : you need to make sure that the combination of keys used will make each entry unique and different from each other. Therefore, it is a good idea to use user_login as this key is unique for each user.','WATS');
 	echo '</div></td></tr></table><br />';
-		
+
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("filter_ticket_listing_tip");>'.__('Ticket author user meta key selector for ticket listing filtering','WATS').' : </a></h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="checkbox" name="filter_ticket_listing"';
+	if ($wats_settings['filter_ticket_listing'] == 1)
+		echo ' checked';
+	echo '> '.__('Allow admins to filter tickets through author user meta key selector','WATS').'</td></tr><tr><td>';
+	echo __('Meta key','WATS').' : <select name="metakeylistfilter" id="metakeylistfilter" size="1">';
+	$metakeylist = wats_get_list_of_user_meta_keys(1);
+	foreach ($metakeylist AS $metakey)
+	{
+        echo '<option value="'.$metakey.'" ';
+        if ($metakey == $wats_settings['filter_ticket_listing_meta_key']) echo 'selected';
+			echo '>'.$metakey.'</option>';
+	}
+	echo '</select></td></tr><tr><td>';
+	echo '<div class="wats_tip" id="filter_ticket_listing_tip">';
+	echo __('Check this option if you want to allow admins to filter tickets through an additionnal selector which will be filled in with meta values attached to the selected meta key.','WATS').'</div></td></tr></table><br />';
+
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("meta_column_ticket_listing_tip");>'.__('Ticket author user meta key column for tickets listing table','WATS').' : </a></h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="checkbox" name="meta_column_ticket_listing"';
+	if ($wats_settings['meta_column_ticket_listing'] == 1)
+		echo ' checked';
+	echo '> '.__('Allow admins to get another column filled with author meta value in the tickets listing table','WATS').'</td></tr><tr><td>';
+	echo __('Meta key','WATS').' : <select name="metakeylistcolumn" id="metakeylistcolumn" size="1">';
+	foreach ($metakeylist AS $metakey)
+	{
+        echo '<option value="'.$metakey.'" ';
+        if ($metakey == $wats_settings['meta_column_ticket_listing_meta_key']) echo 'selected';
+			echo '>'.$metakey.'</option>';
+	}
+	echo '</select></td></tr><tr><td>';
+	echo '<div class="wats_tip" id="meta_column_ticket_listing_tip">';
+	echo __('Check this option if you want to allow admins to get another column in the tickets listing table that will be filled in with user meta values attached to the selected meta key.','WATS').'</div></td></tr></table><br />';
+	
 	echo '<p class="submit">';
 	echo '<input class="button-primary" type="submit" name="save" value="'.__('Save','WATS').'" /></p><br />';
 	
