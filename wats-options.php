@@ -48,6 +48,7 @@ function wats_load_settings()
 		$default['filter_ticket_listing_meta_key'] = 'None';
 		$default['meta_column_ticket_listing'] = 0;
 		$default['meta_column_ticket_listing_meta_key'] = 'None';
+		$default['notification_signature'] = 'Regads,\r\n\r\nWATS Notification engine';
 				
    	    add_option('wats', $default);
 	}
@@ -155,6 +156,11 @@ function wats_load_settings()
 		if (!isset($wats_settings['meta_column_ticket_listing_meta_key']))
 		{
 			$wats_settings['meta_column_ticket_listing_meta_key'] = 'None';
+		}
+		
+		if (!isset($wats_settings['notification_signature']))
+		{
+			$wats_settings['notification_signature'] = 'Regads,\r\n\r\nWATS Notification engine';
 		}
 		
 		$wats_settings['wats_version'] = $wats_version;
@@ -468,12 +474,11 @@ function wats_options_admin_menu()
 		$wats_settings['filter_ticket_listing_meta_key'] = $_POST['metakeylistfilter'];
 		$wats_settings['meta_column_ticket_listing'] = isset($_POST['meta_column_ticket_listing']) ? 1 : 0;
 		$wats_settings['meta_column_ticket_listing_meta_key'] = $_POST['metakeylistcolumn'];
-	
+		$wats_settings['notification_signature'] = esc_html(preg_replace("/(\r\n|\n|\r)/", "",nl2br($_POST['notification_signature'])));
 		update_option('wats', $wats_settings);
 	}
 	
 	wats_load_settings();
-
 	echo '<H2><div style="text-align:center">WATS '.$wats_settings['wats_version'].'</div></H2>';
 	
 	echo '<h3>'.__('Donation','WATS').' :</h3>';
@@ -537,6 +542,14 @@ function wats_options_admin_menu()
 	echo __('If the option is disabled here, then it will be disabled for everybody and it couldn\'t be enabled individually. ','WATS');
 	echo __('The update notification is fired upon the following events : new comment added to a ticket, ownership, priority, status or type change in the ticket edition admin page.','WATS').'<br /><br />';
 	echo __('Warning : with these options enabled, the system may send a lot of emails, especially if you have many users. So please make sure that you really understand the implications before enabling these.','WATS').'</div></td></tr></table><br />';
+
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("notification_signature_tip");>'.__('Mail notifications signature','WATS').' : </a></h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><textarea id="notification_signature" name="notification_signature" cols="40" rows="5">';
+	echo esc_html(str_replace(array('\r\n','\r','<br />'),"\n",html_entity_decode(stripslashes($wats_settings['notification_signature']))));
+	echo '</textarea></td></tr><tr><td>';
+	echo '<div class="wats_tip" id="notification_signature_tip">';
+	echo __('Enter the signature to be put into every notification email sent by the system.','WATS').'</div></td></tr></table><br />';
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("group2_tip");>'.__('Tickets visibility','WATS').' :</a></h3>';
 	echo '<table class="form-table">';

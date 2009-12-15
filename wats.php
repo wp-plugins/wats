@@ -4,12 +4,19 @@ Plugin Name: Wats
 Plugin URI: http://www.lautre-monde.fr/wats-going-on/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0.35
+Version: 1.0.36
 Author URI: http://www.lautre-monde.fr
 */
 
 /*
 1/ Release history :
+- V1.0.36 (15/12/2009) :
++ fixed a bug with post edit link under archives pages if post type is "ticket"
++ removed empty ticket author label on ticket creation page for non admin users
++ added an option under the user profile to grant or remove upload files capability for any user
++ added an option to set email signature of notifications sent by the system to users
++ modified default ticket creator (call center feature) to current user
++ enhanced ticket update notification emails to include status, priority, type and owner changes
 - V1.0.35 (09/12/2009) :
 + added an option to allow admins to filter tickets on ticket listing table page through an additionnal selector based on user meta value
 + added an option to allow admins to get an additionnal column in the ticket listing table filled in with selected meta key meta values
@@ -173,7 +180,7 @@ define('WATS_ANCHOR2',"l'autre monde");
 define("WATS_TICKET_LIST_REGEXP", "/\[WATS_TICKET_LIST ([[:print:]]+)\]/");
 
 $wats_settings = array();
-$wats_version = '1.0.35';
+$wats_version = '1.0.36';
 
 $wats_default_ticket_priority = array(1 => "Emergency", 2 => "Critical", 3 => "Major", 4 => "Minor");
 $wats_default_ticket_status = array(1 => "Newly open", 2 => "Under investigation", 3 => "Waiting for reoccurence", 4 => "Waiting for details", 5 => "Solution delivered", 6 => "Closed");
@@ -257,6 +264,7 @@ add_filter('posts_where','wats_posts_where');
 add_filter('the_content', 'wats_list_tickets_filter');
 add_filter('the_content_rss', 'wats_list_tickets_filter');
 add_filter('wp_insert_post_data', 'wats_insert_post_data');
+add_filter('edit_post_link','wats_filter_edit_ticket_link');
 
 /* Ajax Actions Hooks */
 add_action('wp_ajax_wats_admin_insert_option_entry','wats_admin_insert_option_entry',10);

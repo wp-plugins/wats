@@ -192,6 +192,7 @@ function wats_init_capabilities_table()
 	
 	$wats_capabilities_table = array();
 	$wats_capabilities_table['wats_ticket_ownership'] = __('Tickets can be assigned to this user','WATS');
+	$wats_capabilities_table['upload_files'] = __('User can attach files to tickets','WATS');
 	
 	return ($wats_capabilities_table);
 }
@@ -383,6 +384,19 @@ function wats_fix_single_quotes($str)
 	$str = str_replace('#039;','#39;',$str);
 	
 	return($str);
+}
+
+/**********************************************************/
+/*                                                        */
+/* Fonction de retour la signature pour les notifications */
+/*                                                        */
+/**********************************************************/
+
+function wats_get_mail_notification_signature()
+{
+	global $wats_settings;
+
+	return(esc_html(str_replace(array('\r\n','\r','<br />'),"\r\n",html_entity_decode(stripslashes($wats_settings['notification_signature'])))));
 }
 
 

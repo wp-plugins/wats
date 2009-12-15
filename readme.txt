@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.6
-Stable tag: 1.0.35
+Stable tag: 1.0.36
 
 == Description ==
 
@@ -48,6 +48,14 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.36 (15/12/2009) =
+* fixed a bug with post edit link under archives pages if post type is "ticket"
+* removed empty ticket author label on ticket creation page for non admin users
+* added an option under the user profile to grant or remove upload files capability for any user
+* added an option to set email signature of notifications sent by the system to users
+* modified default ticket creator (call center feature) to current user
+* enhanced ticket update notification emails to include status, priority, type and owner changes
 
 = V1.0.35 (09/12/2009) =
 * added an option to allow admins to filter tickets on ticket listing table page through an additionnal selector based on user meta value

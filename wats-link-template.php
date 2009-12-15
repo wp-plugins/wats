@@ -67,5 +67,22 @@ function wats_edit_ticket_link( $link = 'Edit This', $before = '', $after = '' )
 	echo $before . apply_filters( 'edit_post_link', $link, $post->ID ) . $after;
 }
 
+/*******************************************/
+/*                                                                                  */
+/* Fonction de filtrage de l'url d'édition du ticket */
+/*                                                                                 */
+/******************************************/
+
+function wats_filter_edit_ticket_link($link)
+{
+	preg_match("/post=([0-9])+/",$link,$matches);
+	$matches = explode("=",$matches[0]);
+	$postid = $matches[1];
+	
+	if (get_post_type($postid) == "ticket")
+		$link = str_replace("post.php?","admin.php?page=wats/wats-ticket.php&amp;",$link);
+
+	return($link);
+}
 
 ?>
