@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.8.6
-Stable tag: 1.0.36
+Stable tag: 1.0.37
 
 == Description ==
 
@@ -41,6 +41,10 @@ WATS is licensed under GPL v3.
 2/ Price :
 WATS is free but you are more than welcome to make a donation to thank me if you'd like to.
 
+3/ Warranty (Excerpt of GPL v3 - Disclaimer of Warranty ) :
+THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM “AS IS” WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+
 == Screenshots ==
 1. Sample ticket display in the frontend
 2. Ticket update form in the frontend
@@ -48,6 +52,9 @@ WATS is free but you are more than welcome to make a donation to thank me if you
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.37 (17/12/2009) =
+* fixed a bug with post author save
 
 = V1.0.36 (15/12/2009) =
 * fixed a bug with post edit link under archives pages if post type is "ticket"
