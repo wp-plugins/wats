@@ -3,8 +3,8 @@ Contributors: Olivier
 Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
-Tested up to: 2.8.6
-Stable tag: 1.0.37
+Tested up to: 2.9
+Stable tag: 1.0.38
 
 == Description ==
 
@@ -52,6 +52,10 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.38 (30/12/2009) =
+* added arabic characters support
+* added support for WP 2.9
 
 = V1.0.37 (17/12/2009) =
 * fixed a bug with post author save

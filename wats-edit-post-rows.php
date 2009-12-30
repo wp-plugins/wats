@@ -78,7 +78,7 @@ function wats_post_rows($posts = array())
 	$comment_pending_count = get_pending_comments_num($post_ids);
 	if ( empty($comment_pending_count) )
 		$comment_pending_count = array();
-
+	
 	foreach ($posts as $post)
 	{
 		if (empty($comment_pending_count[$post->ID]))
@@ -101,13 +101,14 @@ function wats_post_row($a_post, $pending_comments, $mode)
 {
 	global $post;
 	static $rowclass;
-
+	global $current_user;
+	
 	$global_post = $post;
 	$post = $a_post;
 	setup_postdata($post);
 
 	$rowclass = 'alternate' == $rowclass ? '' : 'alternate';
-	global $current_user;
+	
 	$post_owner = ( $current_user->ID == $post->post_author ? 'self' : 'other' );
 	$edit_link = wats_get_edit_ticket_link($post->ID);
 	$title = _draft_or_post_title();
