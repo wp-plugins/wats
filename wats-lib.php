@@ -189,10 +189,22 @@ function wats_get_closed_status_id()
 
 function wats_init_capabilities_table()
 {
+	global $wp_roles, $current_user;
 	
 	$wats_capabilities_table = array();
 	$wats_capabilities_table['wats_ticket_ownership'] = __('Tickets can be assigned to this user','WATS');
-	$wats_capabilities_table['upload_files'] = __('User can attach files to tickets','WATS');
+
+	foreach ($wp_roles->role_names as $roledesc => $rolename)
+	{
+		if (in_array($roledesc,array_values($current_user->roles)))
+		{
+			$role = $wp_roles->get_role($roledesc);
+			wats_debug($roledesc);
+			wats_debug(array_key_exists('upload_files',$role->capabilities));
+			if (!array_key_exists('upload_files',$role->capabilities))
+				$wats_capabilities_table['upload_files'] = __('User can attach files to tickets','WATS');
+		}
+	}
 	
 	return ($wats_capabilities_table);
 }
