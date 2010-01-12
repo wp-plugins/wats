@@ -199,8 +199,6 @@ function wats_init_capabilities_table()
 		if (in_array($roledesc,array_values($current_user->roles)))
 		{
 			$role = $wp_roles->get_role($roledesc);
-			wats_debug($roledesc);
-			wats_debug(array_key_exists('upload_files',$role->capabilities));
 			if (!array_key_exists('upload_files',$role->capabilities))
 				$wats_capabilities_table['upload_files'] = __('User can attach files to tickets','WATS');
 		}
@@ -238,7 +236,7 @@ function wats_build_user_list($min_level,$firstitem,$cap)
 
 	wats_load_settings();
 	
-    $users = $wpdb->get_results("SELECT ID FROM `{$wpdb->prefix}users`");
+    $users = $wpdb->get_results("SELECT ID FROM $wpdb->users LEFT JOIN $wpdb->usermeta AS wp1 ON ($wpdb->users.ID = wp1.user_id AND  wp1.meta_key = 'last_name') ORDER BY wp1.meta_value");
     $userlist = array();
 	if ($firstitem !== 0)
 		$userlist[0] = $firstitem;

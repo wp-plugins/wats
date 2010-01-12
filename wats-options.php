@@ -674,7 +674,8 @@ function wats_options_admin_menu()
 	}
 	echo '</select></td></tr><tr><td>';
 	echo '<div class="wats_tip" id="guestlist_tip">';
-	echo __('The shared guest user is a user that must have at least contributor user level. This user will only have access to the ticket creation page on the admin side. You can share the guest user login/password with your visitors so that they can submit tickets without having to register first. This is a shared account.','WATS').'</div></td></tr></table><br />';
+	echo __('The shared guest user is a user that must have at least contributor user level. This user will only have access to the ticket creation page on the admin side. You can share the guest user login/password with your visitors so that they can submit tickets without having to register first. This is a shared account.','WATS');
+	echo '<br /><br />'.__('Warning : if you set the current user (your admin account) as the guest user, you won\'t be able to access the admin options anymore after the save. So please make sure that you understand what it is about before setting this option.','WATS').'</div></td></tr></table><br />';
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("call_center_ticket_creation_tip");>'.__('Call center ticket creation','WATS').' : </a></h3>';
 	echo '<table class="form-table">';

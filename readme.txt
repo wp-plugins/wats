@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.9.1
-Stable tag: 1.0.39
+Stable tag: 1.0.40
 
 == Description ==
 
@@ -52,6 +52,12 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.40 (12/01/2010) =
+* sorted all users selectors by user last_name
+* enhanced details related to guest user setting to minimize error risks
+* modified style of ticket title column in ticket edit page to get a fixed width of 200px (admin side)
+* added default notifications flags for newly registered users
 
 = V1.0.39 (05/01/2010) =
 * fixed an issue with user profile options save in WP 2.9

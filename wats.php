@@ -4,12 +4,17 @@ Plugin Name: Wats
 Plugin URI: http://www.lautre-monde.fr/wats-going-on/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0.39
+Version: 1.0.40
 Author URI: http://www.lautre-monde.fr
 */
 
 /*
 1/ Release history :
+- V1.0.40 (12/01/2010) :
++ sorted all users selectors by user last_name
++ enhanced details related to guest user setting to minimize error risks
++ modified style of ticket title column in ticket edit page to get a fixed width of 200px (admin side)
++ added default notifications flags for newly registered users
 - V1.0.39 (05/01/2010) :
 + fixed an issue with user profile options save in WP 2.9
 + fixed a bug with upload_files capability granting (can now only be modified for roles without upload_files capability by default)
@@ -175,8 +180,8 @@ require_once(dirname(__FILE__) .'/wats-template.php');
 require_once(dirname(__FILE__) .'/wats-profile.php');
 
 add_action('admin_head', 'wats_admin_head');
-add_action('admin_print_styles', 'wats_add_my_stylesheet');
 add_action('wp_print_styles', 'wats_add_my_stylesheet');
+add_action('admin_print_styles', 'wats_add_my_stylesheet');
 add_action('wp_dashboard_setup', 'wats_dashboard_setup');
 add_action('wp_enqueue_scripts','wats_enqueue_script_frontend');
 
@@ -198,7 +203,7 @@ define('WATS_ANCHOR2',"l'autre monde");
 define("WATS_TICKET_LIST_REGEXP", "/\[WATS_TICKET_LIST ([[:print:]]+)\]/");
 
 $wats_settings = array();
-$wats_version = '1.0.39';
+$wats_version = '1.0.40';
 
 $wats_default_ticket_priority = array(1 => "Emergency", 2 => "Critical", 3 => "Major", 4 => "Minor");
 $wats_default_ticket_status = array(1 => "Newly open", 2 => "Under investigation", 3 => "Waiting for reoccurence", 4 => "Waiting for details", 5 => "Solution delivered", 6 => "Closed");
@@ -271,6 +276,7 @@ add_action('pre_get_posts','wats_parse_query');
 add_action('template_redirect','wats_template_redirect');
 add_action('comment_post','wats_comment_update_meta');
 add_action('wp_footer','wats_wp_footer');
+add_action('user_register','wats_user_register');
 
 add_filter('taxonomy_template', 'wats_taxomony_template');
 add_filter('comments_template', 'wats_comments_template');

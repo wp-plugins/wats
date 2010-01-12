@@ -110,4 +110,22 @@ function wats_admin_edit_user_profile()
 	
 	return;
 }
+
+/**************************************************************/
+/*								     						  */
+/* Fonction de création des metas pour un nouvel utilisateur */
+/*									    					  */
+/**************************************************************/
+
+function wats_user_register($id)
+{
+	$wats_notifications = array();
+	$wats_notifications['new_ticket_notification_admin'] = 0;
+	$wats_notifications['ticket_update_notification_all_tickets'] = 0;
+	$wats_notifications['ticket_update_notification_my_tickets'] = 0;
+	update_usermeta($id,'wats_notifications',$wats_notifications);
+	
+	return;
+}
+
 ?>

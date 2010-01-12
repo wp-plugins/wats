@@ -88,3 +88,7 @@ li.wats {
 	background: url(../img/smalldesc.gif) no-repeat center right;
 	background-color: #8dbdd8;
 }
+
+.wats_edit_table th.column-title {
+	width:200px;
+}

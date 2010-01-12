@@ -153,7 +153,7 @@ function wats_insert_post_data($data)
 	
 	if ($current_user->user_level == 10 && $wats_settings['call_center_ticket_creation'] == 1 && isset($_POST['wats_select_ticket_originator']) && $data['post_type'] == "ticket")
 		$data['post_author'] = wats_get_user_ID_from_user_login($_POST['wats_select_ticket_originator']);
-	
+
 	return $data;
 }
 

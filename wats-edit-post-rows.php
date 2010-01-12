@@ -180,7 +180,7 @@ function wats_post_row($a_post, $pending_comments, $mode)
 		break;
 
 		case 'title':
-			$attributes = 'class="post-title column-title"' . $style;
+			$attributes = 'class="post-title wats-column-title"' . $style;
 		?>
 		<td <?php echo $attributes ?>><strong><?php if ( current_user_can( 'edit_post', $post->ID ) ) { ?><a class="row-title" href="<?php echo $edit_link; ?>" title="<?php echo attribute_escape(sprintf(__('Edit "%s"'), $title)); ?>"><?php echo $title ?></a><?php } else { echo $title; }; _post_states($post); ?></strong>
 		<?php
@@ -309,7 +309,7 @@ function wats_post_row($a_post, $pending_comments, $mode)
 
 if ( ! defined('ABSPATH') ) die();
 ?>
-<table class="widefat post fixed" cellspacing="0">
+<table class="widefat post fixed wats_edit_table" cellspacing="0">
 	<thead>
 	<tr>
 <?php print_column_headers('edit'); ?>
