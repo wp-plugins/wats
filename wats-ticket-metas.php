@@ -76,7 +76,7 @@ function wats_comment_update_meta($comment_id)
 {
 	$comment = get_comment($comment_id); 
 	$status = $comment->comment_approved; 
-	if($status !== "spam" ) // approved 
+	if ($status !== "spam") // approved 
 	{ 
 		$post_id =  $comment->comment_post_ID; 
 		wats_ticket_save_meta($post_id);
@@ -475,7 +475,7 @@ function wats_ticket_details_meta_box($post)
 				foreach ($userlist AS $userlogin => $username)
 				{
 					echo '<option value="'.$userlogin.'" ';
-					if ($userlogin == get_the_author()) echo 'selected';
+					if ($userlogin == get_the_author_meta('user_login')) echo 'selected';
 						echo '>'.$username.'</option>';
 				}
 				echo '</select>';

@@ -6,7 +6,9 @@
 /*                                                      */
 /********************************************************/
 
-function wats_get_edit_ticket_link( $id = 0, $context = 'display' ) {
+function wats_get_edit_ticket_link( $id = 0, $context = 'display' ) 
+{
+global $current_user;
 	if ( !$post = &get_post( $id ) )
 		return;
 
@@ -52,7 +54,8 @@ function wats_get_edit_ticket_link( $id = 0, $context = 'display' ) {
 /*                                                        */
 /**********************************************************/
 
-function wats_edit_ticket_link( $link = 'Edit This', $before = '', $after = '' ) {
+function wats_edit_ticket_link( $link = 'Edit This', $before = '', $after = '' ) 
+{
 	global $post;
 
 	if ( $post->post_type == 'page' ) {

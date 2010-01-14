@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.9.1
-Stable tag: 1.0.40
+Stable tag: 1.0.41
 
 == Description ==
 
@@ -52,6 +52,11 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.41 (14/01/2010) =
+* fixed a bug preventing right ticket author from being selected in the ticket edition page
+* fixed a bug with invalid ticket counters on ticket listing page in the admin
+* added value "None" to ticket owner selector filter on ticket listing (frontend)
 
 = V1.0.40 (12/01/2010) =
 * sorted all users selectors by user last_name

@@ -2,6 +2,48 @@
 
 /**********************************************/
 /*                                            */
+/* Fonction pour compter le nombre de tickets */
+/*                                            */
+/**********************************************/
+
+function wats_wp_count_posts($type = 'post', $perm = '')
+{
+	global $wpdb, $wats_settings;
+
+	$user = wp_get_current_user();
+
+	$cache_key = $type;
+
+	$query = "SELECT post_status, COUNT( * ) AS num_posts FROM {$wpdb->posts} WHERE post_type = %s";
+	if ( 'readable' == $perm && is_user_logged_in() ) {
+		if ( !current_user_can("read_private_{$type}s") ) {
+			$cache_key .= '_' . $perm . '_' . $user->ID;
+			$query .= " AND (post_status != 'private' OR ( post_author = '$user->ID' AND post_status = 'private' ))";
+		}
+		if ($wats_settings['visibility'] == 2 && $user->user_level < 10)
+			$query .= " AND post_author = '$user->ID'";
+	}
+	$query .= ' GROUP BY post_status';
+
+	$count = wp_cache_get($cache_key, 'counts');
+	if ( false !== $count )
+		return $count;
+
+	$count = $wpdb->get_results( $wpdb->prepare( $query, $type ), ARRAY_A );
+
+	$stats = array( 'publish' => 0, 'private' => 0, 'draft' => 0, 'pending' => 0, 'future' => 0, 'trash' => 0 );
+	foreach( (array) $count as $row_num => $row ) {
+		$stats[$row['post_status']] = $row['num_posts'];
+	}
+
+	$stats = (object) $stats;
+	wp_cache_set($cache_key, $stats, 'counts');
+
+	return $stats;
+}
+
+/**********************************************/
+/*                                            */
 /* Fonction pour adapter la query aux tickets */
 /*                                            */
 /**********************************************/
@@ -193,7 +235,7 @@ $_SERVER['REQUEST_URI'] = remove_query_arg( array('locked', 'skipped', 'updated'
 <?php
 if ( empty($locked_post_status) ) :
 $status_links = array();
-$num_posts = wp_count_posts('ticket','readable');
+$num_posts = wats_wp_count_posts('ticket','readable');
 $total_posts = array_sum( (array) $num_posts );
 $class = empty( $_GET['post_status'] ) ? ' class="current"' : '';
 $status_links[] = "<li><a href='admin.php?page=wats/wats-edit.php' $class>".sprintf(__ngettext('All <span class="count">(%s)</span>', 'All <span class="count">(%s)</span>', $total_posts), number_format_i18n($total_posts)).'</a>';

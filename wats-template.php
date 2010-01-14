@@ -149,17 +149,19 @@ function wats_list_tickets_filters()
 			$output .= '<option value="0">'.__('Any','WATS').'</option>';
 			foreach ($metakeyvalues AS $value)
 			{
-				$output .= '<option value="'.esc_attr($value).'" >'.esc_html($value).'</option>';
+				$output .= '<option value="'.esc_attr($value).'">'.esc_html($value).'</option>';
 			}
 			$output .= '</select><br /><br />';
 		}
 	
 		$output .= __('Ticket owner','WATS').' : ';
-		$userlist = wats_build_user_list(0,__('Any','WATS'),0);
+		$userlist = wats_build_user_list(0,0,0);
 		$output .= '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner">';
+		$output .= '<option value="0">'.__('Any','WATS').'</option>';
+		$output .= '<option value="1">'.__('None','WATS').'</option>';
 		foreach ($userlist AS $userlogin => $username)
 		{
-			$output .= '<option value="'.$userlogin.'" >'.$username.'</option>';
+			$output .= '<option value="'.$userlogin.'">'.$username.'</option>';
 		}
 		$output .= '</select><br /></p>';
 	}
@@ -212,10 +214,16 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 			$where .= " AND $wpdb->posts.post_author = '$idauthor'";
 			$joinoptions = 1;
 		}
-		if ($idowner != "0")
+		if ($idowner != "0" && $idowner != "1")
 		{
 			$leftjoin .= " LEFT JOIN $wpdb->postmeta AS wp4 ON $wpdb->posts.ID = wp4.post_id ";
 			$where .= " AND (wp4.meta_key = 'wats_ticket_owner' AND wp4.meta_value = '$idowner')";
+			$joinoptions = 1;
+		}
+		else if ($idowner == "1")
+		{
+			$leftjoin .= " LEFT JOIN $wpdb->postmeta AS wp4 ON $wpdb->posts.ID = wp4.post_id ";
+			$where .= " AND (wp4.meta_key = 'wats_ticket_owner' AND wp4.meta_value = 0)";
 			$joinoptions = 1;
 		}
 		if ($idauthormetavalue != "0")
@@ -249,7 +257,6 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 		else if ($wats_settings['visibility'] == 2 && is_user_logged_in())
 			$tickets = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id ".$leftjoin." WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_author = $current_user->ID AND $wpdb->posts.post_status = 'publish' AND $wpdb->term_relationships.term_taxonomy_id IN($catlist)".$where));
 	}
-
 	$output = "";
 	if ($view == 0)
 	{
