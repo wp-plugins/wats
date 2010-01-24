@@ -1,6 +1,10 @@
 <?php
 ?>
 jQuery(document).ready(function() {
+
+	if (jQuery.browser.msie)
+		jQuery('.wats_select').css("width","auto");
+
     jQuery('#filter').click(function() {
 			var view = 1;
 			wats_loading(document.getElementById("resultticketlist"),watsmsg[0]);

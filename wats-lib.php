@@ -38,7 +38,7 @@ function wats_is_numeric($i)
 
 function wats_is_string($i)
 {
-	return (preg_match("/^[\.\,\#\&\;\'\"\-\_()ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d ]+$/", $i));
+	return (preg_match("/^[\.\,\#\&\;\'\"\-\_\:()ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽکگچپژیàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d ]+$/", $i));
 }
 
 /****************************************************/
@@ -236,7 +236,10 @@ function wats_build_user_list($min_level,$firstitem,$cap)
 
 	wats_load_settings();
 	
-    $users = $wpdb->get_results("SELECT ID FROM $wpdb->users LEFT JOIN $wpdb->usermeta AS wp1 ON ($wpdb->users.ID = wp1.user_id AND  wp1.meta_key = 'last_name') ORDER BY wp1.meta_value");
+	$order1 = $wats_settings['user_selector_order_1'];
+	$order2 = $wats_settings['user_selector_order_2'];
+	
+    $users = $wpdb->get_results("SELECT ID FROM $wpdb->users LEFT JOIN $wpdb->usermeta AS wp1 ON ($wpdb->users.ID = wp1.user_id AND wp1.meta_key = '$order1') LEFT JOIN $wpdb->usermeta AS wp2 ON ($wpdb->users.ID = wp2.user_id AND wp2.meta_key = '$order2') ORDER BY wp1.meta_value, wp2.meta_value");
     $userlist = array();
 	if ($firstitem !== 0)
 		$userlist[0] = $firstitem;

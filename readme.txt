@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.9.1
-Stable tag: 1.0.41
+Stable tag: 1.0.42
 
 == Description ==
 
@@ -52,6 +52,14 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.42 (24/01/2010) =
+* added a check to prevent notifications from being delivered to pending users (register plus compatibility)
+* added persian characters support
+* added an option to sort user selectors by meta keys values
+* modified user selector format check to allow ":" char to be inserted
+* modified selectors width to match max width of elements (IE)
+* moved ticket details meta box from sidebar to main content on the ticket creation and edition pages
 
 = V1.0.41 (14/01/2010) =
 * fixed a bug preventing right ticket author from being selected in the ticket edition page

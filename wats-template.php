@@ -110,21 +110,21 @@ function wats_list_tickets_filters()
 	wp_nonce_field('filter-wats-tickets-list');
 	
 	$output .= '<p align="left">'.__('Ticket type','WATS').' : ';
-	$output .= '<select name="wats_select_ticket_type" id="wats_select_ticket_type">';
+	$output .= '<select name="wats_select_ticket_type" id="wats_select_ticket_type" class="wats_select">';
 	$output .= '<option value="0">'.esc_html__('Any','WATS').'</option>';
 	foreach ($wats_ticket_type as $key => $value)
 		$output .= '<option value='.$key.'>'.esc_html__($value,'WATS').'</option>';
 	$output .= '</select><br /><br />';
 	
 	$output .= __('Ticket priority','WATS').' : ';
-	$output .= '<select name="wats_select_ticket_priority" id="wats_select_ticket_priority">';
+	$output .= '<select name="wats_select_ticket_priority" id="wats_select_ticket_priority" class="wats_select">';
 	$output .= '<option value="0">'.esc_html__('Any','WATS').'</option>';
 	foreach ($wats_ticket_priority as $key => $value)
 		$output .= '<option value='.$key.'>'.esc_html__($value,'WATS').'</option>';
 	$output .= '</select><br /><br />';
 	
 	$output .=  __('Ticket status','WATS').' : ';
-	$output .= '<select name="wats_select_ticket_status" id="wats_select_ticket_status">';
+	$output .= '<select name="wats_select_ticket_status" id="wats_select_ticket_status" class="wats_select">';
 	$output .= '<option value="0">'.esc_html__('Any','WATS').'</option>';
 	foreach ($wats_ticket_status as $key => $value)
 		$output .= '<option value='.$key.'>'.esc_html__($value,'WATS').'</option>';
@@ -134,7 +134,7 @@ function wats_list_tickets_filters()
 	{
 		$output .= __('Ticket author','WATS').' : ';
 		$userlist = wats_build_user_list(0,__('Any','WATS'),0);
-		$output .= '<select name="wats_select_ticket_author" id="wats_select_ticket_author">';
+		$output .= '<select name="wats_select_ticket_author" id="wats_select_ticket_author" class="wats_select">';
 		foreach ($userlist AS $userlogin => $username)
 		{
 			$output .= '<option value="'.$userlogin.'" >'.$username.'</option>';
@@ -145,7 +145,7 @@ function wats_list_tickets_filters()
 		{
 			$output .= __('Ticket author','WATS').' ('.$wats_settings['filter_ticket_listing_meta_key'].') : ';
 			$metakeyvalues = wats_build_list_meta_values($wats_settings['filter_ticket_listing_meta_key']);
-			$output .= '<select name="wats_select_ticket_author_meta_value" id="wats_select_ticket_author_meta_value">';
+			$output .= '<select name="wats_select_ticket_author_meta_value" id="wats_select_ticket_author_meta_value" class="wats_select">';
 			$output .= '<option value="0">'.__('Any','WATS').'</option>';
 			foreach ($metakeyvalues AS $value)
 			{
@@ -156,7 +156,7 @@ function wats_list_tickets_filters()
 	
 		$output .= __('Ticket owner','WATS').' : ';
 		$userlist = wats_build_user_list(0,0,0);
-		$output .= '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner">';
+		$output .= '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner" class="wats_select">';
 		$output .= '<option value="0">'.__('Any','WATS').'</option>';
 		$output .= '<option value="1">'.__('None','WATS').'</option>';
 		foreach ($userlist AS $userlogin => $username)

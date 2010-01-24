@@ -49,6 +49,8 @@ function wats_load_settings()
 		$default['meta_column_ticket_listing'] = 0;
 		$default['meta_column_ticket_listing_meta_key'] = 'None';
 		$default['notification_signature'] = 'Regads,\r\n\r\nWATS Notification engine';
+		$default['user_selector_order_1'] = 'last_name';
+		$default['user_selector_order_2'] = 'first_name';
 				
    	    add_option('wats', $default);
 	}
@@ -161,6 +163,16 @@ function wats_load_settings()
 		if (!isset($wats_settings['notification_signature']))
 		{
 			$wats_settings['notification_signature'] = 'Regads,\r\n\r\nWATS Notification engine';
+		}
+		
+		if (!isset($wats_settings['user_selector_order_1']))
+		{
+			$wats_settings['user_selector_order_1'] = 'last_name';
+		}
+		
+		if (!isset($wats_settings['user_selector_order_2']))
+		{
+			$wats_settings['user_selector_order_2'] = 'first_name';
 		}
 		
 		$wats_settings['wats_version'] = $wats_version;
@@ -474,6 +486,8 @@ function wats_options_admin_menu()
 		$wats_settings['filter_ticket_listing_meta_key'] = $_POST['metakeylistfilter'];
 		$wats_settings['meta_column_ticket_listing'] = isset($_POST['meta_column_ticket_listing']) ? 1 : 0;
 		$wats_settings['meta_column_ticket_listing_meta_key'] = $_POST['metakeylistcolumn'];
+		$wats_settings['user_selector_order_1'] = $_POST['user_selector_order_1'];
+		$wats_settings['user_selector_order_2'] = $_POST['user_selector_order_2'];
 		$wats_settings['notification_signature'] = esc_html(preg_replace("/(\r\n|\n|\r)/", "",nl2br($_POST['notification_signature'])));
 		update_option('wats', $wats_settings);
 	}
@@ -664,7 +678,7 @@ function wats_options_admin_menu()
 	echo __('Check this option if you want to allow media library browsing during media upload while creating and editing tickets. This will allow users to view the library and insert files directly from it.','WATS').'</div></td></tr></table><br />';
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("guestlist_tip");>'.__('Shared guest user','WATS').' : </a></h3>';
-	echo '<table class="form-table"><tr><td>'.__('User','WATS').' : <select name="guestlist" id="guestlist" size="1">';
+	echo '<table class="form-table"><tr><td>'.__('User','WATS').' : <select name="guestlist" id="guestlist" class="wats_select">';
 	$userlist = wats_build_user_list(1,__("None",'WATS'),0);
 	foreach ($userlist AS $userlogin => $username)
 	{
@@ -694,6 +708,27 @@ function wats_options_admin_menu()
 	echo '<br/><br />'.__('Warning : you need to make sure that the combination of keys used will make each entry unique and different from each other. Therefore, it is a good idea to use user_login as this key is unique for each user.','WATS');
 	echo '</div></td></tr></table><br />';
 
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("user_selector_order_tip");>'.__('User selector order','WATS').' : </a></h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td>'.__('Sort by','WATS').' : <select name="user_selector_order_1" id="user_selector_order_1" size="1">';
+	$metakeylist = wats_get_list_of_user_meta_keys(1);
+	foreach ($metakeylist AS $metakey)
+	{
+        echo '<option value="'.$metakey.'" ';
+        if ($metakey == $wats_settings['user_selector_order_1']) echo 'selected';
+			echo '>'.$metakey.'</option>';
+	}
+	echo '</select></td></tr><tr><td>'.__('And then','WATS').' : <select name="user_selector_order_2" id="user_selector_order_2" size="1">';
+	foreach ($metakeylist AS $metakey)
+	{
+        echo '<option value="'.$metakey.'" ';
+        if ($metakey == $wats_settings['user_selector_order_2']) echo 'selected';
+			echo '>'.$metakey.'</option>';
+	}
+	echo '</select></td></tr><tr><td>';
+	echo '<div class="wats_tip" id="user_selector_order_tip">';
+	echo __('Select the meta keys used to sort the user selectors.','WATS').'</div></td></tr></table><br />';
+	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("filter_ticket_listing_tip");>'.__('Ticket author user meta key selector for ticket listing filtering','WATS').' : </a></h3>';
 	echo '<table class="form-table">';
 	echo '<tr><td><input type="checkbox" name="filter_ticket_listing"';

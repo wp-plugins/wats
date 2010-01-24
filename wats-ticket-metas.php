@@ -231,7 +231,7 @@ function wats_fire_ticket_update_notification($postID,$newstatus,$newtype,$newpr
 			$subject = __('Ticket ','WATS').$ticketnumber.__(' has been updated','WATS');
 			$output = __('Hello ','WATS').get_usermeta($user->ID, 'first_name').",\r\n\r\n";
 			$output .= __('Ticket ','WATS').$ticketnumber.__(' has been updated.','WATS');
-			$output .= __('You can view it there :','WATS')."\r\n";
+			$output .= __('You can view it here :','WATS')."\r\n";
 			$output .= __('+ Frontend side : ','WATS').get_permalink($postID)."\r\n\r\n";
 			$output .= __('+ Admin side : ','WATS').wats_get_edit_ticket_link($postID, 'mail')."\r\n\r\n";
 			$output .= $updates."\r\n";
@@ -244,7 +244,7 @@ function wats_fire_ticket_update_notification($postID,$newstatus,$newtype,$newpr
 	{
 		add_filter('wp_mail_from', 'wats_mail_from');
 		add_filter('wp_mail_from_name', 'wats_mail_from_name');
-		$users = $wpdb->get_results("SELECT ID FROM `{$wpdb->prefix}users`");
+		$users = $wpdb->get_results("SELECT ID FROM $wpdb->users WHERE user_login NOT LIKE '%unverified__%'");
 		$ticketnumber = get_post_meta($postID,'wats_ticket_number',true);
 		foreach ($users AS $user)
 		{
@@ -257,7 +257,7 @@ function wats_fire_ticket_update_notification($postID,$newstatus,$newtype,$newpr
 					$subject = __('Ticket ','WATS').$ticketnumber.__(' has been updated','WATS');
 					$output = __('Hello ','WATS').get_usermeta($user->ID, 'first_name').",\r\n\r\n";
 					$output .= __('Ticket ','WATS').$ticketnumber.__(' has been updated.','WATS');
-					$output .= __('You can view it there :','WATS')."\r\n";
+					$output .= __('You can view it here :','WATS')."\r\n";
 					$output .= __('+ Frontend side : ','WATS').get_permalink($postID)."\r\n\r\n";
 					$output .= __('+ Admin side : ','WATS').wats_get_edit_ticket_link($postID, 'mail')."\r\n\r\n";
 					$output .= $updates."\r\n";
@@ -299,7 +299,7 @@ function wats_fire_admin_notification($postID)
 					$subject = __('New ticket submitted','WATS');
 					$output = __('Hello ','WATS').get_usermeta($user->ID, 'first_name').",\r\n\r\n";
 					$output .= __('A new ticket has been submitted into the system.','WATS');
-					$output .= __('You can view it there :','WATS')."\r\n";
+					$output .= __('You can view it here :','WATS')."\r\n";
 					$output .= __('+ Frontend side : ','WATS').get_permalink($postID)."\r\n\r\n";
 					$output .= __('+ Admin side : ','WATS').wats_get_edit_ticket_link($postID, 'mail')."\r\n\r\n";
 					$output .= wats_get_mail_notification_signature();
@@ -333,7 +333,7 @@ function wats_ticket_meta_boxes()
 	remove_meta_box('authordiv', 'post', 'normal');
 	remove_meta_box('revisionsdiv', 'post', 'normal');
 	// add_meta_box('tickethistorydiv',__('Ticket history','WATS'),'wats_ticket_history_meta_box','post','normal');
-	add_meta_box('ticketdetailsdiv',__('Ticket details','WATS'),'wats_ticket_details_meta_box','post','side');
+	add_meta_box('ticketdetailsdiv',__('Ticket details','WATS'),'wats_ticket_details_meta_box','post','normal');
 	
 	foreach (array_keys($wp_meta_boxes['post']) as $context)
 	{
@@ -391,7 +391,7 @@ function wats_ticket_details_meta_box($post)
 	$ticket_owner = get_post_meta($post->ID,'wats_ticket_owner',true);
 	
 	echo __('Ticket type','WATS').' : ';
-	echo '<select name="wats_select_ticket_type" id="wats_select_ticket_type">';
+	echo '<select name="wats_select_ticket_type" id="wats_select_ticket_type" class="wats_select">';
 	foreach ($wats_ticket_type as $key => $value)
 	{
 		echo '<option value='.$key;
@@ -402,7 +402,7 @@ function wats_ticket_details_meta_box($post)
 	echo '</select><br /><br />';
 	
 	echo __('Ticket priority','WATS').' : ';
-	echo '<select name="wats_select_ticket_priority" id="wats_select_ticket_priority">';
+	echo '<select name="wats_select_ticket_priority" id="wats_select_ticket_priority" class="wats_select">';
 	foreach ($wats_ticket_priority as $key => $value)
 	{
 		echo '<option value='.$key;
@@ -413,7 +413,7 @@ function wats_ticket_details_meta_box($post)
 	echo '</select><br /><br />';
 	
 	echo __('Ticket status','WATS').' : ';
-	echo '<select name="wats_select_ticket_status" id="wats_select_ticket_status">';
+	echo '<select name="wats_select_ticket_status" id="wats_select_ticket_status" class="wats_select">';
 	foreach ($wats_ticket_status as $key => $value)
 	{
 		echo '<option value='.$key;
@@ -453,25 +453,25 @@ function wats_ticket_details_meta_box($post)
 			}
 		}
 		
-		echo '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner">';
+		echo '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner" class="wats_select">';
 		foreach ($userlist AS $userlogin => $username)
 		{
 			echo '<option value="'.$userlogin.'" ';
 			if ($userlogin == $ticket_owner) echo 'selected';
 				echo '>'.$username.'</option>';
 		}
-		echo '</select>';
+		echo '</select><br /><br />';
 	}
 
 	if (is_admin())
 	{
 		if ($post->ID)
 		{
-			echo '<br /><br />'.__('Ticket originator : ','WATS');
+			echo __('Ticket originator : ','WATS');
 			if ($current_user->user_level == 10 && $wats_settings['call_center_ticket_creation'] == 1)
 			{
 				$userlist = wats_build_user_list(0,0,0);
-				echo '<select name="wats_select_ticket_originator" id="wats_select_ticket_originator">';
+				echo '<select name="wats_select_ticket_originator" id="wats_select_ticket_originator" class="wats_select">';
 				foreach ($userlist AS $userlogin => $username)
 				{
 					echo '<option value="'.$userlogin.'" ';
@@ -487,9 +487,9 @@ function wats_ticket_details_meta_box($post)
 		{
 			if ($current_user->user_level == 10)
 			{
-				echo '<br /><br />'.__('Ticket originator : ','WATS');
+				echo __('Ticket originator : ','WATS');
 				$userlist = wats_build_user_list(0,0,0);
-				echo '<select name="wats_select_ticket_originator" id="wats_select_ticket_originator">';
+				echo '<select name="wats_select_ticket_originator" id="wats_select_ticket_originator" class="wats_select">';
 				foreach ($userlist AS $userlogin => $username)
 				{
 					echo '<option value="'.$userlogin.'" ';
