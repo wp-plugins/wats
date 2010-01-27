@@ -51,7 +51,10 @@ function wats_load_settings()
 		$default['notification_signature'] = 'Regads,\r\n\r\nWATS Notification engine';
 		$default['user_selector_order_1'] = 'last_name';
 		$default['user_selector_order_2'] = 'first_name';
-				
+		$default['frontend_submit_form_access'] = 0;
+		$default['frontend_submit_form_ticket_status'] = 0;
+		$default['submit_form_default_author'] = wats_get_first_admin_login();
+						
    	    add_option('wats', $default);
 	}
         
@@ -175,10 +178,30 @@ function wats_load_settings()
 			$wats_settings['user_selector_order_2'] = 'first_name';
 		}
 		
+		if (!isset($wats_settings['frontend_submit_form_access']))
+		{
+			$wats_settings['frontend_submit_form_access'] = 0;
+		}
+		
+		if (!isset($wats_settings['frontend_submit_form_ticket_status']))
+		{
+			$wats_settings['frontend_submit_form_ticket_status'] = 0;
+		}
+
+		if (!isset($wats_settings['frontend_submit_form_ticket_status']))
+		{
+			$wats_settings['frontend_submit_form_ticket_status'] = 0;
+		}		
+
+		if (!isset($wats_settings['submit_form_default_author']))
+		{
+			$wats_settings['submit_form_default_author'] = wats_get_first_admin_login();
+		}
+
 		$wats_settings['wats_version'] = $wats_version;
 		update_option('wats', $wats_settings);
 	}
-		
+	
 	return;
 }
 
@@ -489,6 +512,10 @@ function wats_options_admin_menu()
 		$wats_settings['user_selector_order_1'] = $_POST['user_selector_order_1'];
 		$wats_settings['user_selector_order_2'] = $_POST['user_selector_order_2'];
 		$wats_settings['notification_signature'] = esc_html(preg_replace("/(\r\n|\n|\r)/", "",nl2br($_POST['notification_signature'])));
+		$wats_settings['frontend_submit_form_access'] = $_POST['group5'];
+		$wats_settings['frontend_submit_form_ticket_status'] = $_POST['group6'];
+		$wats_settings['submit_form_default_author'] = $_POST['defaultauthorlist'];
+		
 		update_option('wats', $wats_settings);
 	}
 	
@@ -690,6 +717,52 @@ function wats_options_admin_menu()
 	echo '<div class="wats_tip" id="guestlist_tip">';
 	echo __('The shared guest user is a user that must have at least contributor user level. This user will only have access to the ticket creation page on the admin side. You can share the guest user login/password with your visitors so that they can submit tickets without having to register first. This is a shared account.','WATS');
 	echo '<br /><br />'.__('Warning : if you set the current user (your admin account) as the guest user, you won\'t be able to access the admin options anymore after the save. So please make sure that you understand what it is about before setting this option.','WATS').'</div></td></tr></table><br />';
+
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("frontendsubmitformaccess_tip");>'.__('Frontend submission form access','WATS').' : </a></h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="radio" name="group5" value="0" ';
+	echo ($wats_settings['frontend_submit_form_access'] == 0) ? 'checked' : '';
+	echo '>'.__('Disable frontend ticket submission form','WATS').' </td></tr>';
+	echo '<tr><td><input type="radio" name="group5" value="1" ';
+	echo ($wats_settings['frontend_submit_form_access'] == 1) ? 'checked' : '';
+	echo '>'.__('Enable frontend ticket submission form for any visitor with a valid email address','WATS').'</td></tr>';
+	echo '<tr><td><input type="radio" name="group5" value="2" ';
+	echo ($wats_settings['frontend_submit_form_access'] == 2) ? 'checked' : '';
+	echo '>'.__('Enable frontend ticket submission form for registered users only','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="frontendsubmitformaccess_tip">';
+	echo __('Set this option to allow users to use a ticket submission form in the frontend to submit new tickets.','WATS');
+	echo '<br /><br />'.__('Warning : if option is selected, users will have the opportunity to submit tickets without being authenticated. This could result in large amount of SPAM.','WATS').'</div></td></tr></table><br />';
+
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("frontendsubformstatus_tip");>'.__('Frontend submission form ticket status','WATS').' : </a></h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="radio" name="group6" value="0" ';
+	echo ($wats_settings['frontend_submit_form_ticket_status'] == 0) ? 'checked' : '';
+	echo '>'.__('All tickets submitted will be in \'pending\' status','WATS').' </td></tr>';
+	echo '<tr><td><input type="radio" name="group6" value="1" ';
+	echo ($wats_settings['frontend_submit_form_ticket_status'] == 1) ? 'checked' : '';
+	echo '>'.__('Tickets from unauthenticated users will be submitted in \'pending\' status and tickets from authenticated users will be in \'publish\' status','WATS').'</td></tr>';
+	echo '<tr><td><input type="radio" name="group6" value="2" ';
+	echo ($wats_settings['frontend_submit_form_ticket_status'] == 2) ? 'checked' : '';
+	echo '>'.__('Tickets from unauthenticated users will be submitted in \'pending\' status and tickets from authenticated users will be set according to user level capability','WATS').'</td></tr>';
+	echo '<tr><td><input type="radio" name="group6" value="3" ';
+	echo ($wats_settings['frontend_submit_form_ticket_status'] == 3) ? 'checked' : '';
+	echo '>'.__('All tickets submitted will be in \'publish\' status','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="frontendsubformstatus_tip">';
+	echo __('Set this option to define the ticket publications status upon ticket submission. It is advisable to set unauthenticated users tickets status to \'pending\' to allow admin moderation before publication and limit SPAM.','WATS');
+	echo '</div></td></tr></table><br />';
+	
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("submitformdefaultauthor_tip");>'.__('Default author for unregistered visitors tickets','WATS').' : </a></h3>';
+	echo '<table class="form-table"><tr><td>'.__('User','WATS').' : <select name="defaultauthorlist" id="defaultauthorlist" class="wats_select">';
+	$userlist = wats_build_user_list(0,0,0);
+	foreach ($userlist AS $userlogin => $username)
+	{
+        echo '<option value="'.$userlogin.'" ';
+        if ($userlogin == $wats_settings['submit_form_default_author']) echo 'selected';
+			echo '>'.$username.'</option>';
+	}
+	echo '</select></td></tr><tr><td>';
+	echo '<div class="wats_tip" id="submitformdefaultauthor_tip">';
+	echo __('This option will be used to set the author of tickets submitted through the frontend submit form by unregistered users.','WATS').'</div></td></tr></table><br />';
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("call_center_ticket_creation_tip");>'.__('Call center ticket creation','WATS').' : </a></h3>';
 	echo '<table class="form-table">';

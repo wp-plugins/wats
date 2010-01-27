@@ -224,6 +224,26 @@ function wats_init_notification_table()
 	return ($wats_notification_table);
 }
 
+/******************************************************/
+/*                                                    */
+/* Fonction de récupération du login du premier admin */
+/*                                                    */
+/******************************************************/
+
+function wats_get_first_admin_login()
+{
+    global $wpdb;
+
+    $users = $wpdb->get_results("SELECT user_login FROM $wpdb->users LEFT JOIN $wpdb->usermeta AS wp1 ON $wpdb->users.ID = wp1.user_id WHERE wp1.meta_key = '{$wpdb->prefix}user_level' AND wp1.meta_value = 10 LIMIT 1");
+	
+	foreach ($users AS $user)
+	{
+		$login = $user->user_login;
+	}
+		
+	return($login);
+}
+
 /*********************************************************/
 /*                                                       */
 /* Fonction de construction de la liste des utilisateurs */

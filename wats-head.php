@@ -30,11 +30,14 @@ function wats_enqueue_script_frontend()
 	var ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
 	var watsmsg = Array();
 	watsmsg[0] = "<?php _e('Filtering table...','WATS'); ?>";
+	watsmsg[1] = "<?php _e('Submitting ticket...','WATS'); ?>";
 	</script>
 <?php
 	$ajaxfileloc = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) .'/wats-ticket-list-ajax.php';
 	wp_enqueue_script('wats-ticket-list',$ajaxfileloc);
-		
+	$ajaxfileloc = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) .'/wats-submit-form-ajax.php';
+	wp_enqueue_script('wats-submit-form',$ajaxfileloc);
+	
 	return;
 }
 

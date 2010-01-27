@@ -107,25 +107,25 @@ function wats_list_tickets_filters()
 	$wats_ticket_status = $wats_settings['wats_statuses'];
 	
 	$output = '<form action="" method="post">';
-	wp_nonce_field('filter-wats-tickets-list');
+	wp_nonce_field('filter-wats-tickets-list','_wpnonce_ticket_list');
 	
 	$output .= '<p align="left">'.__('Ticket type','WATS').' : ';
-	$output .= '<select name="wats_select_ticket_type" id="wats_select_ticket_type" class="wats_select">';
-	$output .= '<option value="0">'.esc_html__('Any','WATS').'</option>';
+	$output .= '<select name="wats_select_ticket_type_tl" id="wats_select_ticket_type_tl" class="wats_select">';
+	$output .= '<option value=0>'.esc_html__('Any','WATS').'</option>';
 	foreach ($wats_ticket_type as $key => $value)
 		$output .= '<option value='.$key.'>'.esc_html__($value,'WATS').'</option>';
 	$output .= '</select><br /><br />';
 	
 	$output .= __('Ticket priority','WATS').' : ';
-	$output .= '<select name="wats_select_ticket_priority" id="wats_select_ticket_priority" class="wats_select">';
-	$output .= '<option value="0">'.esc_html__('Any','WATS').'</option>';
+	$output .= '<select name="wats_select_ticket_priority_tl" id="wats_select_ticket_priority_tl" class="wats_select">';
+	$output .= '<option value=0>'.esc_html__('Any','WATS').'</option>';
 	foreach ($wats_ticket_priority as $key => $value)
 		$output .= '<option value='.$key.'>'.esc_html__($value,'WATS').'</option>';
 	$output .= '</select><br /><br />';
 	
 	$output .=  __('Ticket status','WATS').' : ';
-	$output .= '<select name="wats_select_ticket_status" id="wats_select_ticket_status" class="wats_select">';
-	$output .= '<option value="0">'.esc_html__('Any','WATS').'</option>';
+	$output .= '<select name="wats_select_ticket_status_tl" id="wats_select_ticket_status_tl" class="wats_select">';
+	$output .= '<option value=0>'.esc_html__('Any','WATS').'</option>';
 	foreach ($wats_ticket_status as $key => $value)
 		$output .= '<option value='.$key.'>'.esc_html__($value,'WATS').'</option>';
 	$output .= '</select><br /><br />';
@@ -134,7 +134,7 @@ function wats_list_tickets_filters()
 	{
 		$output .= __('Ticket author','WATS').' : ';
 		$userlist = wats_build_user_list(0,__('Any','WATS'),0);
-		$output .= '<select name="wats_select_ticket_author" id="wats_select_ticket_author" class="wats_select">';
+		$output .= '<select name="wats_select_ticket_author_tl" id="wats_select_ticket_author_tl" class="wats_select">';
 		foreach ($userlist AS $userlogin => $username)
 		{
 			$output .= '<option value="'.$userlogin.'" >'.$username.'</option>';
@@ -145,7 +145,7 @@ function wats_list_tickets_filters()
 		{
 			$output .= __('Ticket author','WATS').' ('.$wats_settings['filter_ticket_listing_meta_key'].') : ';
 			$metakeyvalues = wats_build_list_meta_values($wats_settings['filter_ticket_listing_meta_key']);
-			$output .= '<select name="wats_select_ticket_author_meta_value" id="wats_select_ticket_author_meta_value" class="wats_select">';
+			$output .= '<select name="wats_select_ticket_author_meta_value_tl" id="wats_select_ticket_author_meta_value_tl" class="wats_select">';
 			$output .= '<option value="0">'.__('Any','WATS').'</option>';
 			foreach ($metakeyvalues AS $value)
 			{
@@ -156,7 +156,7 @@ function wats_list_tickets_filters()
 	
 		$output .= __('Ticket owner','WATS').' : ';
 		$userlist = wats_build_user_list(0,0,0);
-		$output .= '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner" class="wats_select">';
+		$output .= '<select name="wats_select_ticket_owner_tl" id="wats_select_ticket_owner_tl" class="wats_select">';
 		$output .= '<option value="0">'.__('Any','WATS').'</option>';
 		$output .= '<option value="1">'.__('None','WATS').'</option>';
 		foreach ($userlist AS $userlogin => $username)
@@ -280,7 +280,7 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 	$output .= '<th scope="col" style="text-align:center;">'.__('Priority','WATS').'</th>';
 	$output .= '<th scope="col" style="text-align:center;">'.__('Status','WATS').'</th>';
 	$output .= '</tr></thead><tbody>';
-   
+
     $alt = false;
 	if ($wats_settings['meta_column_ticket_listing'] == 1 && $current_user->user_level == 10)
 		$colspan = 10;
@@ -341,9 +341,182 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 	if ($view == 0)
 		$output .= '</div>';
 	
-	return($output);
+	return ($output);
 }
 
+/************************************************************************************************/
+/*                                                                                              */
+/* Fonction de filtrage sur le contenu pour l'affichage du formulaire de soumission des tickets */
+/*                                                                                              */
+/************************************************************************************************/
+
+function wats_ticket_submit_form_filter($content)
+{
+	return (preg_replace_callback(WATS_TICKET_SUBMIT_FORM, 'wats_ticket_submit_form', $content));
+}
+
+/****************************************************************/
+/*                                                              */
+/* Fonction d'affichage du formulaire de soumission des tickets */
+/*                                                              */
+/****************************************************************/
+
+function wats_ticket_submit_form()
+{
+	global $current_user, $wats_settings;
+
+	if ($wats_settings['frontend_submit_form_access'] == 1 || ($wats_settings['frontend_submit_form_access'] == 2 && is_user_logged_in()))
+	{
+		$output = '<form action="" method="post" id="">';
+		wp_nonce_field('filter-wats-submit-form','_wpnonce_ticket_submit_form');
+		$output .= '<p align="left" class="wats_ticket_form_title">'.__('User details','WATS').'</p>';
+		if (is_user_logged_in())
+			$output .= '<p align="left">'.__('Logged in as ', 'WATS').$current_user->user_login.'</p>';
+		else
+		{
+			$output .= '<p align="left">'.__('Name', 'WATS').' '.__('(required)','WATS').' <input type="text" name="name" id="name" value="" size="22" /></p>';
+			$output .= '<p align="left">'.__('Mail', 'WATS').' '.__('(required)', 'WATS').' <input type="text" name="email" id="email" value="" size="22" /></p>';
+			$output .= '<p align="left">'.__('Website', 'WATS').' <input type="text" name="url" id="url" value="" size="22" /></p><br />';
+		}
+		$output .= '<p align="left" class="wats_ticket_form_title">'.__('Ticket details','WATS').'</p>';
+		$output .= '<p align="left">'.wats_ticket_details_meta_box($post,1).'</p>';
+		
+		$output .= '<p align="left" class="wats_ticket_form_title">'.__('Ticket title', 'WATS').'</p>';
+		$output .= '<p align="left"><input type="text" name="ticket_title" id="ticket_title" value="" size="60" /></p><br />';
+		$output .= '<p align="left" class="wats_ticket_form_title">'.__('Ticket description', 'WATS').'</p>';
+		$output .= '<p align="left"><textarea name="ticket_content" id="ticket_content" cols="60" rows="10"></textarea></p>';
+
+		$output .= '<p align="right"><input name="submit_ticket" type="submit" id="submit_ticket" value="'.__('Submit ticket', 'WATS').'" /></p>';
+		$output .= '<div id="resultticketsubmitform"></div>';
+		$output .= '</form>';
+	}
+	else if ($wats_settings['frontend_submit_form_access'] == 2)
+		$output = __('Please authenticate yourself to be able to access the form.','WATS');
+	else if ($wats_settings['frontend_submit_form_access'] == 0)
+		$output = __('Sorry, the ticket submission form access has been disabled by the admin.','WATS');
+
+	return ($output);
+}
+
+/*********************************************************/
+/*                                                       */
+/* Fonction de processing Ajax de soumission d'un ticket */
+/*                                                       */
+/*********************************************************/
+
+function wats_ticket_submit_form_ajax_processing()
+{
+	global $wats_settings, $current_user;
+
+	wats_load_settings();
+	check_ajax_referer('filter-wats-submit-form');
+	$create_metas = 0;
+	if ($_POST[view] == 1 && ($wats_settings['frontend_submit_form_access'] == 1 || ($wats_settings['frontend_submit_form_access'] == 2 && is_user_logged_in())))
+	{
+		$categoryfilter = $_POST[categoryfilter];
+		$categorylistfilter = $_POST[categorylistfilter];
+		$post_title = stripslashes(strip_tags($_POST[ticket_title]));
+		$post_content = stripslashes(strip_tags($_POST[ticket_content], '<br><i><b><u><strong>'));
+		$error = '';
+		
+		if (!wats_is_string($post_title))
+			$error .= __('The ticket title is empty or contains invalid characters. ','WATS');
+		
+		if (!wats_is_string($post_content))
+			$error .= __('The ticket description is empty or contains invalid characters. ','WATS');
+		
+		$post_category = array(get_option('default_email_category'));
+		$post_type = 'ticket';
+		
+		if (is_user_logged_in())
+		{
+			$post_author = $current_user->ID;
+		}
+		else
+		{
+			$name = esc_html($_POST[name]);
+			$email = esc_html($_POST[email]);
+			$url = esc_html($_POST[url]);
+			if (!wats_is_string(stripslashes($name)))
+				$error .= __('The name is empty or contains invalid characters. ','WATS');
+			if (is_email($email))
+			{
+				$userdata = get_user_by_email($email);
+				if ($userdata)
+					$post_author = $userdata->ID;
+				else
+				{
+					$post_author = wats_get_user_ID_from_user_login($wats_settings['submit_form_default_author']);
+					$create_metas = 1;
+				}
+			}
+			else
+				$error .= __('The email address is empty or contains invalid characters. ','WATS');
+		}
+		
+		if ($wats_settings['frontend_submit_form_ticket_status'] == 0)
+			$post_status = 'pending';
+		else if ($wats_settings['frontend_submit_form_ticket_status'] == 1)
+		{
+			if (is_user_logged_in())
+				$post_status = 'publish';
+			else
+				$post_status = 'pending';
+		}
+		else if ($wats_settings['frontend_submit_form_ticket_status'] == 2)
+		{
+			if (is_user_logged_in())
+			{
+				$user = new WP_User($post_author);
+				$post_status = ($user->has_cap('publish_posts')) ? 'publish' : 'pending';
+			}
+			else
+				$post_status = 'pending';
+		}
+		else if ($wats_settings['frontend_submit_form_ticket_status'] == 3)
+			$post_status = 'publish';
+		else
+			$post_status = 'pending';
+			
+		$post_data = compact('post_content','post_title','post_author','post_category', 'post_status', 'post_type');
+		$post_data = add_magic_quotes($post_data);
+
+		if (strlen($error))
+			echo __('Error : ','WATS').$error;
+		else
+		{
+			$post_ID = wp_insert_post($post_data);
+			if (is_wp_error($post_ID))
+				echo "\n" . $post_ID->get_error_message();
+			else
+			{
+				add_post_meta($post_ID,'wats_ticket_status',$_POST[idstatus]);
+				add_post_meta($post_ID,'wats_ticket_type',$_POST[idtype]);
+				add_post_meta($post_ID,'wats_ticket_priority',$_POST[idpriority]);
+				add_post_meta($post_ID,'wats_ticket_number',wats_get_latest_ticket_number()+1);
+				if ($create_metas == 1)
+				{
+					add_post_meta($post_ID,'wats_ticket_author_name',$name);
+					add_post_meta($post_ID,'wats_ticket_author_email',$email);
+					add_post_meta($post_ID,'wats_ticket_author_url',$url);
+				}
+				
+				//add_post_meta($post_ID,'wats_ticket_owner',$_POST['wats_select_ticket_owner']);
+				$output = __('Ticket ','WATS').wats_get_ticket_number($post_ID).__(' has been successfully created!','WATS').'<br />';
+				if ($post_status == 'publish')
+					$output .= __('You can access it ','WATS').'<a href="'.get_permalink($post_ID).'">'.__('here','WATS').'</a>.';
+				else
+					$output .= __('You will be able to access it ','WATS').'<a href="'.get_permalink($post_ID).'">'.__('here','WATS').'</a> '.__('when an admin would have approved it','WATS').'.';
+				echo $output;
+				wats_fire_admin_notification($post_ID);
+			}
+		}
+	}
+	else
+		echo __('Error : can\'t submit form','WATS');
+	
+	exit;
+}
 
 /****************************************/
 /*                                      */

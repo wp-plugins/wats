@@ -92,3 +92,7 @@ li.wats {
 .wats_edit_table th.column-title {
 	width:200px;
 }
+
+.wats_ticket_form_title {
+	font-weight:bold;
+}

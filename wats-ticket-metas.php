@@ -372,10 +372,12 @@ function wats_ticket_history_meta_box($post)
 /***********************************************************/
 /*                                                         */
 /* Fonction d'affichage des détails d'un ticket (meta box) */
+/* view : 0 (comment form et ticket edit/creation admin    */
+/* view : 1 (ticket creation frontend) 					   */
 /*                                                         */
 /***********************************************************/
 
-function wats_ticket_details_meta_box($post)
+function wats_ticket_details_meta_box($post,$view=0)
 {
 	global $wats_settings, $current_user;
 	
@@ -390,44 +392,44 @@ function wats_ticket_details_meta_box($post)
 	$ticket_type = get_post_meta($post->ID,'wats_ticket_type',true);
 	$ticket_owner = get_post_meta($post->ID,'wats_ticket_owner',true);
 	
-	echo __('Ticket type','WATS').' : ';
-	echo '<select name="wats_select_ticket_type" id="wats_select_ticket_type" class="wats_select">';
+	$output = __('Ticket type','WATS').' : ';
+	$output .= '<select name="wats_select_ticket_type" id="wats_select_ticket_type" class="wats_select">';
 	foreach ($wats_ticket_type as $key => $value)
 	{
-		echo '<option value='.$key;
+		$output .= '<option value='.$key;
 		if ($key == $ticket_type)
-			echo ' selected';
-		echo '>'.esc_html__($value,'WATS').'</option>';
+			$output .= ' selected';
+		$output .= '>'.esc_html__($value,'WATS').'</option>';
 	}
-	echo '</select><br /><br />';
+	$output .= '</select><br /><br />';
 	
-	echo __('Ticket priority','WATS').' : ';
-	echo '<select name="wats_select_ticket_priority" id="wats_select_ticket_priority" class="wats_select">';
+	$output .= __('Ticket priority','WATS').' : ';
+	$output .= '<select name="wats_select_ticket_priority" id="wats_select_ticket_priority" class="wats_select">';
 	foreach ($wats_ticket_priority as $key => $value)
 	{
-		echo '<option value='.$key;
+		$output .= '<option value='.$key;
 		if ($key == $ticket_priority)
-			echo ' selected';
-		echo '>'.esc_html__($value,'WATS').'</option>';
+			$output .= ' selected';
+		$output .= '>'.esc_html__($value,'WATS').'</option>';
 	}
-	echo '</select><br /><br />';
+	$output .= '</select><br /><br />';
 	
-	echo __('Ticket status','WATS').' : ';
-	echo '<select name="wats_select_ticket_status" id="wats_select_ticket_status" class="wats_select">';
+	$output .= __('Ticket status','WATS').' : ';
+	$output .= '<select name="wats_select_ticket_status" id="wats_select_ticket_status" class="wats_select">';
 	foreach ($wats_ticket_status as $key => $value)
 	{
-		echo '<option value='.$key;
+		$output .= '<option value='.$key;
 		if ($key == $ticket_status)
-			echo ' selected';
-		echo '>'.esc_html__($value,'WATS').'</option>';
+			$output .= ' selected';
+		$output .= '>'.esc_html__($value,'WATS').'</option>';
 	}
-	echo '</select><br /><br />';
+	$output .= '</select><br /><br />';
 	
 	setup_postdata($post);
 	
 	if ($wats_ticket_assign == 1 || ($wats_ticket_assign == 2 && $wats_ticket_assign_level <= $current_user->user_level))
 	{
-		echo __('Ticket owner','WATS').' : ';
+		$output .= __('Ticket owner','WATS').' : ';
 		if ($wats_settings['ticket_assign_user_list'] == 0)
 		{
 			$userlist = wats_build_user_list(0,__("None",'WATS'),0);
@@ -453,55 +455,70 @@ function wats_ticket_details_meta_box($post)
 			}
 		}
 		
-		echo '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner" class="wats_select">';
+		$output .= '<select name="wats_select_ticket_owner" id="wats_select_ticket_owner" class="wats_select">';
 		foreach ($userlist AS $userlogin => $username)
 		{
-			echo '<option value="'.$userlogin.'" ';
-			if ($userlogin == $ticket_owner) echo 'selected';
-				echo '>'.$username.'</option>';
+			$output .= '<option value="'.$userlogin.'" ';
+			if ($userlogin == $ticket_owner) $output .= 'selected';
+				$output .= '>'.$username.'</option>';
 		}
-		echo '</select><br /><br />';
+		$output .= '</select><br /><br />';
 	}
 
 	if (is_admin())
 	{
 		if ($post->ID)
 		{
-			echo __('Ticket originator : ','WATS');
+			$output .= __('Ticket originator : ','WATS');
 			if ($current_user->user_level == 10 && $wats_settings['call_center_ticket_creation'] == 1)
 			{
 				$userlist = wats_build_user_list(0,0,0);
-				echo '<select name="wats_select_ticket_originator" id="wats_select_ticket_originator" class="wats_select">';
+				$output .= '<select name="wats_select_ticket_originator" id="wats_select_ticket_originator" class="wats_select">';
 				foreach ($userlist AS $userlogin => $username)
 				{
-					echo '<option value="'.$userlogin.'" ';
-					if ($userlogin == get_the_author_meta('user_login')) echo 'selected';
-						echo '>'.$username.'</option>';
+					$output .= '<option value="'.$userlogin.'" ';
+					if ($userlogin == get_the_author_meta('user_login')) $output .= 'selected';
+						$output .= '>'.$username.'</option>';
 				}
-				echo '</select>';
+				$output .= '</select>';
 			}
 			else
-				echo get_the_author();
+				$output .= get_the_author();
 		}
 		else if ($wats_settings['call_center_ticket_creation'] == 1)
 		{
 			if ($current_user->user_level == 10)
 			{
-				echo __('Ticket originator : ','WATS');
+				$output .= __('Ticket originator : ','WATS');
 				$userlist = wats_build_user_list(0,0,0);
-				echo '<select name="wats_select_ticket_originator" id="wats_select_ticket_originator" class="wats_select">';
+				$output .= '<select name="wats_select_ticket_originator" id="wats_select_ticket_originator" class="wats_select">';
 				foreach ($userlist AS $userlogin => $username)
 				{
-					echo '<option value="'.$userlogin.'" ';
-					if ($current_user->user_login == $userlogin) echo 'selected';
-					echo '>'.$username.'</option>';
+					$output .= '<option value="'.$userlogin.'" ';
+					if ($current_user->user_login == $userlogin) $output .= 'selected';
+					$output .= '>'.$username.'</option>';
 				}
-				echo '</select>';
+				$output .=  '</select>';
 			}
 		}
+		
+		$ticket_author_name = get_post_meta($post->ID,'wats_ticket_author_name',true);
+		if ($ticket_author_name)
+			$output .= '<br /><br />'.__('Ticket author name : ','WATS').$ticket_author_name;
+		
+		$ticket_author_email = get_post_meta($post->ID,'wats_ticket_author_email',true);
+		if ($ticket_author_email)
+			$output .= '<br /><br />'.__('Ticket author email : ','WATS').'<a href="mailto:'.$ticket_author_email.'">'.$ticket_author_email.'</a>';
+		
+		$ticket_author_url = get_post_meta($post->ID,'wats_ticket_author_url',true);
+		if ($ticket_author_url)
+			$output .= '<br /><br />'.__('Ticket author url : ','WATS').'<a href="'.$ticket_author_url.'">'.$ticket_author_url.'</a>';
 	}
-	
-	return;
+
+	if ($view == 1)
+		return ($output);
+	else
+		echo $output;
 }
 
 ?>

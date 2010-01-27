@@ -4,12 +4,15 @@ Plugin Name: Wats
 Plugin URI: http://www.lautre-monde.fr/wats-going-on/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0.42
+Version: 1.0.43
 Author URI: http://www.lautre-monde.fr
 */
 
 /*
 1/ Release history :
+- V1.0.43 (27/01/2010) :
++ added ticket submission form feature in the frontend
++ removed unused code (wats-ticket-list-ajax-processing.php)
 - V1.0.42 (24/01/2010) :
 + added a check to prevent notifications from being delivered to pending users (register plus compatibility)
 + added persian characters support
@@ -212,9 +215,10 @@ define('WATS_BACKLINK2','http://www.lautre-monde.fr');
 define('WATS_ANCHOR','ticket system');
 define('WATS_ANCHOR2',"l'autre monde");
 define("WATS_TICKET_LIST_REGEXP", "/\[WATS_TICKET_LIST ([[:print:]]+)\]/");
+define("WATS_TICKET_SUBMIT_FORM", "/\[WATS_TICKET_SUBMIT_FORM\]/");
 
 $wats_settings = array();
-$wats_version = '1.0.42';
+$wats_version = '1.0.43';
 
 $wats_default_ticket_priority = array(1 => "Emergency", 2 => "Critical", 3 => "Major", 4 => "Minor");
 $wats_default_ticket_status = array(1 => "Newly open", 2 => "Under investigation", 3 => "Waiting for reoccurence", 4 => "Waiting for details", 5 => "Solution delivered", 6 => "Closed");
@@ -297,6 +301,7 @@ add_filter('get_next_post_where','wats_ticket_get_previous_next_post_where');
 add_filter('getarchives_where','wats_get_archives');
 add_filter('posts_where','wats_posts_where');
 add_filter('the_content', 'wats_list_tickets_filter');
+add_filter('the_content', 'wats_ticket_submit_form_filter');
 add_filter('the_content_rss', 'wats_list_tickets_filter');
 add_filter('wp_insert_post_data', 'wats_insert_post_data');
 add_filter('edit_post_link','wats_filter_edit_ticket_link');
@@ -308,4 +313,6 @@ add_action('wp_ajax_wats_admin_update_option_entry','wats_admin_update_option_en
 
 add_action('wp_ajax_wats_ticket_list_ajax_processing','wats_ticket_list_ajax_processing',10);
 add_action('wp_ajax_nopriv_wats_ticket_list_ajax_processing','wats_ticket_list_ajax_processing',10);
+add_action('wp_ajax_wats_ticket_submit_form_ajax_processing','wats_ticket_submit_form_ajax_processing',10);
+add_action('wp_ajax_nopriv_wats_ticket_submit_form_ajax_processing','wats_ticket_submit_form_ajax_processing',10);
 ?>
