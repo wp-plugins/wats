@@ -11,11 +11,13 @@ Stable tag: 1.0.43
 This plugin adds to wordpress the functionnalities of a ticket system. This allows users to submit tickets to report problems or get support on whatever you want. You can customize the status, priority and type of the ticket.
 
 WATS offers multiple possibilities for your customers to submit tickets :
+
 * through the frontend form (doesn't require any authentication nor registration)
 * through the admin site via the shared guest user feature
 * through the admin side for all users with a minimum level of contributor
 
 WATS key features :
+
 * ticket submission through the admin
 * ticket submission through the frontend
 * ticket assignation
