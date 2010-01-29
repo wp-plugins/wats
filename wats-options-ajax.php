@@ -56,6 +56,7 @@ jQuery(document).ready(function() {
 			resultat = 1;
 		if (resultat == 0)
 		{
+			jQuery('#idaddtype').attr('disabled','disabled');
 			var type = "wats_types";
 			var idvalue = jQuery("#idtype").val();
 			wats_loading(document.getElementById("resultaddtype"),watsmsg[4]);
@@ -63,6 +64,7 @@ jQuery(document).ready(function() {
 			jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 			function(res)
 			{
+				jQuery('#idaddtype').removeAttr('disabled');
 				var message_result = eval('(' + res + ')');
 				if (message_result.success == "TRUE")
 				{
@@ -91,11 +93,13 @@ jQuery(document).ready(function() {
 		{
 		    if (this.checked == true)
 			{
+				jQuery('#idsuptype').attr('disabled','disabled');
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
 				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
+					jQuery('#idsuptype').removeAttr('disabled');
 					var message_result = eval('(' + res + ')');
 					wats_stop_loading(document.getElementById("resultsuptype"),message_result.error);
 					if (message_result.success == "TRUE")
@@ -117,6 +121,7 @@ jQuery(document).ready(function() {
 			resultat = 1;
 		if (resultat == 0)
 		{
+			jQuery('#idaddpriority').attr('disabled','disabled');
 			var type = "wats_priorities";
 			var idvalue = jQuery("#idpriority").val();
 			var idcat = 0;
@@ -124,6 +129,7 @@ jQuery(document).ready(function() {
 			jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 			function(res)
 			{
+				jQuery('#idaddpriority').removeAttr('disabled');
 				var message_result = eval('(' + res + ')');
 				if (message_result.success == "TRUE")
 				{
@@ -152,11 +158,13 @@ jQuery(document).ready(function() {
 		{
 		    if (this.checked == true)
 			{
+				jQuery('#idsuppriority').attr('disabled','disabled');
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
 				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
+					jQuery('#idsuppriority').removeAttr('disabled');
 					var message_result = eval('(' + res + ')');
 					wats_stop_loading(document.getElementById("resultsuppriority"),message_result.error);
 					if (message_result.success == "TRUE")
@@ -178,6 +186,7 @@ jQuery(document).ready(function() {
 			resultat = 1;
 		if (resultat == 0)
 		{
+			jQuery('#idaddstatus').attr('disabled','disabled');
 			var type = "wats_statuses";
 			var idvalue = jQuery("#idstatus").val();
 			wats_loading(document.getElementById("resultaddstatus"),watsmsg[4]);
@@ -185,6 +194,7 @@ jQuery(document).ready(function() {
 			jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 			function(res)
 			{
+				jQuery('#idaddstatus').removeAttr('disabled');
 				var message_result = eval('(' + res + ')');
 				if (message_result.success == "TRUE")
 				{
@@ -213,11 +223,13 @@ jQuery(document).ready(function() {
 		{
 		    if (this.checked == true)
 			{
+				jQuery('#idsupstatus').attr('disabled','disabled');
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
 				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
+					jQuery('#idsupstatus').removeAttr('disabled');
 					var message_result = eval('(' + res + ')');
 					wats_stop_loading(document.getElementById("resultsupstatus"),message_result.error);
 					if (message_result.success == "TRUE")
@@ -234,6 +246,7 @@ jQuery(document).ready(function() {
 	});
 	
 	jQuery('#idaddcat').click(function() {
+		jQuery('#idaddcat').attr('disabled','disabled');
 		var type = "wats_categories";
 		var idvalue = jQuery('#catlist option:selected').text();
 		var idcat = jQuery('#catlist option:selected').val();
@@ -241,6 +254,7 @@ jQuery(document).ready(function() {
 		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 		function(res)
 		{
+			jQuery('#idaddcat').removeAttr('disabled');
 			var message_result = eval('(' + res + ')');
 			if (message_result.success == "TRUE")
 			{
@@ -265,11 +279,13 @@ jQuery(document).ready(function() {
 		{
 		    if (this.checked == true)
 			{
+				jQuery('#idsupcat').attr('disabled','disabled');
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
 				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
+					jQuery('#idsupcat').removeAttr('disabled');
 					var message_result = eval('(' + res + ')');
 					wats_stop_loading(document.getElementById("resultsupcat"),message_result.error);
 					if (message_result.success == "TRUE")

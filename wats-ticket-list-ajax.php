@@ -6,6 +6,7 @@ jQuery(document).ready(function() {
 		jQuery('.wats_select').css("width","auto");
 
     jQuery('#filter').click(function() {
+			jQuery('#filter').attr('disabled','disabled');
 			var view = 1;
 			wats_loading(document.getElementById("resultticketlist"),watsmsg[0]);
 			var idtype = jQuery('#wats_select_ticket_type_tl option:selected').val();
@@ -28,6 +29,7 @@ jQuery(document).ready(function() {
 			jQuery.post(ajaxurl, {action:"wats_ticket_list_ajax_processing", _ajax_nonce:jQuery("#_wpnonce_ticket_list").val(), view:view, idtype:idtype, idpriority:idpriority, idstatus:idstatus, idauthor:idauthor, idauthormetavalue:idauthormetavalue, idowner:idowner, categoryfilter:categoryfilter, categorylistfilter:categorylistfilter},
 			function(res)
 			{
+				jQuery('#filter').removeAttr('disabled');
 				wats_stop_loading(document.getElementById("resultticketlist"),res);
 				jQuery('#tableticket').tablesorter();
 			});

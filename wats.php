@@ -4,12 +4,15 @@ Plugin Name: Wats
 Plugin URI: http://www.lautre-monde.fr/wats-going-on/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0.43
+Version: 1.0.44
 Author URI: http://www.lautre-monde.fr
 */
 
 /*
 1/ Release history :
+- V1.0.44 (29/01/2010) :
++ enhanced Ajax submission handling by disabling buttons on submit to prevent double submission errors
++ added feature to allow ticket submission by email
 - V1.0.43 (27/01/2010) :
 + added ticket submission form feature in the frontend
 + removed unused code (wats-ticket-list-ajax-processing.php)
@@ -192,6 +195,7 @@ require_once(dirname(__FILE__) .'/wats-dashboard.php');
 require_once(dirname(__FILE__) .'/wats-link-template.php');
 require_once(dirname(__FILE__) .'/wats-template.php');
 require_once(dirname(__FILE__) .'/wats-profile.php');
+require_once(dirname(__FILE__) .'/wats-mail.php');
 
 add_action('admin_head', 'wats_admin_head');
 add_action('wp_print_styles', 'wats_add_my_stylesheet');
@@ -216,9 +220,10 @@ define('WATS_ANCHOR','ticket system');
 define('WATS_ANCHOR2',"l'autre monde");
 define("WATS_TICKET_LIST_REGEXP", "/\[WATS_TICKET_LIST ([[:print:]]+)\]/");
 define("WATS_TICKET_SUBMIT_FORM", "/\[WATS_TICKET_SUBMIT_FORM\]/");
+define('WATS_WP_MAIL_INTERVAL', 300);
 
 $wats_settings = array();
-$wats_version = '1.0.43';
+$wats_version = '1.0.44';
 
 $wats_default_ticket_priority = array(1 => "Emergency", 2 => "Critical", 3 => "Major", 4 => "Minor");
 $wats_default_ticket_status = array(1 => "Newly open", 2 => "Under investigation", 3 => "Waiting for reoccurence", 4 => "Waiting for details", 5 => "Solution delivered", 6 => "Closed");
@@ -252,7 +257,8 @@ function wats_plugins_loaded()
 	}
 	wats_load_settings();
 	add_action('admin_menu','wats_add_admin_page');
-
+	wats_check_email_ticket_submission();
+	
 	return;
 }
 

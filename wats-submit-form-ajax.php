@@ -2,6 +2,7 @@
 ?>
 jQuery(document).ready(function() {
     jQuery('#submit_ticket').click(function() {
+			jQuery('#submit_ticket').attr('disabled','disabled');
 			var view = 1;
 			wats_loading(document.getElementById("resultticketsubmitform"),watsmsg[1]);
 			var name = jQuery('#name').val();
@@ -18,6 +19,7 @@ jQuery(document).ready(function() {
 			function(res)
 			{
 				wats_stop_loading(document.getElementById("resultticketsubmitform"),res);
+				jQuery('#submit_ticket').removeAttr('disabled');
 			});
 		
 		return false;

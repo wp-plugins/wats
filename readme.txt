@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.9.1
-Stable tag: 1.0.43
+Stable tag: 1.0.44
 
 == Description ==
 
@@ -15,6 +15,7 @@ WATS offers multiple possibilities for your customers to submit tickets :
 * through the frontend form (doesn't require any authentication nor registration)
 * through the admin site via the shared guest user feature
 * through the admin side for all users with a minimum level of contributor
+* directly by email
 
 WATS key features :
 
@@ -64,6 +65,10 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.44 (29/01/2010) =
+* enhanced Ajax submission handling by disabling buttons on submit to prevent double submission errors
+* added feature to allow ticket submission by email
 
 = V1.0.43 (27/01/2010) =
 * added ticket submission form feature in the frontend

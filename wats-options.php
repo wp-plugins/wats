@@ -54,6 +54,11 @@ function wats_load_settings()
 		$default['frontend_submit_form_access'] = 0;
 		$default['frontend_submit_form_ticket_status'] = 0;
 		$default['submit_form_default_author'] = wats_get_first_admin_login();
+		$default['ms_ticket_submission'] = 0;
+		$default['ms_mail_server'] = 'mail.example.com';
+		$default['ms_port_server'] = '110';
+		$default['ms_mail_address'] = 'login@example.com';
+		$default['ms_mail_password'] = 'password';
 						
    	    add_option('wats', $default);
 	}
@@ -198,6 +203,31 @@ function wats_load_settings()
 			$wats_settings['submit_form_default_author'] = wats_get_first_admin_login();
 		}
 
+		if (!isset($wats_settings['ms_ticket_submission']))
+		{
+			$wats_settings['ms_ticket_submission'] = 0;
+		}
+		
+		if (!isset($wats_settings['ms_mail_server']))
+		{
+			$wats_settings['ms_mail_server'] = 'mail.example.com';
+		}
+		
+		if (!isset($wats_settings['ms_port_server']))
+		{
+			$wats_settings['ms_port_server'] = '110';
+		}
+		
+		if (!isset($wats_settings['ms_mail_address']))
+		{
+			$wats_settings['ms_mail_address'] = 'login@example.com';
+		}
+		
+		if (!isset($wats_settings['ms_mail_password']))
+		{
+			$wats_settings['ms_mail_password'] = 'password';
+		}
+		
 		$wats_settings['wats_version'] = $wats_version;
 		update_option('wats', $wats_settings);
 	}
@@ -515,7 +545,12 @@ function wats_options_admin_menu()
 		$wats_settings['frontend_submit_form_access'] = $_POST['group5'];
 		$wats_settings['frontend_submit_form_ticket_status'] = $_POST['group6'];
 		$wats_settings['submit_form_default_author'] = $_POST['defaultauthorlist'];
-		
+		$wats_settings['ms_ticket_submission'] = isset($_POST['ms_ticket_submission']) ? 1 : 0;
+		$wats_settings['ms_mail_server'] = wats_is_string(stripslashes($_POST['ms_mail_server'])) ? esc_html(stripslashes($_POST['ms_mail_server'])) : 'mail.example.com';
+		$wats_settings['ms_port_server'] = wats_is_numeric(stripslashes($_POST['ms_port_server'])) ? esc_html(stripslashes($_POST['ms_port_server'])) : '110';
+		$wats_settings['ms_mail_address'] = is_email(stripslashes($_POST['ms_mail_address'])) ? esc_html(stripslashes($_POST['ms_mail_address'])) : 'login@example.com';
+		$wats_settings['ms_mail_password'] = wats_is_string(stripslashes($_POST['ms_mail_password'])) ? esc_html(stripslashes($_POST['ms_mail_password'])) : 'password';
+
 		update_option('wats', $wats_settings);
 	}
 	
@@ -751,6 +786,21 @@ function wats_options_admin_menu()
 	echo __('Set this option to define the ticket publications status upon ticket submission. It is advisable to set unauthenticated users tickets status to \'pending\' to allow admin moderation before publication and limit SPAM.','WATS');
 	echo '</div></td></tr></table><br />';
 	
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("email_ticket_submission_tip");>'.__('Email ticket submission','WATS').' : </a></h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td><input type="checkbox" name="ms_ticket_submission"';
+	if ($wats_settings['ms_ticket_submission'] == 1)
+		echo ' checked';
+	echo '> '.__('Allow ticket submission through email','WATS').'</td></tr><tr><td>';
+	echo '<tr><td>'.__('Server : ','WATS').'<input type="text" name="ms_mail_server" value="'.esc_attr(stripslashes($wats_settings['ms_mail_server'])).'" size=30></td></tr><tr><td>';
+	echo '<tr><td>'.__('Port : ','WATS').'<input type="text" name="ms_port_server" value="'.esc_attr(stripslashes($wats_settings['ms_port_server'])).'" size=30></td></tr><tr><td>';
+	echo '<tr><td>'.__('Login : ','WATS').'<input type="text" name="ms_mail_address" value="'.esc_attr(stripslashes($wats_settings['ms_mail_address'])).'" size=30></td></tr><tr><td>';
+	echo '<tr><td>'.__('Password : ','WATS').'<input type="text" name="ms_mail_password" value="'.esc_attr(stripslashes($wats_settings['ms_mail_password'])).'" size=30></td></tr><tr><td>';
+	echo '<div class="wats_tip" id="email_ticket_submission_tip">';
+	echo __('This feature allows users to submit tickets directly through email. You have to define a secret email on a POP3 server.','WATS');
+	echo '<br/><br />'.__('Warning : every email received on this account will result in a ticket. Therefore, make sure that your email adress isn\'t known by SPAM robots.','WATS');
+	echo '</div></td></tr></table><br />';
+	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("submitformdefaultauthor_tip");>'.__('Default author for unregistered visitors tickets','WATS').' : </a></h3>';
 	echo '<table class="form-table"><tr><td>'.__('User','WATS').' : <select name="defaultauthorlist" id="defaultauthorlist" class="wats_select">';
 	$userlist = wats_build_user_list(0,0,0);
@@ -762,7 +812,7 @@ function wats_options_admin_menu()
 	}
 	echo '</select></td></tr><tr><td>';
 	echo '<div class="wats_tip" id="submitformdefaultauthor_tip">';
-	echo __('This option will be used to set the author of tickets submitted through the frontend submit form by unregistered users.','WATS').'</div></td></tr></table><br />';
+	echo __('This option will be used to set the author of tickets submitted through the frontend submit form or through email by unregistered users.','WATS').'</div></td></tr></table><br />';
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("call_center_ticket_creation_tip");>'.__('Call center ticket creation','WATS').' : </a></h3>';
 	echo '<table class="form-table">';
