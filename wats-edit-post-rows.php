@@ -76,7 +76,7 @@ function wats_post_rows($posts = array())
 		$post_ids[] = $a_post->ID;
 
 	$comment_pending_count = get_pending_comments_num($post_ids);
-	if ( empty($comment_pending_count) )
+	if (empty($comment_pending_count))
 		$comment_pending_count = array();
 	
 	foreach ($posts as $post)
@@ -253,10 +253,12 @@ function wats_post_row($a_post, $pending_comments, $mode)
 		<td <?php echo $attributes ?>><div class="post-com-count-wrapper">
 		<?php
 			$pending_phrase = sprintf( __('%s pending'), number_format( $pending_comments ) );
-			if ( $pending_comments )
+			if ($pending_comments)
 				echo '<strong>';
-				comments_number("<a href='edit-comments.php?p=$post->ID' title='$pending_phrase' class='post-com-count'><span class='comment-count'>" . __('0') . '</span></a>', "<a href='edit-comments.php?p=$post->ID' title='$pending_phrase' class='post-com-count'><span class='comment-count'>" . __('1') . '</span></a>', "<a href='edit-comments.php?p=$post->ID' title='$pending_phrase' class='post-com-count'><span class='comment-count'>" . __('%') . '</span></a>');
-				if ( $pending_comments )
+			global $id;
+			$id	= $post->ID;
+			comments_number("<a href='edit-comments.php?p=$post->ID' title='$pending_phrase' class='post-com-count'><span class='comment-count'>" . _x('0', 'comment count') . '</span></a>', "<a href='edit-comments.php?p=$post->ID' title='$pending_phrase' class='post-com-count'><span class='comment-count'>" . _x('1', 'comment count') . '</span></a>', "<a href='edit-comments.php?p=$post->ID' title='$pending_phrase' class='post-com-count'><span class='comment-count'>" . _x('%', 'comment count') . '</span></a>');
+			if ($pending_comments)
 				echo '</strong>';
 		?>
 		</div></td>

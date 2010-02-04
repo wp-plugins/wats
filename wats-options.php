@@ -422,7 +422,7 @@ function wats_admin_insert_option_entry()
 function wats_admin_add_category_interface($resultsup,$resultadd,$idsup,$idadd,$value,$input)
 {
 
-	echo '<input type="submit" class="button-primary" id="'.$idsup.'" value="'.__('Remove','WATS').'" /><div id="'.$resultsup.'"></div><br /><br />';
+	echo '<input type="submit" class="button-primary" id="'.$idsup.'" value="'.__('Remove selected categories','WATS').'" /><div id="'.$resultsup.'"></div><br /><br />';
 
 	echo '<table class="form-table" cellspacing="1" cellpadding="1">';
 	echo '<tr><th><label>'.__($value,'WATS').'</label></th><td>';
@@ -434,7 +434,7 @@ function wats_admin_add_category_interface($resultsup,$resultadd,$idsup,$idadd,$
 	}
 	echo '</select></td><td></td></tr>';
 	echo '</table><br />';
-	echo '<input type="submit" id="'.$idadd.'" value="'.__('Add','WATS').'" class="button-primary" /><div id="'.$resultadd.'"></div>';
+	echo '<input type="submit" id="'.$idadd.'" value="'.__('Add this category','WATS').'" class="button-primary" /><div id="'.$resultadd.'"></div>';
 
 	return;
 }
@@ -448,12 +448,12 @@ function wats_admin_add_category_interface($resultsup,$resultadd,$idsup,$idadd,$
 function wats_admin_add_table_interface($resultsup,$resultadd,$idsup,$idadd,$value,$input)
 {
 
-	echo '<input type="submit" class="button-primary" id="'.$idsup.'" value="'.__('Remove','WATS').'" /><div id="'.$resultsup.'"></div><br /><br />';
+	echo '<input type="submit" class="button-primary" id="'.$idsup.'" value="'.__('Remove selected items','WATS').'" /><div id="'.$resultsup.'"></div><br /><br />';
 
 	echo '<table class="form-table" cellspacing="1" cellpadding="1">';
 	echo '<tr><th><label>'.__($value,'WATS').'</label></th><td><input type="text" name="'.$input.'" id="'.$input.'" size="30" class="regular-text" /></td><td></td></tr>';
 	echo '</table><br />';
-	echo '<input type="submit" id="'.$idadd.'" value="'.__('Add','WATS').'" class="button-primary" /><div id="'.$resultadd.'"></div><br /><br />';
+	echo '<input type="submit" id="'.$idadd.'" value="'.__('Add this entry','WATS').'" class="button-primary" /><div id="'.$resultadd.'"></div><br /><br />';
 
 	return;
 }
@@ -565,6 +565,10 @@ function wats_options_admin_menu()
 	echo '<input name="cmd" type="hidden" value="_s-xclick" />';
 	echo '<input name="hosted_button_id" type="hidden" value="6412724" />';
 	echo '<input alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypal.com/en_US/FR/i/btn/btn_donateCC_LG.gif" type="image" style="border: none" /> <img src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" border="0" alt="pixel WATS going on..." width="1" height="1" title="WATS going on..." /><br /></form></center></p>';
+	
+	echo '<h3>'.__('Help','WATS').' :</h3>';
+	echo __('If you want to get some details about an option, just click on the option title, this will display some inline details.','WATS').'<br /><br />';
+	echo __('In the tables, you can directly edit items by clicking on the following icon : ','WATS').'<img src="'.WATS_URL.'img/modify.png" /><br /><br /><br />';
 		
 	echo '<form action="" method="post">';
 	wp_nonce_field('update-wats-options');
@@ -888,7 +892,7 @@ function wats_options_admin_menu()
 	echo __('Check this option if you want to allow admins to get another column in the tickets listing table that will be filled in with user meta values attached to the selected meta key.','WATS').'</div></td></tr></table><br />';
 	
 	echo '<p class="submit">';
-	echo '<input class="button-primary" type="submit" name="save" value="'.__('Save','WATS').'" /></p><br />';
+	echo '<input class="button-primary" type="submit" name="save" value="'.__('Save the options','WATS').'" /></p><br />';
 	
 	echo '<h3>'.__('Ticket types','WATS').' :</h3><br />';
 	echo '<table class="widefat" cellspacing="0" id="tabletype" style="text-align:center;"><thead><tr class="thead">';
@@ -928,5 +932,4 @@ function wats_options_admin_menu()
 	
 	echo '</form><br /><br />';
 }
-
 ?>
