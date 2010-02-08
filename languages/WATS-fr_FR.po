@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WATS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-01 14:02+0100\n"
+"POT-Creation-Date: 2010-02-08 15:36+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Olivier <autremonde75@gmail.com>\n"
 "Language-Team: \n"
@@ -152,7 +152,7 @@ msgstr ""
 #: wats-edit-form-advanced.php:164
 #: wats-edit-form-advanced.php:213
 #: wats-edit-post-rows.php:192
-#: wats-edit-post-rows.php:280
+#: wats-edit-post-rows.php:282
 #: wats-edit.php:296
 #: wats-edit.php:376
 msgid "Edit"
@@ -245,7 +245,7 @@ msgstr ""
 
 #: wats-edit-form-advanced.php:227
 #: wats-edit-post-rows.php:194
-#: wats-edit-post-rows.php:286
+#: wats-edit-post-rows.php:288
 #: wats-edit.php:297
 #: wats-edit.php:377
 msgid "Delete"
@@ -294,7 +294,7 @@ msgid "Parent category"
 msgstr ""
 
 #: wats-edit-form-advanced.php:341
-#: wats-template.php:685
+#: wats-template.php:689
 msgid "Categories"
 msgstr ""
 
@@ -495,7 +495,7 @@ msgid "View \"%s\""
 msgstr ""
 
 #: wats-edit-post-rows.php:200
-#: wats-edit-post-rows.php:274
+#: wats-edit-post-rows.php:276
 msgid "View"
 msgstr ""
 
@@ -511,18 +511,6 @@ msgstr ""
 #: wats-edit-post-rows.php:255
 #, php-format
 msgid "%s pending"
-msgstr ""
-
-#: wats-edit-post-rows.php:258
-msgid "0"
-msgstr ""
-
-#: wats-edit-post-rows.php:258
-msgid "1"
-msgstr ""
-
-#: wats-edit-post-rows.php:258
-msgid "%"
 msgstr ""
 
 #: wats-edit.php:59
@@ -672,23 +660,23 @@ msgstr "Ajout d'entrée en cours"
 msgid "Error : the string contains invalid caracters!"
 msgstr "Erreur : la chaîne contient des caractères invalides!"
 
-#: wats-lib.php:195
+#: wats-lib.php:206
 msgid "Tickets can be assigned to this user"
 msgstr "Les tickets peuvent être assignés à cet utilisateur"
 
-#: wats-lib.php:203
+#: wats-lib.php:214
 msgid "User can attach files to tickets"
 msgstr "L'utilisateur peut attacher des fichiers aux tickets"
 
-#: wats-lib.php:220
+#: wats-lib.php:231
 msgid "Get a mail notification when a new ticket is submitted (admin only)"
 msgstr "Recevoir une notification par email lorsqu'un nouveau ticket est soumis (seulement pour les administrateurs)"
 
-#: wats-lib.php:221
+#: wats-lib.php:232
 msgid "Get a mail notification when any ticket is updated"
 msgstr "Recevoir une notification par email quand un ticket est mis à jour"
 
-#: wats-lib.php:222
+#: wats-lib.php:233
 msgid "Get a mail notification when a ticket originated by me is updated"
 msgstr "Recevoir une notification par email lorsque l'un de mes tickets est mis à jour"
 
@@ -1385,7 +1373,7 @@ msgstr "L'adresse email est vide ou contient des caractères invalides. "
 msgid "Error : "
 msgstr "Erreur : "
 
-#: wats-template.php:505
+#: wats-template.php:507
 #: wats-ticket-metas.php:231
 #: wats-ticket-metas.php:233
 #: wats-ticket-metas.php:257
@@ -1393,32 +1381,36 @@ msgstr "Erreur : "
 msgid "Ticket "
 msgstr "Le ticket "
 
-#: wats-template.php:505
+#: wats-template.php:507
 msgid " has been successfully created!"
 msgstr " a été soumis avec succès!"
 
-#: wats-template.php:507
+#: wats-template.php:509
+msgid "Ticket has been successfully created!"
+msgstr "Le ticket a été soumis avec succès!"
+
+#: wats-template.php:511
 msgid "You can access it "
 msgstr "Vous pouvez y accéder "
 
-#: wats-template.php:507
-#: wats-template.php:509
+#: wats-template.php:511
+#: wats-template.php:513
 msgid "here"
 msgstr "ici"
 
-#: wats-template.php:509
+#: wats-template.php:513
 msgid "You will be able to access it "
 msgstr "Vous pourrez y accéder "
 
-#: wats-template.php:509
+#: wats-template.php:513
 msgid "when an admin would have approved it"
 msgstr "quand un administrateur l'autre approuvé"
 
-#: wats-template.php:516
+#: wats-template.php:520
 msgid "Error : can't submit form"
 msgstr "Erreur : impossible de soumettre le formulaire"
 
-#: wats-template.php:686
+#: wats-template.php:690
 msgid "Post Tags"
 msgstr ""
 

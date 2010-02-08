@@ -48,7 +48,7 @@ function wats_load_settings()
 		$default['filter_ticket_listing_meta_key'] = 'None';
 		$default['meta_column_ticket_listing'] = 0;
 		$default['meta_column_ticket_listing_meta_key'] = 'None';
-		$default['notification_signature'] = 'Regads,\r\n\r\nWATS Notification engine';
+		$default['notification_signature'] = 'Regads,<br /><br />WATS Notification engine';
 		$default['user_selector_order_1'] = 'last_name';
 		$default['user_selector_order_2'] = 'first_name';
 		$default['frontend_submit_form_access'] = 0;
@@ -170,7 +170,7 @@ function wats_load_settings()
 		
 		if (!isset($wats_settings['notification_signature']))
 		{
-			$wats_settings['notification_signature'] = 'Regads,\r\n\r\nWATS Notification engine';
+			$wats_settings['notification_signature'] = 'Regads,<br /><br />WATS Notification engine';
 		}
 		
 		if (!isset($wats_settings['user_selector_order_1']))

@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.9.1
-Stable tag: 1.0.45
+Stable tag: 1.0.46
 
 == Description ==
 
@@ -65,6 +65,11 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.46 (08/02/2010) =
+* modified default value for notification signature
+* fixed frontend submit form error when description contains carriage return
+* enhanced success message on frontend submit form based on ticket numbering setting
 
 = V1.0.45 (04/02/2010) =
 * enhanced options page design to improve admin experience

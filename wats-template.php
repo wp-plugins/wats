@@ -422,7 +422,7 @@ function wats_ticket_submit_form_ajax_processing()
 		if (!wats_is_string($post_title))
 			$error .= __('The ticket title is empty or contains invalid characters. ','WATS');
 		
-		if (!wats_is_string($post_content))
+		if (!wats_is_paragraph($post_content))
 			$error .= __('The ticket description is empty or contains invalid characters. ','WATS');
 		
 		$post_category = array(get_option('default_email_category'));
@@ -502,7 +502,11 @@ function wats_ticket_submit_form_ajax_processing()
 				}
 				
 				//add_post_meta($post_ID,'wats_ticket_owner',$_POST['wats_select_ticket_owner']);
-				$output = __('Ticket ','WATS').wats_get_ticket_number($post_ID).__(' has been successfully created!','WATS').'<br />';
+				$ticketnumber = wats_get_ticket_number($post_ID);
+				if ($ticketnumber != 0)
+					$output = __('Ticket ','WATS').$ticketnumber.__(' has been successfully created!','WATS').'<br />';
+				else
+					$output = __('Ticket has been successfully created!','WATS').'<br />';
 				if ($post_status == 'publish')
 					$output .= __('You can access it ','WATS').'<a href="'.get_permalink($post_ID).'">'.__('here','WATS').'</a>.';
 				else
