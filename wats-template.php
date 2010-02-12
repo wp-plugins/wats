@@ -736,15 +736,16 @@ function wats_title_insert_ticket_number($title)
 function wats_ticket_get_previous_next_post_where($where)
 {
 	global $wats_settings, $current_user;
-	
+
+	$searched_pattern = array(" AND p.post_type = 'ticket'"," AND p.post_type = 'post'");
 	if ($wats_settings['visibility'] == 0)
-		$where = str_replace( " AND p.post_type = 'post'", " AND (p.post_type = 'post' OR p.post_type = 'ticket')", $where);
+		$where = str_replace($searched_pattern, " AND (p.post_type = 'post' OR p.post_type = 'ticket')", $where);
 	else if ($wats_settings['visibility'] == 1 && is_user_logged_in())
-		$where = str_replace( " AND p.post_type = 'post'", " AND (p.post_type = 'post' OR p.post_type = 'ticket')", $where);
+		$where = str_replace($searched_pattern, " AND (p.post_type = 'post' OR p.post_type = 'ticket')", $where);
 	else if ($wats_settings['visibility'] == 2 && is_user_logged_in() && $current_user->user_level == 10)
-		$where = str_replace( " AND p.post_type = 'post'", " AND (p.post_type = 'post' OR p.post_type = 'ticket')", $where);
+		$where = str_replace($searched_pattern, " AND (p.post_type = 'post' OR p.post_type = 'ticket')", $where);
 	else if ($wats_settings['visibility'] == 2 && is_user_logged_in())
-		$where = str_replace( " AND p.post_type = 'post'", " AND (p.post_type = 'post' OR (p.post_type = 'ticket' AND p.post_author = ".$current_user->ID."))", $where);
+		$where = str_replace($searched_pattern, " AND (p.post_type = 'post' OR (p.post_type = 'ticket' AND p.post_author = ".$current_user->ID."))", $where);
 
 	return ($where);
 }

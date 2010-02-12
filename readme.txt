@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.9.1
-Stable tag: 1.0.46
+Stable tag: 1.0.47
 
 == Description ==
 
@@ -65,6 +65,10 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.47 (12/02/2010) =
+* fixed a bug with previous and next links on single ticket page in WP 2.9
+* added "/" as valid character for ticket description text area in the frontend submit form
 
 = V1.0.46 (08/02/2010) =
 * modified default value for notification signature
