@@ -776,4 +776,18 @@ function wats_list_terms_exclusions($args)
 	return $where;
 }
 
-php?>
+/***************************************/
+/*                                     */
+/* Fonction de filtrage du flux RSS des commentaire */
+/*                                     */
+/***************************************/
+
+function wats_filter_comments_rss($cwhere)
+{
+
+	$cwhere = $cwhere." AND post_type != 'ticket'";
+	
+	return $cwhere;
+}
+
+?>
