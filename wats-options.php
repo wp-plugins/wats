@@ -548,7 +548,7 @@ function wats_options_admin_menu()
 		$wats_settings['ms_ticket_submission'] = isset($_POST['ms_ticket_submission']) ? 1 : 0;
 		$wats_settings['ms_mail_server'] = wats_is_string(stripslashes($_POST['ms_mail_server'])) ? esc_html(stripslashes($_POST['ms_mail_server'])) : 'mail.example.com';
 		$wats_settings['ms_port_server'] = wats_is_numeric(stripslashes($_POST['ms_port_server'])) ? esc_html(stripslashes($_POST['ms_port_server'])) : '110';
-		$wats_settings['ms_mail_address'] = is_email(stripslashes($_POST['ms_mail_address'])) ? esc_html(stripslashes($_POST['ms_mail_address'])) : 'login@example.com';
+		$wats_settings['ms_mail_address'] = wats_is_string(stripslashes($_POST['ms_mail_address'])) ? esc_html(stripslashes($_POST['ms_mail_address'])) : 'login@example.com';
 		$wats_settings['ms_mail_password'] = wats_is_string(stripslashes($_POST['ms_mail_password'])) ? esc_html(stripslashes($_POST['ms_mail_password'])) : 'password';
 
 		update_option('wats', $wats_settings);

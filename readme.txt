@@ -3,8 +3,8 @@ Contributors: Olivier
 Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
-Tested up to: 2.9.1
-Stable tag: 1.0.48
+Tested up to: 2.9.2
+Stable tag: 1.0.49
 
 == Description ==
 
@@ -40,6 +40,7 @@ Translations :
 * English (Minimum release : 1.0, Originator : Olivier from http://www.lautre-monde.fr )
 * French (Minimum release : 1.0, Originator : Olivier from http://www.lautre-monde.fr )
 * German (Minimum release : 1.0.23, Originator : Tobias Kalleder from http://indivisualists.com/ )
+* Spanish (Minimum release : 1.0.49, Originator : Esteban from http://www.netmdp.com/ )
 
 
 == Installation ==
@@ -65,6 +66,11 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.49 (09/03/2010) =
+* added support for WP 2.9.2
+* added support for username not formatted as an email address for the ticket submission through email options
+* added spanish translation (provided by Esteban from http://www.netmdp.com/ )
 
 = V1.0.48 (14/02/2010) =
 * fixed a bug with RSS comment feeds showing ticket comments while they shouldn't
