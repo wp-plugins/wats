@@ -158,7 +158,7 @@ function wats_add_admin_page()
 					wp_safe_redirect($destpage);
 			}
 			
-			add_menu_page(__('Modify','WATS'),__('Tickets','WATS'),0,WATS_PATH.'wats-edit.php',0,$plugin_url.'img/support.png');
+			add_menu_page(__('Modify','WATS'),__('Tickets','WATS'),0,WATS_PATH.'wats-edit.php',0,'div');
 			add_submenu_page(WATS_PATH.'wats-edit.php',__('Edit Tickets','WATS'),__('Edit Tickets','WATS'),0,WATS_PATH.'wats-edit.php');
 			add_action('admin_head-wats/wats-edit.php','wats_ticket_edit_admin_head');
 

@@ -717,7 +717,7 @@ function wats_title_insert_ticket_number($title)
 {
 	global $post;
 
-	if (wats_is_ticket($post) && ($title == $post->post_title))
+	if (wats_is_ticket($post) && ($title == wptexturize($post->post_title)))
 	{
 		$value = wats_get_ticket_number($post->ID);
 		if ($value)

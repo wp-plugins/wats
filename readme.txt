@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.9.2
-Stable tag: 1.0.49
+Stable tag: 1.0.50
 
 == Description ==
 
@@ -41,6 +41,8 @@ Translations :
 * French (Minimum release : 1.0, Originator : Olivier from http://www.lautre-monde.fr )
 * German (Minimum release : 1.0.23, Originator : Tobias Kalleder from http://indivisualists.com/ )
 * Spanish (Minimum release : 1.0.49, Originator : Esteban from http://www.netmdp.com/ )
+* Lithuanian (Minimum release : 1.0.50, Originator : Arturas from http://www.taisyklajums.lt/ )
+
 
 
 == Installation ==
@@ -66,6 +68,12 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+
+= V1.0.50 (24/03/2010) =
+* fixed a bug preventing ticket number from being displayed in ticket title (wptexturize issue)
+* enhanced menuitem icon rendering
+* added lithuanian translation (provided by Arturas from http://www.taisyklajums.lt/ )
 
 = V1.0.49 (09/03/2010) =
 * added support for WP 2.9.2

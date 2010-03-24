@@ -96,3 +96,10 @@ li.wats {
 .wats_ticket_form_title {
 	font-weight:bold;
 }
+
+#adminmenu #toplevel_page_wats-wats-edit:hover div.wp-menu-image,
+#adminmenu #toplevel_page_wats-wats-edit div.wp-menu-image,
+#adminmenu #toplevel_page_wats-wats-edit.wp-has-current-submenu div.wp-menu-image,
+#adminmenu #toplevel_page_wats-wats-edit.current div.wp-menu-image {
+    background:transparent url(../img/support.png) no-repeat 6px 6px;
+}
