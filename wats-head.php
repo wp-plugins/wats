@@ -49,13 +49,15 @@ function wats_enqueue_script_frontend()
 
 function wats_add_my_stylesheet()
 {
+
     $plugin_url = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) .'/';
 	$myStyleFile = $plugin_url."css/wats.css";
     wp_register_style('wats_css', $myStyleFile); 
     wp_enqueue_style('wats_css');
 	
 	if (is_admin())
-		wp_admin_css('thickbox');
+		wp_enqueue_style('thickbox');
+	/*wp_admin_css('thickbox');*/
 	
 	return;
 }

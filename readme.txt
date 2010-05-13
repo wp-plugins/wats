@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.9.2
-Stable tag: 1.0.50
+Stable tag: 1.0.51
 
 == Description ==
 
@@ -58,7 +58,7 @@ WATS is licensed under GPL v3.
 WATS is free but you are more than welcome to make a donation to thank me if you'd like to.
 
 3/ Warranty (Excerpt of GPL v3 - Disclaimer of Warranty ) :
-THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM “AS IS” WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
 
 
 == Screenshots ==
@@ -69,6 +69,15 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 
 == Changelog ==
 
+
+= V1.0.51 (12/05/2010) =
+* added CSS class to ticket details items on frontend ticket submission page
+* fixed a bug where a notification would be fired for all post type comments instead of only being fired for tickets
+* modified meta_value selector in the ticket listing page to be sorted by alphabetical order
+* modified thickbox loading to fix an interworking problem with gravity forms plugin
+* fixed a bug preventing admin edit ticket link from being inserted into the new ticket admin notification when an unauthenticated user submits a ticket through the frontend form
+* added login form to the ticket submission form if user isn't authenticated and authentication is mandatory to access it
+* enhanced handling of update forms selectors when no value is provided so that existing values aren't removed
 
 = V1.0.50 (24/03/2010) =
 * fixed a bug preventing ticket number from being displayed in ticket title (wptexturize issue)

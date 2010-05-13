@@ -76,9 +76,9 @@ function wats_comment_update_meta($comment_id)
 {
 	$comment = get_comment($comment_id); 
 	$status = $comment->comment_approved; 
-	if ($status !== "spam") // approved 
-	{ 
-		$post_id =  $comment->comment_post_ID; 
+	$post_id =  $comment->comment_post_ID;
+	if ($status !== "spam" && wats_is_ticket($post_id))
+	{
 		wats_ticket_save_meta($post_id);
 	}
 
@@ -96,42 +96,54 @@ function wats_ticket_save_meta($postID)
 	$newticket = 0;
 
 	$newstatus = -1;
-	$status = get_post_meta($postID,'wats_ticket_status',true);
-	if ($status != $_POST['wats_select_ticket_status'])
-		$newstatus = $_POST['wats_select_ticket_status'];
-		
+	if (isset($_POST['wats_select_ticket_status']))
+	{
+		$status = get_post_meta($postID,'wats_ticket_status',true);
+		if ($status != $_POST['wats_select_ticket_status'])
+			$newstatus = $_POST['wats_select_ticket_status'];
+			
+		if (!update_post_meta($postID,'wats_ticket_status',$_POST['wats_select_ticket_status']))
+			add_post_meta($postID,'wats_ticket_status',$_POST['wats_select_ticket_status']);
+	}
+
 	$newtype = -1;
-	$type = get_post_meta($postID,'wats_ticket_type',true);
-	if ($type != $_POST['wats_select_ticket_type'])
-		$newtype = $_POST['wats_select_ticket_type'];
+	if (isset($_POST['wats_select_ticket_type']))
+	{
+		$type = get_post_meta($postID,'wats_ticket_type',true);
+		if ($type != $_POST['wats_select_ticket_type'])
+			$newtype = $_POST['wats_select_ticket_type'];
+			
+		if (!update_post_meta($postID,'wats_ticket_type',$_POST['wats_select_ticket_type']))
+			add_post_meta($postID,'wats_ticket_type',$_POST['wats_select_ticket_type']);
+	}
 		
 	$newpriority = -1;
-	$priority = get_post_meta($postID,'wats_ticket_priority',true);
-	if ($priority != $_POST['wats_select_ticket_priority'])
-		$newpriority = $_POST['wats_select_ticket_priority'];
-
-	$newowner = -1;
-	$owner = get_post_meta($postID,'wats_ticket_owner',true);
-	if ($owner != $_POST['wats_select_ticket_owner'])
-		$newowner = $_POST['wats_select_ticket_owner'];
-	
-	if (!update_post_meta($postID,'wats_ticket_status',$_POST['wats_select_ticket_status']))
-		add_post_meta($postID,'wats_ticket_status',$_POST['wats_select_ticket_status']);
-
-	if (!update_post_meta($postID,'wats_ticket_type',$_POST['wats_select_ticket_type']))
-		add_post_meta($postID,'wats_ticket_type',$_POST['wats_select_ticket_type']);
+	if (isset($_POST['wats_select_ticket_type']))
+	{
+		$priority = get_post_meta($postID,'wats_ticket_priority',true);
+		if ($priority != $_POST['wats_select_ticket_priority'])
+			$newpriority = $_POST['wats_select_ticket_priority'];
 		
-	if (!update_post_meta($postID,'wats_ticket_priority',$_POST['wats_select_ticket_priority']))
-		add_post_meta($postID,'wats_ticket_priority',$_POST['wats_select_ticket_priority']);
+		if (!update_post_meta($postID,'wats_ticket_priority',$_POST['wats_select_ticket_priority']))
+			add_post_meta($postID,'wats_ticket_priority',$_POST['wats_select_ticket_priority']);
+	}
+	
+	$newowner = -1;
+	if (isset($_POST['wats_select_ticket_owner']))
+	{
+		$owner = get_post_meta($postID,'wats_ticket_owner',true);
+		if ($owner != $_POST['wats_select_ticket_owner'])
+			$newowner = $_POST['wats_select_ticket_owner'];
+		
+		if (!update_post_meta($postID,'wats_ticket_owner',$_POST['wats_select_ticket_owner']))
+			add_post_meta($postID,'wats_ticket_owner',$_POST['wats_select_ticket_owner']);
+	}
 	
 	if (!get_post_meta($postID,'wats_ticket_number',true))
 	{
 		add_post_meta($postID,'wats_ticket_number',wats_get_latest_ticket_number()+1);
 		$newticket = 1;
 	}
-	
-	if (!update_post_meta($postID,'wats_ticket_owner',$_POST['wats_select_ticket_owner']))
-		add_post_meta($postID,'wats_ticket_owner',$_POST['wats_select_ticket_owner']);
 
 	if ($newticket == 1)
 		wats_fire_admin_notification($postID);
@@ -392,7 +404,11 @@ function wats_ticket_details_meta_box($post,$view=0)
 	$ticket_type = get_post_meta($post->ID,'wats_ticket_type',true);
 	$ticket_owner = get_post_meta($post->ID,'wats_ticket_owner',true);
 	
-	$output = __('Ticket type','WATS').' : ';
+	$output = '';
+	
+	if ($view == 1)
+		$output .= '<div class="wats_select_ticket_type_frontend">';
+	$output .= __('Ticket type','WATS').' : ';
 	$output .= '<select name="wats_select_ticket_type" id="wats_select_ticket_type" class="wats_select">';
 	foreach ($wats_ticket_type as $key => $value)
 	{
@@ -403,6 +419,8 @@ function wats_ticket_details_meta_box($post,$view=0)
 	}
 	$output .= '</select><br /><br />';
 	
+	if ($view == 1)
+		$output .= '</div><div class="wats_select_ticket_priority_frontend">';
 	$output .= __('Ticket priority','WATS').' : ';
 	$output .= '<select name="wats_select_ticket_priority" id="wats_select_ticket_priority" class="wats_select">';
 	foreach ($wats_ticket_priority as $key => $value)
@@ -413,7 +431,9 @@ function wats_ticket_details_meta_box($post,$view=0)
 		$output .= '>'.esc_html__($value,'WATS').'</option>';
 	}
 	$output .= '</select><br /><br />';
-	
+		
+	if ($view == 1)
+		$output .= '</div><div class="wats_select_ticket_status_frontend">';
 	$output .= __('Ticket status','WATS').' : ';
 	$output .= '<select name="wats_select_ticket_status" id="wats_select_ticket_status" class="wats_select">';
 	foreach ($wats_ticket_status as $key => $value)
@@ -424,7 +444,9 @@ function wats_ticket_details_meta_box($post,$view=0)
 		$output .= '>'.esc_html__($value,'WATS').'</option>';
 	}
 	$output .= '</select><br /><br />';
-	
+	if ($view == 1)
+		$output .= '</div>';
+		
 	setup_postdata($post);
 	
 	if ($wats_ticket_assign == 1 || ($wats_ticket_assign == 2 && $wats_ticket_assign_level <= $current_user->user_level))

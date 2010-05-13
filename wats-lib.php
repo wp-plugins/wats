@@ -38,7 +38,7 @@ function wats_is_numeric($i)
 
 function wats_is_string($i)
 {
-	return (preg_match("/^[\.\,\#\&\;\'\"\-\_\:?!()@ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽکگچپژیàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d ]+$/", $i));
+	return (preg_match("/^[\.\,\#\&\;\'\"\+\-\_\:?!()@ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽکگچپژیàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d ]+$/", $i));
 }
 
 /**************************************************************/
@@ -49,7 +49,7 @@ function wats_is_string($i)
 
 function wats_is_paragraph($i)
 {
-	return (preg_match("/^[\.\,\#\&\;\'\"\-\_\:\/?!()@ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽکگچپژیàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d\s ]+$/", $i));
+	return (preg_match("/^[\.\,\#\&\;\'\"\+\-\_\:\/?!()@ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽکگچپژیàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d\s ]+$/", $i));
 }
 
 /****************************************************/
@@ -391,7 +391,7 @@ function wats_build_list_meta_values($key)
 {
 	global $wpdb;
 	
-	$values = $wpdb->get_results("SELECT DISTINCT meta_value FROM $wpdb->usermeta WHERE meta_key=\"$key\"");
+	$values = $wpdb->get_results("SELECT DISTINCT meta_value FROM $wpdb->usermeta WHERE meta_key=\"$key\" ORDER BY meta_value ASC");
 	$list = array();
 	foreach ($values AS $value)
 	{

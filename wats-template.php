@@ -378,8 +378,8 @@ function wats_ticket_submit_form()
 			$output .= '<p align="left">'.__('Mail', 'WATS').' '.__('(required)', 'WATS').' <input type="text" name="email" id="email" value="" size="22" /></p>';
 			$output .= '<p align="left">'.__('Website', 'WATS').' <input type="text" name="url" id="url" value="" size="22" /></p><br />';
 		}
-		$output .= '<p align="left" class="wats_ticket_form_title">'.__('Ticket details','WATS').'</p>';
-		$output .= '<p align="left">'.wats_ticket_details_meta_box($post,1).'</p>';
+		$output .= '<div class="wats_select_ticket_details_frontend"><p align="left" class="wats_ticket_form_title">'.__('Ticket details','WATS').'</p>';
+		$output .= '<p align="left">'.wats_ticket_details_meta_box($post,1).'</p></div>';
 		
 		$output .= '<p align="left" class="wats_ticket_form_title">'.__('Ticket title', 'WATS').'</p>';
 		$output .= '<p align="left"><input type="text" name="ticket_title" id="ticket_title" value="" size="60" /></p><br />';
@@ -391,7 +391,17 @@ function wats_ticket_submit_form()
 		$output .= '</form>';
 	}
 	else if ($wats_settings['frontend_submit_form_access'] == 2)
+	{
 		$output = __('Please authenticate yourself to be able to access the form.','WATS');
+		$output .= '<form action="'.get_bloginfo('url').'/wp-login.php" method="post">';
+		$output .= '<table>';
+		$output .= '<tr><td>'.__('User','WATS').'</td><td><input type="text" name="log" id="log" size="22" /></td></tr>';
+		$output .= '<tr><td>'.__('Password','WATS').'</td><td><input type="password" name="pwd" id="pwd" size="22" /></td></tr>';
+		$output .= '<tr><td><input type="submit" name="submit" value="Send" class="button" /></td>';
+		$output .= '<td><input name="rememberme" id="rememberme" type="checkbox" checked="checked" value="forever" />Remember me</td></tr></table>';
+		$output .= '<input type="hidden" name="redirect_to" value="'.$_SERVER['REQUEST_URI'].'"/>';
+		$output .= '</form>';
+	}
 	else if ($wats_settings['frontend_submit_form_access'] == 0)
 		$output = __('Sorry, the ticket submission form access has been disabled by the admin.','WATS');
 
@@ -776,11 +786,11 @@ function wats_list_terms_exclusions($args)
 	return $where;
 }
 
-/***************************************/
-/*                                     */
+/****************************************************/
+/*                                                  */
 /* Fonction de filtrage du flux RSS des commentaire */
-/*                                     */
-/***************************************/
+/*                                                  */
+/****************************************************/
 
 function wats_filter_comments_rss($cwhere)
 {

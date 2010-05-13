@@ -103,3 +103,12 @@ li.wats {
 #adminmenu #toplevel_page_wats-wats-edit.current div.wp-menu-image {
     background:transparent url(../img/support.png) no-repeat 6px 6px;
 }
+
+.wats_select_ticket_type_frontend,
+.wats_select_ticket_status_frontend,
+.wats_select_ticket_priority_frontend {
+	text-align:left;
+}
+
+.wats_select_ticket_details_frontend {
+}

@@ -6,46 +6,21 @@
 /*                                                      */
 /********************************************************/
 
-function wats_get_edit_ticket_link( $id = 0, $context = 'display' ) 
+function wats_get_edit_ticket_link($id = 0, $context = 'display')
 {
-global $current_user;
-	if ( !$post = &get_post( $id ) )
+	
+	if (!$post = &get_post($id))
 		return;
 
-	if ( 'display' == $context )
+	if ('display' == $context)
 		$action = 'action=edit&amp;';
 	else
 		$action = 'action=edit&';
 
-	switch ( $post->post_type ) :
-	case 'page' :
-		if ( !current_user_can( 'edit_page', $post->ID ) )
-			return;
-		$file = 'page';
-		$var  = 'post';
-		break;
-	case 'attachment' :
-		if ( !current_user_can( 'edit_post', $post->ID ) )
-			return;
-		$file = 'media';
-		$var  = 'attachment_id';
-		break;
-	case 'revision' :
-		if ( !current_user_can( 'edit_post', $post->ID ) )
-			return;
-		$file = 'revision';
-		$var  = 'revision';
-		$action = '';
-		break;
-	default :
-		if ( !current_user_can( 'edit_post', $post->ID ) )
-			return;
-		$file = 'admin.php?page=wats/wats-ticket';
-		$var  = 'post';
-		break;
-	endswitch;
+	$file = 'admin.php?page=wats/wats-ticket';
+	$var  = 'post';
 
-	return apply_filters( 'get_edit_post_link', admin_url("$file.php&{$action}$var=$post->ID"), $post->ID, $context );
+	return apply_filters( 'get_edit_post_link', admin_url("$file.php&{$action}$var=$post->ID"), $post->ID, $context);
 }
 
 /**********************************************************/
