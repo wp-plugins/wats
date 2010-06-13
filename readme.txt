@@ -4,7 +4,7 @@ Donate link: http://www.lautre-monde.fr/wats-going-on/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
 Tested up to: 2.9.2
-Stable tag: 1.0.51
+Stable tag: 1.0.52
 
 == Description ==
 
@@ -62,6 +62,7 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 
 
 == Screenshots ==
+
 1. Sample ticket display in the frontend
 2. Ticket update form in the frontend
 3. Tickets listing in the frontend
@@ -69,6 +70,13 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 
 == Changelog ==
 
+= V1.0.52 (13/06/2010) =
+* added an option to select the ticket closed status (to allow bypassing of autodetection)
+* modified checks for ticket status, priority, type and category edition in the options page
+* modified checks for ticket title and content on the frontend submission form
+* added a filter operator for statuses on the ticket listing page
+* modified notifications for "my tickets" updates, now notifications are sent out to ticket originator and users who updated the ticket (through comments)
+* added an option to make local user profile notifications settings optionnal and leave precedence to global notifications settings only
 
 = V1.0.51 (12/05/2010) =
 * added CSS class to ticket details items on frontend ticket submission page

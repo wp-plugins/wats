@@ -4,12 +4,19 @@ Plugin Name: Wats
 Plugin URI: http://www.lautre-monde.fr/wats-going-on/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0.51
+Version: 1.0.52
 Author URI: http://www.lautre-monde.fr
 */
 
 /*
 1/ Release history :
+- V1.0.52 (13/06/2010) :
++ added an option to select the ticket closed status (to allow bypassing of autodetection)
++ modified checks for ticket status, priority, type and category edition in the options page
++ modified checks for ticket title and content on the frontend submission form
++ added a filter operator for statuses on the ticket listing page
++ modified notifications for "my tickets" updates, now notifications are sent out to ticket originator and users who updated the ticket (through comments)
++ added an option to make local user profile notifications settings optionnal and leave precedence to global notifications settings only
 - V1.0.51 (12/05/2010) :
 + added CSS class to ticket details items on frontend ticket submission page
 + fixed a bug where a notification would be fired for all post type comments instead of only being fired for tickets
@@ -252,7 +259,7 @@ define("WATS_TICKET_SUBMIT_FORM", "/\[WATS_TICKET_SUBMIT_FORM\]/");
 define('WATS_WP_MAIL_INTERVAL', 300);
 
 $wats_settings = array();
-$wats_version = '1.0.51';
+$wats_version = '1.0.52';
 
 $wats_default_ticket_priority = array(1 => "Emergency", 2 => "Critical", 3 => "Major", 4 => "Minor");
 $wats_default_ticket_status = array(1 => "Newly open", 2 => "Under investigation", 3 => "Waiting for reoccurence", 4 => "Waiting for details", 5 => "Solution delivered", 6 => "Closed");

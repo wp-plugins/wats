@@ -12,6 +12,7 @@ jQuery(document).ready(function() {
 			var idtype = jQuery('#wats_select_ticket_type_tl option:selected').val();
 			var idpriority = jQuery('#wats_select_ticket_priority_tl option:selected').val();
 			var idstatus = jQuery('#wats_select_ticket_status_tl option:selected').val();
+			var idstatusop = jQuery('#wats_select_ticket_status_operator option:selected').val();
 			if (jQuery('#wats_select_ticket_author_tl option:selected').val())
 				var idauthor = jQuery('#wats_select_ticket_author_tl option:selected').val();
 			else
@@ -26,7 +27,7 @@ jQuery(document).ready(function() {
 				var idowner = 0;
 			var categoryfilter = jQuery('#categoryfilter').val();
 			var categorylistfilter = jQuery('#categorylistfilter').val();
-			jQuery.post(ajaxurl, {action:"wats_ticket_list_ajax_processing", _ajax_nonce:jQuery("#_wpnonce_ticket_list").val(), view:view, idtype:idtype, idpriority:idpriority, idstatus:idstatus, idauthor:idauthor, idauthormetavalue:idauthormetavalue, idowner:idowner, categoryfilter:categoryfilter, categorylistfilter:categorylistfilter},
+			jQuery.post(ajaxurl, {action:"wats_ticket_list_ajax_processing", _ajax_nonce:jQuery("#_wpnonce_ticket_list").val(), view:view, idtype:idtype, idpriority:idpriority, idstatus:idstatus, idauthor:idauthor, idauthormetavalue:idauthormetavalue, idowner:idowner, categoryfilter:categoryfilter, categorylistfilter:categorylistfilter, idstatusop:idstatusop},
 			function(res)
 			{
 				jQuery('#filter').removeAttr('disabled');

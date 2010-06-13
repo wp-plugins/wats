@@ -59,7 +59,15 @@ function wats_load_settings()
 		$default['ms_port_server'] = '110';
 		$default['ms_mail_address'] = 'login@example.com';
 		$default['ms_mail_password'] = 'password';
-						
+		$closed = 0;
+		foreach ($wats_default_ticket_status as $key => $value)
+		{
+			if ($value == "Closed")
+				$closed = $key;
+		}
+		$default['closed_status_id'] = $closed;
+		$default['ticket_notification_bypass_mode'] = 0;
+								
    	    add_option('wats', $default);
 	}
         
@@ -228,6 +236,23 @@ function wats_load_settings()
 			$wats_settings['ms_mail_password'] = 'password';
 		}
 		
+		if (!isset($wats_settings['closed_status_id']))
+		{
+			$wats_ticket_status = $wats_settings['wats_statuses'];
+			$closed = 0;
+			foreach ($wats_ticket_status as $key => $value)
+			{
+				if ($value == "Closed")
+					$closed = $key;
+			}
+			$wats_settings['closed_status_id'] = $closed;
+		}
+		
+		if (!isset($wats_settings['ticket_notification_bypass_mode']))
+		{
+			$wats_settings['ticket_notification_bypass_mode'] = 0;
+		}
+				
 		$wats_settings['wats_version'] = $wats_version;
 		update_option('wats', $wats_settings);
 	}
@@ -246,8 +271,8 @@ function wats_admin_update_option_entry()
 	global $wats_settings;
 
 	wats_load_settings();
-	$idvalue = $_POST[idvalue];
-	$idprevvalue = $_POST[idprevvalue];
+	$idvalue = stripslashes_deep($_POST[idvalue]);
+	$idprevvalue = stripslashes_deep($_POST[idprevvalue]);
 	$idtable = $_POST[idtable];
 	
 	check_ajax_referer('update-wats-options');
@@ -274,13 +299,13 @@ function wats_admin_update_option_entry()
 			$wats_options = $wats_settings[$type];
 			foreach ($wats_options as $key => $value)
 			{
-				if (esc_html(stripslashes($value)) == esc_html(stripslashes($idprevvalue)))
+				if ($value == $idprevvalue)
 					$res = $key;
 			}
 			
 			foreach ($wats_options as $key => $value)
 			{
-				if (esc_html(stripslashes($value)) == esc_html(stripslashes($idvalue)))
+				if ($value == $idvalue)
 					$res = -1;
 			}
 
@@ -294,17 +319,10 @@ function wats_admin_update_option_entry()
 			}
 			else
 			{
-				if (wats_is_string(stripslashes($idvalue)))
-				{
-					$wats_options[$res] = esc_html(stripslashes($idvalue));
-					$wats_settings[$type] = $wats_options;
-					update_option('wats', $wats_settings);
-					$message_result = array('id' => "", 'idvalue' => stripslashes($idvalue),'success' => "TRUE", 'error' => __("Entry successfully updated!",'WATS'));
-				}
-				else
-				{
-					$message_result = array('id' => "", 'idvalue' => "",'success' => "FALSE", 'error' => __("Error : the entry contains invalid characters!",'WATS'));
-				}
+				$wats_options[$res] = $idvalue;
+				$wats_settings[$type] = $wats_options;
+				update_option('wats', $wats_settings);
+				$message_result = array('id' => "", 'idvalue' => $idvalue,'success' => "TRUE", 'error' => __("Entry successfully updated!",'WATS'));
 			}
         }
 	}
@@ -323,7 +341,7 @@ function wats_admin_remove_option_entry()
 {
 	global $wats_settings;
 
-	$idvalue = $_POST[idvalue];
+	$idvalue = stripslashes_deep($_POST[idvalue]);
 	$type = $_POST[type];
 	
 	check_ajax_referer('update-wats-options');
@@ -357,7 +375,7 @@ function wats_admin_insert_option_entry()
 	global $wats_settings;
 
 	wats_load_settings();
-	$idvalue = $_POST[idvalue];
+	$idvalue = stripslashes_deep($_POST[idvalue]);
 	$type = $_POST[type];
 	$idcat = $_POST[idcat];
 	
@@ -391,21 +409,14 @@ function wats_admin_insert_option_entry()
 		}
         else
         {
-			if (wats_is_string(stripslashes($idvalue)))
-			{
-				if ($idcat > 0)
-					$length = $idcat;
-				else
-					$length++;
-				$wats_options[$length] = esc_html(stripslashes($idvalue));
-				$wats_settings[$type] = $wats_options;
-				update_option('wats', $wats_settings);
-				$message_result = array('id' => $length, 'idvalue' => stripslashes($idvalue),'success' => "TRUE", 'error' => __("Entry successfully added!",'WATS'));
-			}
+			if ($idcat > 0)
+				$length = $idcat;
 			else
-			{
-				$message_result = array('id' => "", 'idvalue' => "",'success' => "FALSE", 'error' => __("Error : the entry contains invalid characters!",'WATS'));
-			}
+				$length++;
+			$wats_options[$length] = $idvalue;
+			$wats_settings[$type] = $wats_options;
+			update_option('wats', $wats_settings);
+			$message_result = array('id' => $length, 'idvalue' => $idvalue,'success' => "TRUE", 'error' => __("Entry successfully added!",'WATS'));
         }
 	}
 	
@@ -430,7 +441,7 @@ function wats_admin_add_category_interface($resultsup,$resultadd,$idsup,$idadd,$
 	$categories = get_categories('type=post&hide_empty=0');
 	foreach ($categories as $category)
 	{
-        echo '<option value="'.$category->cat_ID.'" >'.$category->cat_name.'</option>';
+        echo '<option value="'.$category->cat_ID.'" >'.esc_html($category->cat_name).'</option>';
 	}
 	echo '</select></td><td></td></tr>';
 	echo '</table><br />';
@@ -486,7 +497,7 @@ function wats_admin_display_options_list($type,$check)
 				echo ' class="wats_editable">';
 			else
 				echo '>';
-			echo esc_html(stripslashes($value)).'</td>';
+			echo esc_html($value).'</td>';
 			echo '<td><input type="checkbox" name="'.$check.'" id="'.$check.'" value="'.$key.'" /></td>';
 			echo '</tr>';
 
@@ -550,7 +561,9 @@ function wats_options_admin_menu()
 		$wats_settings['ms_port_server'] = wats_is_numeric(stripslashes($_POST['ms_port_server'])) ? esc_html(stripslashes($_POST['ms_port_server'])) : '110';
 		$wats_settings['ms_mail_address'] = wats_is_string(stripslashes($_POST['ms_mail_address'])) ? esc_html(stripslashes($_POST['ms_mail_address'])) : 'login@example.com';
 		$wats_settings['ms_mail_password'] = wats_is_string(stripslashes($_POST['ms_mail_password'])) ? esc_html(stripslashes($_POST['ms_mail_password'])) : 'password';
-
+		$wats_settings['closed_status_id'] = $_POST['closedstatusselector'];
+		$wats_settings['ticket_notification_bypass_mode'] = isset($_POST['ticket_notification_bypass_mode']) ? 1 : 0;
+		
 		update_option('wats', $wats_settings);
 	}
 	
@@ -568,7 +581,13 @@ function wats_options_admin_menu()
 	
 	echo '<h3>'.__('Help','WATS').' :</h3>';
 	echo __('If you want to get some details about an option, just click on the option title, this will display some inline details.','WATS').'<br /><br />';
-	echo __('In the tables, you can directly edit items by clicking on the following icon : ','WATS').'<img src="'.WATS_URL.'img/modify.png" /><br /><br /><br />';
+	echo __('In the tables, you can directly edit items by clicking on the following icon : ','WATS').'<img src="'.WATS_URL.'img/modify.png" /><br /><br />';
+	echo __('If you need some help with the plugin setup, you can :','WATS');
+	echo '<ul style="list-style-type:disc;padding-left:40px;padding-top:5px;"><li><a href="http://www.lautre-monde.fr/wats-going-on/">'.__('Read the documentation','WATS').'</a></li>';
+	echo '<li><a href="http://www.lautre-monde.fr/wats-going-on/#respond">'.__('Leave a comment','WATS').'</a></li>';
+	echo '<li><a href="http://www.lautre-monde.fr/contactez-moi/">'.__('Drop me a mail','WATS').'</a></li></ul><br />';
+	echo __('If you are looking for a Wordpress expert, please ','WATS').'<a href="http://www.lautre-monde.fr/contactez-moi/">'.__(' contact me','WATS').'</a>! ';
+	echo __('I can perform theme customization, Wordpress installation and configuration, plugin customization and even more...','WATS').'<br /><br /><br />';
 		
 	echo '<form action="" method="post">';
 	wp_nonce_field('update-wats-options');
@@ -610,17 +629,23 @@ function wats_options_admin_menu()
 	echo '<tr><td><input type="checkbox" name="ticket_update_notification_all_tickets"';
 	if ($wats_settings['ticket_update_notification_all_tickets'] == 1)
 		echo ' checked';
-	echo '> '.__('Notify user by email when ticket is updated. Applies to all tickets.','WATS').'</td></tr><tr><td>';
+	echo '> '.__('Notify user by email when ticket is updated. Applies to all tickets and will notify all users.','WATS').'</td></tr><tr><td>';
 	echo '<tr><td><input type="checkbox" name="ticket_update_notification_my_tickets"';
 	if ($wats_settings['ticket_update_notification_my_tickets'] == 1)
 		echo ' checked';
-	echo '> '.__('Notify user by email when ticket is updated. Applies only to tickets originated by the user.','WATS').'</td></tr><tr><td>';
+	echo '> '.__('Notify user by email when ticket is updated. Applies only to tickets originated by the user and will notify only ticket originator and updaters.','WATS').'</td></tr><tr><td>';
+	echo '<tr><td><input type="checkbox" name="ticket_notification_bypass_mode"';
+	if ($wats_settings['ticket_notification_bypass_mode'] == 1)
+		echo ' checked';
+	echo '> '.__('Enable local user profile notifications options to allow bypass of global options.','WATS').'</td></tr><tr><td>';
 	echo '<div class="wats_tip" id="notification_admin_tip">';
 	echo __('Check the options according to the notifications you want the system to send to users after specific events happened. ','WATS');
-	echo __('These are global options which can be enabled or disabled individually under user profile. ','WATS');
 	echo __('If the option is enabled here, then by default, it will be enabled for the user but he can disable it under his profile. ','WATS');
+	echo __('When a new user is added, the profile option is disabled by default. ','WATS').'<br /><br />';
 	echo __('If the option is disabled here, then it will be disabled for everybody and it couldn\'t be enabled individually. ','WATS');
 	echo __('The update notification is fired upon the following events : new comment added to a ticket, ownership, priority, status or type change in the ticket edition admin page.','WATS').'<br /><br />';
+	echo __('These are global options which can be enabled or disabled individually under user profile if the bypass option is set. ','WATS');
+	echo __('If the bypass option isn\'t set, only global notifications options will be relevant and user profile options couldn\'t be modified. ','WATS');
 	echo __('Warning : with these options enabled, the system may send a lot of emails, especially if you have many users. So please make sure that you really understand the implications before enabling these.','WATS').'</div></td></tr></table><br />';
 
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("notification_signature_tip");>'.__('Mail notifications signature','WATS').' : </a></h3>';
@@ -920,6 +945,21 @@ function wats_options_admin_menu()
     echo '</tr></thead><tbody class="list:user user-list">';
     wats_admin_display_options_list('wats_statuses','statuscheck');
 	wats_admin_add_table_interface('resultsupstatus','resultaddstatus','idsupstatus','idaddstatus','Status','idstatus');
+
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("closed_status_selector_tip");>'.__('Closed status','WATS').' : </a></h3>';
+	echo '<table class="form-table">';
+	echo '<tr><td>';
+	echo __('Status','WATS').' : <select name="closedstatusselector" id="closedstatusselector" size="1">';
+	$wats_status = $wats_settings['wats_statuses'];
+	foreach ($wats_status AS $key => $value)
+	{
+        echo '<option value="'.$key.'" ';
+        if ($key == $wats_settings['closed_status_id']) echo 'selected';
+			echo '>'.$value.'</option>';
+	}
+	echo '</select></td></tr><tr><td>';
+	echo '<div class="wats_tip" id="closed_status_selector_tip">';
+	echo __('Select the status associated to the ticket closure.','WATS').'</div></td></tr></table><br />';
 	
 	echo '<h3>'.__('Categories opened to submission','WATS').' :</h3><br />';
 	echo '<table class="widefat" cellspacing="0" id="tablecat" style="text-align:center;"><thead><tr class="thead">';
@@ -929,6 +969,9 @@ function wats_options_admin_menu()
     echo '</tr></thead><tbody class="list:user user-list">';
     wats_admin_display_options_list('wats_categories','catcheck');
 	wats_admin_add_category_interface('resultsupcat','resultaddcat','idsupcat','idaddcat','Category','idcat');
+	
+	echo '<p class="submit">';
+	echo '<input class="button-primary" type="submit" name="save" value="'.__('Save the options','WATS').'" /></p><br />';
 	
 	echo '</form><br /><br />';
 }

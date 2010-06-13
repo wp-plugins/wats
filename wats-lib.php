@@ -117,7 +117,7 @@ function wats_get_latest_ticket_number()
 {
 	global $wpdb;
 	
-	$value = $wpdb->get_var("SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = 'wats_ticket_number' ORDER BY post_id DESC LIMIT 0,1");
+	$value = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = 'wats_ticket_number' ORDER BY post_id DESC LIMIT 0,1"));
 
 	if (!$value)
 		$value = 0;
@@ -135,7 +135,7 @@ function wats_get_number_of_tickets()
 {
 	global $wpdb;
 	
-	$value = $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = 'wats_ticket_number'");
+	$value = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = 'wats_ticket_number'"));
 
 	if (!$value)
 		$value = 0;
@@ -162,7 +162,7 @@ function wats_get_number_of_tickets_by_status($status,$userid)
 	if ($userid != 0)
 		$query .= " AND $wpdb->posts.post_author = $userid";
 
-	$value = $wpdb->get_var($query);
+	$value = $wpdb->get_var($wpdb->prepare($query));
 
 	if (!$value)
 		$value = 0;
@@ -180,16 +180,7 @@ function wats_get_closed_status_id()
 {
 	global $wats_settings;
 	
-	$wats_ticket_status = $wats_settings['wats_statuses'];
-
-	$closed = 0;
-	foreach ($wats_ticket_status as $key => $value)
-	{
-		if ($wats_ticket_status[$key] == "Closed")
-			$closed = $key;
-	}
-	
-	return $closed;
+	return $wats_settings['closed_status_id'];
 }
 
 /*****************************************************/
@@ -245,7 +236,7 @@ function wats_get_first_admin_login()
 {
     global $wpdb;
 
-    $users = $wpdb->get_results("SELECT user_login FROM $wpdb->users LEFT JOIN $wpdb->usermeta AS wp1 ON $wpdb->users.ID = wp1.user_id WHERE wp1.meta_key = '{$wpdb->prefix}user_level' AND wp1.meta_value = 10 LIMIT 1");
+    $users = $wpdb->get_results($wpdb->prepare("SELECT user_login FROM $wpdb->users LEFT JOIN $wpdb->usermeta AS wp1 ON $wpdb->users.ID = wp1.user_id WHERE wp1.meta_key = '{$wpdb->prefix}user_level' AND wp1.meta_value = 10 LIMIT 1"));
 	
 	foreach ($users AS $user)
 	{
@@ -270,7 +261,7 @@ function wats_build_user_list($min_level,$firstitem,$cap)
 	$order1 = $wats_settings['user_selector_order_1'];
 	$order2 = $wats_settings['user_selector_order_2'];
 	
-    $users = $wpdb->get_results("SELECT ID FROM $wpdb->users LEFT JOIN $wpdb->usermeta AS wp1 ON ($wpdb->users.ID = wp1.user_id AND wp1.meta_key = '$order1') LEFT JOIN $wpdb->usermeta AS wp2 ON ($wpdb->users.ID = wp2.user_id AND wp2.meta_key = '$order2') ORDER BY wp1.meta_value, wp2.meta_value");
+    $users = $wpdb->get_results($wpdb->prepare("SELECT ID FROM $wpdb->users LEFT JOIN $wpdb->usermeta AS wp1 ON ($wpdb->users.ID = wp1.user_id AND wp1.meta_key = '$order1') LEFT JOIN $wpdb->usermeta AS wp2 ON ($wpdb->users.ID = wp2.user_id AND wp2.meta_key = '$order2') ORDER BY wp1.meta_value, wp2.meta_value"));
     $userlist = array();
 	if ($firstitem !== 0)
 		$userlist[0] = $firstitem;
@@ -350,7 +341,7 @@ function wats_get_list_of_user_meta_keys($view)
 {
 	global $wpdb;
 	
-	$keys = $wpdb->get_results("SELECT DISTINCT meta_key FROM $wpdb->usermeta");
+	$keys = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT meta_key FROM $wpdb->usermeta"));
 	if ($view == 0)
 	{
 		$list = '';
@@ -391,7 +382,7 @@ function wats_build_list_meta_values($key)
 {
 	global $wpdb;
 	
-	$values = $wpdb->get_results("SELECT DISTINCT meta_value FROM $wpdb->usermeta WHERE meta_key=\"$key\" ORDER BY meta_value ASC");
+	$values = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT meta_value FROM $wpdb->usermeta WHERE meta_key=%s ORDER BY meta_value ASC",$key));
 	$list = array();
 	foreach ($values AS $value)
 	{
@@ -411,7 +402,7 @@ function wats_get_user_ID_from_user_login($login)
 {
 	global $wpdb;
 	
-	$id = $wpdb->get_var("SELECT ID FROM $wpdb->users WHERE user_login=\"$login\"");
+	$id = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->users WHERE user_login=%s",$login));
 	
 	return($id);
 }

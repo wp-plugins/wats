@@ -237,7 +237,7 @@ function wats_fire_ticket_update_notification($postID,$newstatus,$newtype,$newpr
 		$ticketnumber = get_post_meta($postID,'wats_ticket_number',true);
 		$user = new WP_user($userid);
 		$notifications = get_usermeta($user->ID,'wats_notifications');
-		if (!isset($notifications['ticket_update_notification_my_tickets']) || $notifications['ticket_update_notification_my_tickets'] != 0)
+		if ($wats_settings['ticket_notification_bypass_mode'] == 0 || !isset($notifications['ticket_update_notification_my_tickets']) || $notifications['ticket_update_notification_my_tickets'] != 0)
 		{
 			$ticket_author_id = $userid;
 			$subject = __('Ticket ','WATS').$ticketnumber.__(' has been updated','WATS');
@@ -250,21 +250,43 @@ function wats_fire_ticket_update_notification($postID,$newstatus,$newtype,$newpr
 			$output .= wats_get_mail_notification_signature();
 			wp_mail($user->user_email,$subject,$output);
 		}
+		
+		$users = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT user_id FROM $wpdb->comments WHERE comment_post_ID = %d",$postID));
+		foreach ($users AS $user_entry)
+		{
+			if ($user_entry->user_id != $ticket_author_id)
+			{
+				$user = new WP_user($user_entry->user_id);
+				$notifications = get_usermeta($user->ID,'wats_notifications');
+				if ($wats_settings['ticket_notification_bypass_mode'] == 0 || !isset($notifications['ticket_update_notification_my_tickets']) || $notifications['ticket_update_notification_my_tickets'] != 0)
+				{
+					$subject = __('Ticket ','WATS').$ticketnumber.__(' has been updated','WATS');
+					$output = __('Hello ','WATS').get_usermeta($user->ID, 'first_name').",\r\n\r\n";
+					$output .= __('Ticket ','WATS').$ticketnumber.__(' has been updated.','WATS');
+					$output .= __('You can view it here :','WATS')."\r\n";
+					$output .= __('+ Frontend side : ','WATS').get_permalink($postID)."\r\n\r\n";
+					$output .= __('+ Admin side : ','WATS').wats_get_edit_ticket_link($postID, 'mail')."\r\n\r\n";
+					$output .= $updates."\r\n";
+					$output .= wats_get_mail_notification_signature();
+					wp_mail($user->user_email,$subject,$output);
+				}
+			}
+		}
 	}
 	
 	if ($wats_settings['ticket_update_notification_all_tickets'] == 1)
 	{
 		add_filter('wp_mail_from', 'wats_mail_from');
 		add_filter('wp_mail_from_name', 'wats_mail_from_name');
-		$users = $wpdb->get_results("SELECT ID FROM $wpdb->users WHERE user_login NOT LIKE '%unverified__%'");
+		$users = $wpdb->get_results($wpdb->prepare("SELECT ID FROM $wpdb->users WHERE user_login NOT LIKE %s",'%unverified__%'));
 		$ticketnumber = get_post_meta($postID,'wats_ticket_number',true);
-		foreach ($users AS $user)
+		foreach ($users AS $user_entry)
 		{
-			if ($user->ID != $ticket_author_id)
+			if ($user_entry->ID != $ticket_author_id)
 			{
-				$user = new WP_user($user->ID);
+				$user = new WP_user($user_entry->ID);
 				$notifications = get_usermeta($user->ID,'wats_notifications');
-				if (!isset($notifications['ticket_update_notification_all_tickets']) || $notifications['ticket_update_notification_all_tickets'] != 0)
+				if ($wats_settings['ticket_notification_bypass_mode'] == 0 || !isset($notifications['ticket_update_notification_all_tickets']) || $notifications['ticket_update_notification_all_tickets'] != 0)
 				{
 					$subject = __('Ticket ','WATS').$ticketnumber.__(' has been updated','WATS');
 					$output = __('Hello ','WATS').get_usermeta($user->ID, 'first_name').",\r\n\r\n";
@@ -299,14 +321,14 @@ function wats_fire_admin_notification($postID)
 	{
 		add_filter('wp_mail_from', 'wats_mail_from');
 		add_filter('wp_mail_from_name', 'wats_mail_from_name');
-		$users = $wpdb->get_results("SELECT ID FROM `{$wpdb->prefix}users`");
+		$users = $wpdb->get_results($wpdb->prepare("SELECT ID FROM $wpdb->users"));
 		foreach ($users AS $user)
 		{
 			$user = new WP_user($user->ID);
 			if ($user->user_level == 10)
 			{
 				$notifications = get_usermeta($user->ID,'wats_notifications');
-				if (!isset($notifications['new_ticket_notification_admin']) || $notifications['new_ticket_notification_admin'] != 0)
+				if ($wats_settings['ticket_notification_bypass_mode'] == 0 || !isset($notifications['new_ticket_notification_admin']) || $notifications['new_ticket_notification_admin'] != 0)
 				{
 					$subject = __('New ticket submitted','WATS');
 					$output = __('Hello ','WATS').get_usermeta($user->ID, 'first_name').",\r\n\r\n";

@@ -37,6 +37,7 @@ function wats_ticket_list_ajax_processing()
 		$idtype = $_POST[idtype];
 		$idpriority = $_POST[idpriority];
 		$idstatus = $_POST[idstatus];
+		$idstatusop = $_POST[idstatusop];
 		if (($wats_settings['visibility'] == 0) || ($wats_settings['visibility'] == 1 && is_user_logged_in()) || ($wats_settings['visibility'] == 2 && is_user_logged_in() && $current_user->user_level == 10))
 		{
 			$idauthor = $_POST[idauthor];
@@ -53,7 +54,7 @@ function wats_ticket_list_ajax_processing()
 			$idauthormetavalue = "0";
 		$categoryfilter = $_POST[categoryfilter];
 		$categorylistfilter = $_POST[categorylistfilter];
-		echo wats_list_tickets($categoryfilter, $categorylistfilter, 1, $idtype, $idpriority, $idstatus, $idowner, $idauthor, $idauthormetavalue);
+		echo wats_list_tickets($categoryfilter, $categorylistfilter, 1, $idtype, $idpriority, $idstatus, $idowner, $idauthor, $idauthormetavalue, $idstatusop);
 	}
 	
 	exit;
@@ -89,7 +90,7 @@ function wats_list_tickets_args($args)
 	}
 	$catlist = implode(',',$catlist);
 	
-	return (wats_list_tickets($args[1],$catlist,0,0,0,0,0,0,0));
+	return (wats_list_tickets($args[1],$catlist,0,0,0,0,0,0,0,0));
 }
 
 /**************************************************************/
@@ -123,7 +124,11 @@ function wats_list_tickets_filters()
 		$output .= '<option value='.$key.'>'.esc_html__($value,'WATS').'</option>';
 	$output .= '</select><br /><br />';
 	
-	$output .=  __('Ticket status','WATS').' : ';
+	$output .=  __('Ticket status','WATS').' ';
+	$output .= '<select name="wats_select_ticket_status_operator" id="wats_select_ticket_status_operator" class="wats_select">';
+	$output .= '<option value=0>==</option>';
+	$output .= '<option value=1>!=</option>';
+	$output .= '</select> ';
 	$output .= '<select name="wats_select_ticket_status_tl" id="wats_select_ticket_status_tl" class="wats_select">';
 	$output .= '<option value=0>'.esc_html__('Any','WATS').'</option>';
 	foreach ($wats_ticket_status as $key => $value)
@@ -179,7 +184,7 @@ function wats_list_tickets_filters()
 /*                                                      */
 /********************************************************/
 
-function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriority, $idstatus, $idowner, $idauthor, $idauthormetavalue)
+function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriority, $idstatus, $idowner, $idauthor, $idauthormetavalue, $idstatusop)
 {
 	global $wpdb, $wats_settings, $current_user;
 
@@ -204,8 +209,12 @@ function wats_list_tickets($filtercategory, $catlist, $view, $idtype, $idpriorit
 		}
 		if ($idstatus > 0)
 		{
+			if ($idstatusop == 1)
+				$idstatusop = '!=';
+			else
+				$idstatusop = '=';
 			$leftjoin .= " LEFT JOIN $wpdb->postmeta AS wp3 ON $wpdb->posts.ID = wp3.post_id ";
-			$where .= " AND (wp3.meta_key = 'wats_ticket_status' AND wp3.meta_value = '$idstatus')";
+			$where .= " AND (wp3.meta_key = 'wats_ticket_status' AND wp3.meta_value ".$idstatusop." '$idstatus')";
 			$joinoptions = 1;
 		}
 		if ($idauthor != "0")
@@ -425,15 +434,15 @@ function wats_ticket_submit_form_ajax_processing()
 	{
 		$categoryfilter = $_POST[categoryfilter];
 		$categorylistfilter = $_POST[categorylistfilter];
-		$post_title = stripslashes(strip_tags($_POST[ticket_title]));
-		$post_content = stripslashes(strip_tags($_POST[ticket_content], '<br><i><b><u><strong>'));
+		$post_title = stripslashes_deep(strip_tags($_POST[ticket_title]));
+		$post_content = stripslashes_deep(strip_tags($_POST[ticket_content], '<br><i><b><u><strong>'));
 		$error = '';
 		
-		if (!wats_is_string($post_title))
+/*		if (!wats_is_string($post_title))
 			$error .= __('The ticket title is empty or contains invalid characters. ','WATS');
 		
 		if (!wats_is_paragraph($post_content))
-			$error .= __('The ticket description is empty or contains invalid characters. ','WATS');
+			$error .= __('The ticket description is empty or contains invalid characters. ','WATS');*/
 		
 		$post_category = array(get_option('default_email_category'));
 		$post_type = 'ticket';
