@@ -47,7 +47,7 @@ Translations :
 * Spanish (Minimum release : 1.0.49, Originator : Esteban from http://www.netmdp.com/ )
 * Lithuanian (Minimum release : 1.0.50, Originator : Arturas from http://www.taisyklajums.lt/ )
 * Russian (Minimum release : 1.0.53, Originator : Alexey from http://reservation.isaev.asia/ )
-* Indonesian (Minimum release : 1.0.53, Originator : Rizal Fauzie from http://fauzievolute.com )
+* Indonesian (Minimum release : 1.0.53, Originator : Rizal Fauzie from http://fauzievolute.com/ )
 
 
 == Installation ==
@@ -59,10 +59,7 @@ This plugin is almost plug and play! Just activate it and then go to the options
 1/ License terms :
 WATS is licensed under GPL v3.
 
-2/ Price :
-WATS is free but you are more than welcome to make a donation to thank me if you'd like to.
-
-3/ Warranty (Excerpt of GPL v3 - Disclaimer of Warranty ) :
+2/ Warranty (Excerpt of GPL v3 - Disclaimer of Warranty ) :
 THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
 
 
