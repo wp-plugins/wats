@@ -35,46 +35,51 @@ $.fn.editable = function(options){
 	
 	options.toEditable = function(){
 		$this = $(this);
-		$this.data('editable.current',$this.html());
-		opts = $this.data('editable.options');
-		$.editableFactory[opts.type].toEditable($this.empty(),opts);
-		// Configure events,styles for changed content
-		$this.data('editable.previous',$this.data('editable.current'))
-			 .children()
-				 .focus()
-				 .addClass(opts.editClass);
-		// Submit Event
-		if(opts.submit){
-			$('<button/>').appendTo($this)
-						.html(opts.submit)
-						.one('mouseup',function(){opts.toNonEditable($(this).parent(),true)});
-		}else
-			$this.one(opts.submitBy,function(){opts.toNonEditable($(this),true)})
-				 .children()
-				 	.one(opts.submitBy,function(){opts.toNonEditable($(this).parent(),true)});
-		// Cancel Event
-		if(opts.cancel)
-			$('<button/>').appendTo($this)
-						.html(opts.cancel)
-						.one('mouseup',function(){opts.toNonEditable($(this).parent(),false)});
-		// Call User Function
-		if($.isFunction(opts.onEdit))
-			opts.onEdit.apply(	$this,
-									[{
-										current:$this.data('editable.current'),
-										previous:$this.data('editable.previous')
-									}]
-								);
+		if (this.children.length == 0)
+		{
+			$this.data('editable.current',$this.html());
+			opts = $this.data('editable.options');
+			$.editableFactory[opts.type].toEditable($this.empty(),opts);
+			// Configure events,styles for changed content
+			$this.data('editable.previous',$this.data('editable.current'))
+				.children()
+					.focus()
+					.addClass(opts.editClass);
+			// Submit Event
+			if(opts.submit){
+				$('<button/>').appendTo($this)
+							.html(opts.submit)
+							.one('mouseup',function(){opts.toNonEditable($(this).parent(),true)});
+			}else
+				$this.one(opts.submitBy,function(){opts.toNonEditable($(this),true)})
+					.children()
+						.one(opts.submitBy,function(){opts.toNonEditable($(this).parent(),true)});
+			// Cancel Event
+			if(opts.cancel)
+				$('<button/>').appendTo($this)
+							.html(opts.cancel)
+							.one('mouseup',function(){opts.toNonEditable($(this).parent(),false)});
+			// Call User Function
+			if($.isFunction(opts.onEdit))
+				opts.onEdit.apply(	$this,
+										[{
+											current:$this.data('editable.current'),
+											previous:$this.data('editable.previous')
+										}]
+									);
+		}
 	}
 	options.toNonEditable = function($this,change){
 		opts = $this.data('editable.options');
 		// Configure events,styles for changed content
+
 		$this.one(opts.editBy,opts.toEditable)
 			 .data( 'editable.current',
 				    change 
 						?$.editableFactory[opts.type].getValue($this,opts)
 						:$this.data('editable.current')
-					)
+					);
+		$this.one(opts.editBy,opts.toEditable)
 			 .html(
 				    opts.type=='password'
 				   		?'*****'

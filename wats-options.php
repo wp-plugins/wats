@@ -48,7 +48,7 @@ function wats_load_settings()
 		$default['filter_ticket_listing_meta_key'] = 'None';
 		$default['meta_column_ticket_listing'] = 0;
 		$default['meta_column_ticket_listing_meta_key'] = 'None';
-		$default['notification_signature'] = 'Regads,<br /><br />WATS Notification engine';
+		$default['notification_signature'] = 'Regards,<br /><br />WATS Notification engine';
 		$default['user_selector_order_1'] = 'last_name';
 		$default['user_selector_order_2'] = 'first_name';
 		$default['frontend_submit_form_access'] = 0;
@@ -67,6 +67,9 @@ function wats_load_settings()
 		}
 		$default['closed_status_id'] = $closed;
 		$default['ticket_notification_bypass_mode'] = 0;
+		$default['default_ticket_type'] = 1;
+		$default['default_ticket_status'] = 1;
+		$default['default_ticket_priority'] = 1;
 								
    	    add_option('wats', $default);
 	}
@@ -178,7 +181,7 @@ function wats_load_settings()
 		
 		if (!isset($wats_settings['notification_signature']))
 		{
-			$wats_settings['notification_signature'] = 'Regads,<br /><br />WATS Notification engine';
+			$wats_settings['notification_signature'] = 'Regards,<br /><br />WATS Notification engine';
 		}
 		
 		if (!isset($wats_settings['user_selector_order_1']))
@@ -251,6 +254,24 @@ function wats_load_settings()
 		if (!isset($wats_settings['ticket_notification_bypass_mode']))
 		{
 			$wats_settings['ticket_notification_bypass_mode'] = 0;
+		}
+		
+		if (!isset($wats_settings['default_ticket_type']))
+		{
+			$wats_ticket_types = $wats_settings['wats_types'];
+			$wats_settings['default_ticket_type'] = key($wats_ticket_types);
+		}
+		
+		if (!isset($wats_settings['default_ticket_status']))
+		{
+			$wats_ticket_statuses = $wats_settings['wats_statuses'];
+			$wats_settings['default_ticket_status'] = key($wats_ticket_statuses);
+		}
+		
+		if (!isset($wats_settings['default_ticket_priority']))
+		{
+			$wats_ticket_priorities = $wats_settings['wats_priorities'];
+			$wats_settings['default_ticket_priority'] = key($wats_ticket_priorities);
 		}
 				
 		$wats_settings['wats_version'] = $wats_version;
@@ -424,6 +445,113 @@ function wats_admin_insert_option_entry()
 	exit;
 }
 
+/*********************************************/
+/*                                           */
+/* Fonction Ajax de suppression d'une règle de notification */
+/*                                           */
+/*********************************************/
+
+function wats_admin_remove_notification_rule_entry()
+{
+	$idvalue = $_POST[idvalue];
+	
+	check_ajax_referer('update-wats-options');
+	
+	wp_cache_flush();
+	$wats_notification_rules = get_option('wats_notification_rules');
+	if ($wats_notification_rules[$idvalue])
+	{
+		unset($wats_notification_rules[$idvalue]);
+		update_option('wats_notification_rules', $wats_notification_rules);
+		$message_result = array('id' => $idvalue,'success' => "TRUE", 'error' => __("Rule successfully removed!",'WATS'));
+	}
+	else
+	{
+		$message_result = array('id' => $idvalue,'success' => "FALSE", 'error' => __("Error : rule not existing!",'WATS'));
+	}
+	
+	echo json_encode($message_result);
+	exit;
+}
+
+/*********************************/
+/*                               */
+/* Fonction d'ajout d'une règle de notification */
+/*                               */
+/*********************************/
+
+function wats_admin_insert_notification_rule_entry()
+{
+	$listvalue = stripslashes_deep($_POST[listvalue]);
+	$idtype = $_POST[idtype];
+	$idpriority = $_POST[idpriority];
+	$idstatus = $_POST[idstatus];
+	
+	check_ajax_referer('update-wats-options');
+	
+	if (strlen($_POST[listvalue]) == 0)
+	{
+		$message_result = array('id' => "", 'idvalue' => "",'success' => "FALSE", 'error' => __("Error : please enter an entry!",'WATS'));
+	}
+	else
+    {
+		$wats_notification_rules = get_option('wats_notification_rules');
+		$rule = "type:".$idtype.";priority:".$idpriority.";status:".$idstatus.";";
+		$wats_notification_rules[] = array($rule => $listvalue);
+		
+		update_option('wats_notification_rules', $wats_notification_rules);
+		$message_result = array('id' => count($wats_notification_rules)-1, 'rule' => wats_admin_display_notification_rule(wats_admin_build_notification_rule($rule)), 'list' => $listvalue, 'success' => "TRUE", 'error' => __("Rule successfully added!",'WATS'));
+	}
+	
+	echo json_encode($message_result);
+	exit;
+}
+
+/*************************************************************/
+/*                                                           */
+/* Fonction d'affichage de l'interface d'ajout des règles de notification */
+/*                                                           */
+/*************************************************************/
+
+function wats_admin_add_notification_rules_interface($resultsup,$resultadd,$idsup,$idadd,$value,$input)
+{
+	global $wats_settings;
+	
+	$wats_ticket_priority = $wats_settings['wats_priorities'];
+	$wats_ticket_type = $wats_settings['wats_types'];
+	$wats_ticket_status = $wats_settings['wats_statuses'];
+	
+	echo '<input type="submit" class="button-primary" id="'.$idsup.'" value="'.__('Remove selected rules','WATS').'" /><div id="'.$resultsup.'"></div><br /><br />';
+
+	echo '<table class="form-table" cellspacing="1" cellpadding="1">';
+	echo '<tr><th><label>'.__('Ticket type','WATS').'</label></th><td>';
+	echo '<select name="notification_rules_select_ticket_type" id="notification_rules_select_ticket_type">';
+	echo '<option value="0">'.esc_html__('Any','WATS').'</option>';
+	foreach ($wats_ticket_type as $key => $value)
+		echo '<option value="'.$key.'">'.esc_html__($value,'WATS').'</option>';
+	echo '</select></td><td></td></tr>';
+	
+	echo '<tr><th><label>'.__('Ticket priority','WATS').'</label></th><td>';
+	echo '<select name="notification_rules_select_ticket_priority" id="notification_rules_select_ticket_priority">';
+	echo '<option value="0">'.esc_html__('Any','WATS').'</option>';
+	foreach ($wats_ticket_priority as $key => $value)
+		echo '<option value="'.$key.'">'.esc_html__($value,'WATS').'</option>';
+	echo '</select></td><td></td></tr>';
+	
+	echo '<tr><th><label>'.__('Ticket status','WATS').'</label></th><td>';
+	echo '<select name="notification_rules_select_ticket_status" id="notification_rules_select_ticket_status">';
+	echo '<option value="0">'.esc_html__('Any','WATS').'</option>';
+	foreach ($wats_ticket_status as $key => $value)
+		echo '<option value="'.$key.'">'.esc_html__($value,'WATS').'</option>';
+	echo '</select></td><td></td></tr>';
+	
+	echo '<tr><th><label>'.__('Mailing list','WATS').'</label></th><td><input type="text" name="rule_mailing_list" id="rule_mailing_list" size="30" class="regular-text" /></td><td></td></tr>';
+	echo '</table><br />';
+	echo '<input type="submit" id="'.$idadd.'" value="'.__('Add this rule','WATS').'" class="button-primary" /><div id="'.$resultadd.'"></div>';
+
+	return;
+}
+
 /*************************************************************/
 /*                                                           */
 /* Fonction d'affichage de l'interface d'ajout de catégories */
@@ -471,11 +599,53 @@ function wats_admin_add_table_interface($resultsup,$resultadd,$idsup,$idadd,$val
 
 /***************************************************************/
 /*                                                             */
+/* Fonction de remplissage de la table des règles dans la page des options */
+/*                                                             */
+/***************************************************************/
+
+function wats_admin_display_notification_rules_list()
+{
+	$wats_notification_rules = get_option('wats_notification_rules');
+    $x = 0;
+    $alt = false;
+	if (is_array($wats_notification_rules))
+	{
+		foreach (array_keys($wats_notification_rules) AS $key)
+		{
+			foreach ($wats_notification_rules[$key] AS $rule => $list)
+			{
+				$x = 1;
+				$rule = wats_admin_display_notification_rule(wats_admin_build_notification_rule($rule));
+				echo '<tr valign="middle"';
+				echo ($alt == true) ? ' class="alternate"' : '';
+				echo '>';
+				echo '<td>'.$key.'</td>';
+				echo '<td>'.esc_html($rule).'</td>';
+				echo '<td>'.esc_html($list).'</td>';
+				echo '<td><input type="checkbox" name="notification_rule_check" id="notification_rule_check" value="'.$key.'" /></td>';
+				echo '</tr>';
+
+				$alt = !$alt;
+			}
+		}
+	}
+
+    if ($x == 0)
+    {
+        echo '<tr valign="middle"><td colspan="4" style="text-align:center">'.__('No entry','WATS').'</td></tr>';
+    }
+	echo '</tbody></table><br />';
+	
+    return;
+}
+
+/***************************************************************/
+/*                                                             */
 /* Fonction de remplissage des tables dans la page des options */
 /*                                                             */
 /***************************************************************/
 
-function wats_admin_display_options_list($type,$check)
+function wats_admin_display_options_list($type,$check,$defaultvalue)
 {
     global $wats_settings;
 	
@@ -494,10 +664,14 @@ function wats_admin_display_options_list($type,$check)
 			echo '<td>'.$key.'</td>';
 			echo '<td';
 			if ($type != 'wats_categories')
-				echo ' class="wats_editable">';
-			else
-				echo '>';
-			echo esc_html($value).'</td>';
+				echo ' class="wats_editable"';
+			echo '>'.esc_html($value).'</td>';
+			if ($type != 'wats_categories')
+			{
+				echo '<td><input type="radio" value="'.$key.'" name="group_default_'.$type.'" ';
+				echo ($defaultvalue == $key) ? 'checked' : '';
+				echo '></td>';
+			}
 			echo '<td><input type="checkbox" name="'.$check.'" id="'.$check.'" value="'.$key.'" /></td>';
 			echo '</tr>';
 
@@ -512,6 +686,13 @@ function wats_admin_display_options_list($type,$check)
 	echo '</tbody></table><br />';
 	
     return;
+}
+
+function wats_options_premium_only()
+{
+	echo '<div style="font-weight:bold;">'.__('Warning : this feature isn\'t available in the standard release. Please upgrade to benefit from it!','WATS').'</div>';
+
+	return;
 }
 
 /***********************************************/
@@ -563,6 +744,9 @@ function wats_options_admin_menu()
 		$wats_settings['ms_mail_password'] = wats_is_string(stripslashes($_POST['ms_mail_password'])) ? esc_html(stripslashes($_POST['ms_mail_password'])) : 'password';
 		$wats_settings['closed_status_id'] = $_POST['closedstatusselector'];
 		$wats_settings['ticket_notification_bypass_mode'] = isset($_POST['ticket_notification_bypass_mode']) ? 1 : 0;
+		$wats_settings['default_ticket_type'] = $_POST['group_default_wats_types'];
+		$wats_settings['default_ticket_status'] = $_POST['group_default_wats_statuses'];
+		$wats_settings['default_ticket_priority'] = $_POST['group_default_wats_priorities'];
 		
 		update_option('wats', $wats_settings);
 	}
@@ -570,24 +754,14 @@ function wats_options_admin_menu()
 	wats_load_settings();
 	echo '<H2><div style="text-align:center">WATS '.$wats_settings['wats_version'].'</div></H2>';
 	
-	echo '<h3>'.__('Donation','WATS').' :</h3>';
-	echo __('WATS is free to use, cool isn\'t it? It has however required hundreds of hours to be developed.','WATS');
-	echo __(' It still requires a huge amount of time in order to provide technical support for users and new releases with bugfixes and new features.','WATS');
-	echo __(' By making a donation, you recognize my work and encourage me to go on with the development and support of WATS. Thanks for this!','WATS');
-	echo '<br /><br /><p align="center"><center><form action="https://www.paypal.com/cgi-bin/webscr" enctype="application/x-www-form-urlencoded" method="post">';
-	echo '<input name="cmd" type="hidden" value="_s-xclick" />';
-	echo '<input name="hosted_button_id" type="hidden" value="6412724" />';
-	echo '<input alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypal.com/en_US/FR/i/btn/btn_donateCC_LG.gif" type="image" style="border: none" /> <img src="https://www.paypal.com/fr_FR/i/scr/pixel.gif" border="0" alt="pixel WATS going on..." width="1" height="1" title="WATS going on..." /><br /></form></center></p>';
+	echo '<h3>'.__('Upgrade to Premium release','WATS').' :</h3>';
+	echo __('You are currently using the standard release of WATS. This release is free.','WATS');
+	echo __(' There is a Premium release available for you. It contains all the features of the standard release plus many advanced features.','WATS');
+	echo __(' You can read more about the premium release and order it on ','WATS').'<a href="http://www.ticket-system.net">'.__('WATS official website','WATS').'</a>.';
 	
 	echo '<h3>'.__('Help','WATS').' :</h3>';
 	echo __('If you want to get some details about an option, just click on the option title, this will display some inline details.','WATS').'<br /><br />';
 	echo __('In the tables, you can directly edit items by clicking on the following icon : ','WATS').'<img src="'.WATS_URL.'img/modify.png" /><br /><br />';
-	echo __('If you need some help with the plugin setup, you can :','WATS');
-	echo '<ul style="list-style-type:disc;padding-left:40px;padding-top:5px;"><li><a href="http://www.lautre-monde.fr/wats-going-on/">'.__('Read the documentation','WATS').'</a></li>';
-	echo '<li><a href="http://www.lautre-monde.fr/wats-going-on/#respond">'.__('Leave a comment','WATS').'</a></li>';
-	echo '<li><a href="http://www.lautre-monde.fr/contactez-moi/">'.__('Drop me a mail','WATS').'</a></li></ul><br />';
-	echo __('If you are looking for a Wordpress expert, please ','WATS').'<a href="http://www.lautre-monde.fr/contactez-moi/">'.__(' contact me','WATS').'</a>! ';
-	echo __('I can perform theme customization, Wordpress installation and configuration, plugin customization and even more...','WATS').'<br /><br /><br />';
 		
 	echo '<form action="" method="post">';
 	wp_nonce_field('update-wats-options');
@@ -638,7 +812,8 @@ function wats_options_admin_menu()
 	if ($wats_settings['ticket_notification_bypass_mode'] == 1)
 		echo ' checked';
 	echo '> '.__('Enable local user profile notifications options to allow bypass of global options.','WATS').'</td></tr><tr><td>';
-	echo '<div class="wats_tip" id="notification_admin_tip">';
+	wats_options_premium_only();
+	echo '</td></tr><tr><td><div class="wats_tip" id="notification_admin_tip">';
 	echo __('Check the options according to the notifications you want the system to send to users after specific events happened. ','WATS');
 	echo __('If the option is enabled here, then by default, it will be enabled for the user but he can disable it under his profile. ','WATS');
 	echo __('When a new user is added, the profile option is disabled by default. ','WATS').'<br /><br />';
@@ -793,7 +968,8 @@ function wats_options_admin_menu()
 	echo '<tr><td><input type="radio" name="group5" value="2" ';
 	echo ($wats_settings['frontend_submit_form_access'] == 2) ? 'checked' : '';
 	echo '>'.__('Enable frontend ticket submission form for registered users only','WATS').'</td></tr><tr><td>';
-	echo '<div class="wats_tip" id="frontendsubmitformaccess_tip">';
+	wats_options_premium_only();
+	echo '</td></tr><tr><td><div class="wats_tip" id="frontendsubmitformaccess_tip">';
 	echo __('Set this option to allow users to use a ticket submission form in the frontend to submit new tickets.','WATS');
 	echo '<br /><br />'.__('Warning : if option is selected, users will have the opportunity to submit tickets without being authenticated. This could result in large amount of SPAM.','WATS').'</div></td></tr></table><br />';
 
@@ -811,7 +987,8 @@ function wats_options_admin_menu()
 	echo '<tr><td><input type="radio" name="group6" value="3" ';
 	echo ($wats_settings['frontend_submit_form_ticket_status'] == 3) ? 'checked' : '';
 	echo '>'.__('All tickets submitted will be in \'publish\' status','WATS').'</td></tr><tr><td>';
-	echo '<div class="wats_tip" id="frontendsubformstatus_tip">';
+	wats_options_premium_only();
+	echo '</td></tr><tr><td><div class="wats_tip" id="frontendsubformstatus_tip">';
 	echo __('Set this option to define the ticket publications status upon ticket submission. It is advisable to set unauthenticated users tickets status to \'pending\' to allow admin moderation before publication and limit SPAM.','WATS');
 	echo '</div></td></tr></table><br />';
 	
@@ -825,7 +1002,8 @@ function wats_options_admin_menu()
 	echo '<tr><td>'.__('Port : ','WATS').'<input type="text" name="ms_port_server" value="'.esc_attr(stripslashes($wats_settings['ms_port_server'])).'" size=30></td></tr><tr><td>';
 	echo '<tr><td>'.__('Login : ','WATS').'<input type="text" name="ms_mail_address" value="'.esc_attr(stripslashes($wats_settings['ms_mail_address'])).'" size=30></td></tr><tr><td>';
 	echo '<tr><td>'.__('Password : ','WATS').'<input type="text" name="ms_mail_password" value="'.esc_attr(stripslashes($wats_settings['ms_mail_password'])).'" size=30></td></tr><tr><td>';
-	echo '<div class="wats_tip" id="email_ticket_submission_tip">';
+	wats_options_premium_only();
+	echo '</td></tr><tr><td><div class="wats_tip" id="email_ticket_submission_tip">';
 	echo __('This feature allows users to submit tickets directly through email. You have to define a secret email on a POP3 server.','WATS');
 	echo '<br/><br />'.__('Warning : every email received on this account will result in a ticket. Therefore, make sure that your email adress isn\'t known by SPAM robots.','WATS');
 	echo '</div></td></tr></table><br />';
@@ -896,7 +1074,8 @@ function wats_options_admin_menu()
 			echo '>'.$metakey.'</option>';
 	}
 	echo '</select></td></tr><tr><td>';
-	echo '<div class="wats_tip" id="filter_ticket_listing_tip">';
+	wats_options_premium_only();
+	echo '</td></tr><tr><td><div class="wats_tip" id="filter_ticket_listing_tip">';
 	echo __('Check this option if you want to allow admins to filter tickets through an additionnal selector which will be filled in with meta values attached to the selected meta key.','WATS').'</div></td></tr></table><br />';
 
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("meta_column_ticket_listing_tip");>'.__('Ticket author user meta key column for tickets listing table','WATS').' : </a></h3>';
@@ -913,7 +1092,8 @@ function wats_options_admin_menu()
 			echo '>'.$metakey.'</option>';
 	}
 	echo '</select></td></tr><tr><td>';
-	echo '<div class="wats_tip" id="meta_column_ticket_listing_tip">';
+	wats_options_premium_only();
+	echo '</td></tr><tr><td><div class="wats_tip" id="meta_column_ticket_listing_tip">';
 	echo __('Check this option if you want to allow admins to get another column in the tickets listing table that will be filled in with user meta values attached to the selected meta key.','WATS').'</div></td></tr></table><br />';
 	
 	echo '<p class="submit">';
@@ -923,27 +1103,30 @@ function wats_options_admin_menu()
 	echo '<table class="widefat" cellspacing="0" id="tabletype" style="text-align:center;"><thead><tr class="thead">';
 	echo '<th scope="col" class="manage-column" width="10%" style="text-align:center;">ID</th>';
 	echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Type','WATS').'</th>';
+	echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Default','WATS').'</th>';
     echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Selection','WATS').'</th>';
     echo '</tr></thead><tbody class="list:user user-list">';
-    wats_admin_display_options_list('wats_types','typecheck');
+    wats_admin_display_options_list('wats_types','typecheck',$wats_settings['default_ticket_type']);
 	wats_admin_add_table_interface('resultsuptype','resultaddtype','idsuptype','idaddtype','Type','idtype');
 	
 	echo '<h3>'.__('Ticket priorities','WATS').' :</h3><br />';
 	echo '<table class="widefat" cellspacing="0" id="tablepriority" style="text-align:center;"><thead><tr class="thead">';
 	echo '<th scope="col" class="manage-column" width="10%" style="text-align:center;">ID</th>';
 	echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Priority','WATS').'</th>';
+	echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Default','WATS').'</th>';
     echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Selection','WATS').'</th>';
     echo '</tr></thead><tbody class="list:user user-list">';
-    wats_admin_display_options_list('wats_priorities','prioritycheck');
+    wats_admin_display_options_list('wats_priorities','prioritycheck',$wats_settings['default_ticket_priority']);
 	wats_admin_add_table_interface('resultsuppriority','resultaddpriority','idsuppriority','idaddpriority','Priority','idpriority');
 	
 	echo '<h3>'.__('Ticket statuses','WATS').' :</h3><br />';
 	echo '<table class="widefat" cellspacing="0" id="tablestatus" style="text-align:center;"><thead><tr class="thead">';
 	echo '<th scope="col" class="manage-column" width="10%" style="text-align:center;">ID</th>';
 	echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Status','WATS').'</th>';
+	echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Default','WATS').'</th>';
     echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Selection','WATS').'</th>';
     echo '</tr></thead><tbody class="list:user user-list">';
-    wats_admin_display_options_list('wats_statuses','statuscheck');
+    wats_admin_display_options_list('wats_statuses','statuscheck',$wats_settings['default_ticket_status']);
 	wats_admin_add_table_interface('resultsupstatus','resultaddstatus','idsupstatus','idaddstatus','Status','idstatus');
 
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("closed_status_selector_tip");>'.__('Closed status','WATS').' : </a></h3>';
@@ -967,8 +1150,23 @@ function wats_options_admin_menu()
 	echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Category','WATS').'</th>';
     echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Selection','WATS').'</th>';
     echo '</tr></thead><tbody class="list:user user-list">';
-    wats_admin_display_options_list('wats_categories','catcheck');
+    wats_admin_display_options_list('wats_categories','catcheck',0);
 	wats_admin_add_category_interface('resultsupcat','resultaddcat','idsupcat','idaddcat','Category','idcat');
+	
+	echo '<br /><h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("notification_rule_tip");>'.__('New ticket notification rules','WATS').' :</a></h3><br />';
+	wats_options_premium_only();
+	echo '<br /><table class="widefat" cellspacing="0" id="tablerules" style="text-align:center;"><thead><tr class="thead">';
+	echo '<th scope="col" class="manage-column" width="10%" style="text-align:center;">ID</th>';
+	echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Rule','WATS').'</th>';
+	echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Mailing list','WATS').'</th>';
+    echo '<th scope="col" class="manage-column" style="text-align:center;">'.__('Selection','WATS').'</th>';
+    echo '</tr></thead><tbody class="list:user user-list">';
+    wats_admin_display_notification_rules_list();
+	wats_admin_add_notification_rules_interface('resultsuprule','resultaddrule','idsuprule','idaddrule','Rule','idrule');
+	echo '<br /><br /><div class="wats_tip" id="notification_rule_tip">';
+	echo __('Associate specific priority, status and type with an email distribution list. Those will get a mail when a new ticket is raised with the specified values.','WATS').'<br /><br />';
+	echo __('Warning : if you enter multiple email adresses, please separate them with a comma ",".','WATS');
+	echo '</div><br />';
 	
 	echo '<p class="submit">';
 	echo '<input class="button-primary" type="submit" name="save" value="'.__('Save the options','WATS').'" /></p><br />';

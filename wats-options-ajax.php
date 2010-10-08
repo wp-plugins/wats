@@ -17,7 +17,6 @@ jQuery(document).ready(function() {
 	function wats_options_editable_begin()
 	{    
 		jQuery(this).addClass("wats_editableaccept");
-		
 	}
 	
 	function wats_options_editable_end(content)
@@ -58,7 +57,7 @@ jQuery(document).ready(function() {
 				var x = jQuery("input[name=typecheck]").length;
 				var liste = [message_result.id,message_result.idvalue];
 				var editable = [0,1];
-				wats_js_add_table_col(document.getElementById("tabletype"),liste,"typecheck",x,message_result.id,editable);
+				wats_js_add_table_col_with_default(document.getElementById("tabletype"),liste,"typecheck",x,message_result.id,editable,"group_default_wats_types");
 				jQuery("#idtype").val("");
 				wats_options_editable_init();
 			}
@@ -115,7 +114,7 @@ jQuery(document).ready(function() {
 				var x = jQuery("input[name=prioritycheck]").length;
 				var liste = [message_result.id,message_result.idvalue];
 				var editable = [0,1];
-				wats_js_add_table_col(document.getElementById("tablepriority"),liste,"prioritycheck",x,message_result.id,editable);
+				wats_js_add_table_col_with_default(document.getElementById("tablepriority"),liste,"prioritycheck",x,message_result.id,editable,"group_default_wats_priorities");
 				jQuery("#idpriority").val("");
 				wats_options_editable_init();
 			}
@@ -172,7 +171,7 @@ jQuery(document).ready(function() {
 				var x = jQuery("input[name=statuscheck]").length;
 				var liste = [message_result.id,message_result.idvalue];
 				var editable = [0,1];
-				wats_js_add_table_col(document.getElementById("tablestatus"),liste,"statuscheck",x,message_result.id,editable);
+				wats_js_add_table_col_with_default(document.getElementById("tablestatus"),liste,"statuscheck",x,message_result.id,editable,"group_default_wats_statuses");
 				jQuery("#idstatus").val("");
 				wats_options_editable_init();
 			}
@@ -228,7 +227,7 @@ jQuery(document).ready(function() {
 			{
 				var x = jQuery("input[name=catcheck]").length;
 				var liste = [message_result.id,message_result.idvalue];
-				var editable = [0,1];
+				var editable = [0,0];
 				wats_js_add_table_col(document.getElementById("tablecat"),liste,"catcheck",x,message_result.id,editable);
 			}
 			wats_stop_loading(document.getElementById("resultaddcat"),message_result.error);
@@ -263,6 +262,62 @@ jQuery(document).ready(function() {
 					}
 					if (jQuery("input[name=catcheck]").length == 0)
 						wats_js_add_blank_cell("tablecat",3,watsmsg[2]);
+				});
+			}
+		});
+		return false;
+	});
+	
+	jQuery('#idaddrule').click(function() {
+		jQuery('#idaddrule').attr('disabled','disabled');
+		var idtype = jQuery('#notification_rules_select_ticket_type option:selected').val();
+		var idpriority = jQuery('#notification_rules_select_ticket_priority option:selected').val();
+		var idstatus = jQuery('#notification_rules_select_ticket_status option:selected').val();
+		var listvalue = jQuery("#rule_mailing_list").val();
+		wats_loading(document.getElementById("resultaddrule"),watsmsg[4]);
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_notification_rule_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idtype:idtype, idpriority:idpriority, idstatus:idstatus, listvalue:listvalue},
+		function(res)
+		{
+			jQuery('#idaddrule').removeAttr('disabled');
+			var message_result = eval('(' + res + ')');
+			if (message_result.success == "TRUE")
+			{
+				var x = jQuery("input[name=notification_rule_check]").length;
+				var liste = [message_result.id,message_result.rule,message_result.list];
+				var editable = [0,0,0];
+				wats_js_add_table_col(document.getElementById("tablerules"),liste,"notification_rule_check",x,message_result.id,editable);
+			}
+			wats_stop_loading(document.getElementById("resultaddrule"),message_result.error);
+		});
+
+		return false;
+	});
+	
+	jQuery('#idsuprule').click(function() {
+		if (jQuery("input[name=notification_rule_check]").length == 0)
+			wats_stop_loading(document.getElementById("resultsuprule"),watsmsg[0]);
+		else if (jQuery("input[name=notification_rule_check]:checked").length == 0)
+			wats_stop_loading(document.getElementById("resultsuprule"),watsmsg[1]);
+	    jQuery("input[name=notification_rule_check]:checked").each(function()
+		{
+		    if (this.checked == true)
+			{
+				jQuery('#idsuprule').attr('disabled','disabled');
+				var idvalue = this.value;
+				var nodetoremove = this.parentNode;
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_notification_rule_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue},
+				function(res)
+				{
+					jQuery('#idsuprule').removeAttr('disabled');
+					var message_result = eval('(' + res + ')');
+					wats_stop_loading(document.getElementById("resultsuprule"),message_result.error);
+					if (message_result.success == "TRUE")
+					{
+						parenttoremove = nodetoremove.parentNode;
+						parenttoremove.parentNode.removeChild(parenttoremove);
+					}
+					if (jQuery("input[name=notification_rule_check]").length == 0)
+						wats_js_add_blank_cell("tablerules",4,watsmsg[2]);
 				});
 			}
 		});

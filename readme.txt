@@ -1,31 +1,35 @@
 === Wordpress Advanced Ticket System ===
 Contributors: Olivier
-Donate link: http://www.lautre-monde.fr/wats-going-on/
+Donate link: http://www.ticket-system.net/
 Tags: ticket,support,taxonomy,help,cms,crm,customer
 Requires at least: 2.7.1
-Tested up to: 2.9.2
-Stable tag: 1.0.52
+Tested up to: 3.0.1
+Stable tag: 1.0.53
 
 == Description ==
 
 This plugin adds to wordpress the functionnalities of a ticket system. This allows users to submit tickets to report problems or get support on whatever you want. You can customize the status, priority and type of the ticket.
 
+= Plugin's Official website =
+Wordpress Advanced Ticket System : http://www.ticket-system.net/
+
+
 WATS offers multiple possibilities for your customers to submit tickets :
 
-* through the frontend form (doesn't require any authentication nor registration)
+* through the frontend form (doesn't require any authentication nor registration) (Premium)
 * through the admin site via the shared guest user feature
 * through the admin side for all users with a minimum level of contributor
-* directly by email
+* directly by email (Premium)
 
 WATS key features :
 
 * ticket submission through the admin
-* ticket submission through the frontend
+* ticket submission through the frontend (Premium)
 * ticket assignation
 * ticket submission on behalf of users
-* mail notification upon new ticket submission
-* mail notification upon ticket update
-* ticket list filtering and sorting
+* mail notification upon new ticket submission (Premium)
+* mail notification upon ticket update (Premium)
+* ticket list filtering and sorting (Premium)
 
 Examples of use of WATS :
 
@@ -37,12 +41,13 @@ Examples of use of WATS :
 
 Translations :
 
-* English (Minimum release : 1.0, Originator : Olivier from http://www.lautre-monde.fr )
-* French (Minimum release : 1.0, Originator : Olivier from http://www.lautre-monde.fr )
+* English (Minimum release : 1.0, Originator : Olivier from http://www.ticket-system.net )
+* French (Minimum release : 1.0, Originator : Olivier from http://www.ticket-system.net )
 * German (Minimum release : 1.0.23, Originator : Tobias Kalleder from http://indivisualists.com/ )
 * Spanish (Minimum release : 1.0.49, Originator : Esteban from http://www.netmdp.com/ )
 * Lithuanian (Minimum release : 1.0.50, Originator : Arturas from http://www.taisyklajums.lt/ )
-
+* Russian (Minimum release : 1.0.53, Originator : Alexey from http://reservation.isaev.asia/ )
+* Indonesian (Minimum release : 1.0.53, Originator : Rizal Fauzie from http://fauzievolute.com )
 
 
 == Installation ==
@@ -69,6 +74,22 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 4. Ticket creation in the admin backend
 
 == Changelog ==
+
+= V1.0.53 (07/10/2010) =
+* fixed a bug with ticket listing table formatting when ticket numbering isn't active
+* added compatibility for WP 3.0, 3.0.1
+* fixed a bug inducing a php warning when no category is associated to ticket listing post
+* enhanced title formatting on single ticket page in the frontend
+* fixed a race condition with jQuery Editable plugin
+* fixed a bug inducing javascript error with jQuery Editable plugin
+* added category selector to frontend ticket submission form
+* added Russian translation (prodived by Alexey from http://reservation.isaev.asia/ )
+* added Indonesian translation (provided by Rizal Fauzie from http://fauzievolute.com )
+* added an option to select the ticket default type, priority and status that will then be selected by default in the ticket creation page (admin and frontend submission form)
+* added an option to define specific notification list upon new ticket opening based on ticket priority, type and status
+* enhanced details provided in new ticket notification mail
+* modified ticket update notification to not include admin link if the user level is subscriber
+* fixed a bug enforcing comments for all post type
 
 = V1.0.52 (13/06/2010) =
 * added an option to select the ticket closed status (to allow bypassing of autodetection)

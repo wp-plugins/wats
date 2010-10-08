@@ -50,6 +50,42 @@ function wats_js_add_check_input(tr,checkid,checkvalue)
 	return;
 }
 
+function wats_js_add_table_col_with_default(table,liste,checkid,x,checkvalue,editable,defaultgroupname)
+{
+	if (x == 0)
+		table.deleteRow(table.rows.length-1);
+	tr = table.insertRow(table.rows.length);
+	if ((table.rows.length % 2) == 1)
+	tr.className = 'alternate';
+	for (var i = 0; i < liste.length; i++)
+	{
+		c = tr.insertCell(-1);
+		c.appendChild(document.createTextNode(liste[i]));
+		if (editable[i] == 1)
+			c.className = 'wats_editable';
+	}
+	c = tr.insertCell(-1);
+	try{
+		input = document.createElement('<input type="radio" name="'+defaultgroupname+'" />');
+	}
+	catch(err){
+		input = document.createElement('input');
+	}
+	input.type = "radio";
+	input.name = defaultgroupname;
+	input.value = checkvalue;
+	c.appendChild(input);
+	c = tr.insertCell(-1);
+	input = document.createElement('input');
+	input.type = "checkbox";
+	input.name = checkid;
+	input.id = checkid;
+	input.value = checkvalue;
+	c.appendChild(input);
+		
+	return;
+}
+
 function wats_js_add_table_col(table,liste,checkid,x,checkvalue,editable)
 {
 	if (x == 0)

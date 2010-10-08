@@ -434,6 +434,60 @@ function wats_get_mail_notification_signature()
 	return(esc_html(str_replace(array('\r\n','\r','<br />'),"\r\n",html_entity_decode(stripslashes($wats_settings['notification_signature'])))));
 }
 
+/**********************************************************/
+/*                                                        */
+/* Fonction d'affichage des règles de notification */
+/*                                                        */
+/**********************************************************/
+
+function wats_admin_display_notification_rule($rule)
+{
+	global $wats_settings;
+	
+	$output = '';
+	
+	foreach ($rule AS $key => $value)
+	{
+		if (strlen($output) > 0)
+			$output .= __(' AND ','WATS');
+		if ($value > 0)
+		{
+			switch ($key)
+			{
+				case "priority" : $liste = $wats_settings['wats_priorities']; break;
+				case "type" : $liste = $wats_settings['wats_types']; break;
+				case "status" : $liste = $wats_settings['wats_statuses']; break;
+			}
+			$output .= $key." : ".$liste[$value];
+		}
+		else
+			$output .= $key." : ".__('Any','WATS');
+	}
+
+	return $output;
+}
+
+/**********************************************************/
+/*                                                        */
+/* Fonction de construction des règles de notification */
+/*                                                        */
+/**********************************************************/
+
+function wats_admin_build_notification_rule($rule)
+{
+	$rules = explode(";",$rule);
+	
+	unset($rules[count($rules)-1]);
+	$ruleset = array();
+	foreach ($rules AS $rulesentry)
+	{
+		$newrule = explode(":",$rulesentry);
+		$ruleset = array_merge($ruleset,array($newrule[0] => $newrule[1]));
+	}
+	
+	return $ruleset;
+}
+
 
 /***********************************************************/
 /*                                                         */

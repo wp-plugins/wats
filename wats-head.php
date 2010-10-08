@@ -8,7 +8,7 @@
 
 function wats_admin_head()
 {
-
+	
 	return;
 }
 
@@ -49,7 +49,7 @@ function wats_enqueue_script_frontend()
 
 function wats_add_my_stylesheet()
 {
-
+	
     $plugin_url = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) .'/';
 	$myStyleFile = $plugin_url."css/wats.css";
     wp_register_style('wats_css', $myStyleFile); 
@@ -88,7 +88,7 @@ function wats_admin_scripts()
 
 function wats_customize_guest_admin()
 {
-	global $menu;
+	global $menu, $wp_version;
 	
 	foreach ($menu as $key => $value)
 	{
@@ -100,7 +100,10 @@ function wats_customize_guest_admin()
     else
 		$requesteduri = getenv('REQUEST_URI');
 
-	$targeturi = admin_url().'admin.php?page=wats/wats-ticket-new.php';
+	if ($wp_version < '3.0')
+		$targeturi = admin_url().'admin.php?page=wats/wats-ticket-new.php';
+	else
+		$targeturi = admin_url().'post-new.php?post_type=ticket';
 	$subtargeturi = substr_replace($targeturi,'',0,strlen(get_option('siteurl')));
 	$result = strpos($requesteduri,$subtargeturi);
 
@@ -118,7 +121,7 @@ function wats_customize_guest_admin()
 
 function wats_add_admin_page()
 {
-	global $wats_settings, $menu, $current_user, $_registered_pages;
+	global $wats_settings, $menu, $current_user, $_registered_pages, $wp_version;
 
 	wats_load_settings();
 	$plugin_url = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) .'/';
@@ -131,7 +134,7 @@ function wats_add_admin_page()
 	
 	if (function_exists('add_options_page'))
 	{
-		$page = add_options_page('Wats Options', 'Wats Options',10, basename(__FILE__), 'wats_options_admin_menu');
+		$page = add_options_page('Wats Options', 'Wats Options','administrator', basename(__FILE__), 'wats_options_admin_menu');
 		add_action('admin_print_scripts-'.$page,'wats_options_admin_head');
 	}
 
@@ -139,9 +142,16 @@ function wats_add_admin_page()
 	{
 		if ($current_user->user_login == $wats_settings['wats_guest_user'])
 		{
-			add_menu_page(__('New Ticket','WATS'),__('Tickets','WATS'),0,WATS_PATH.'wats-ticket-new.php',0,$plugin_url.'img/support.png');
-			add_submenu_page(WATS_PATH.'wats-ticket-new.php',__('New ticket','WATS'),__('New ticket','WATS'),0,WATS_PATH.'wats-ticket-new.php');
-			add_action('admin_head-wats/wats-ticket-new.php','wats_ticket_creation_admin_head');
+			if ($wp_version < '3.0')
+			{
+				add_menu_page(__('New Ticket','WATS'),__('Tickets','WATS'),0,WATS_PATH.'wats-ticket-new.php',0,$plugin_url.'img/support.png');
+				add_submenu_page(WATS_PATH.'wats-ticket-new.php',__('New ticket','WATS'),__('New ticket','WATS'),0,WATS_PATH.'wats-ticket-new.php');
+				add_action('admin_head-wats/wats-ticket-new.php','wats_ticket_creation_admin_head');
+			}
+			else
+			{
+				add_filter('list_terms_exclusions','wats_list_terms_exclusions');
+			}
 		}
 		else if (current_user_can('edit_posts') == 1)
 		{
@@ -160,16 +170,31 @@ function wats_add_admin_page()
 					wp_safe_redirect($destpage);
 			}
 			
-			add_menu_page(__('Modify','WATS'),__('Tickets','WATS'),0,WATS_PATH.'wats-edit.php',0,'div');
-			add_submenu_page(WATS_PATH.'wats-edit.php',__('Edit Tickets','WATS'),__('Edit Tickets','WATS'),0,WATS_PATH.'wats-edit.php');
-			add_action('admin_head-wats/wats-edit.php','wats_ticket_edit_admin_head');
+			if ($wp_version < '3.0')
+			{
+				add_menu_page(__('Modify','WATS'),__('Tickets','WATS'),0,WATS_PATH.'wats-edit.php',0,'div');
+				add_submenu_page(WATS_PATH.'wats-edit.php',__('Edit Tickets','WATS'),__('Edit Tickets','WATS'),0,WATS_PATH.'wats-edit.php');
+				add_action('admin_head-wats/wats-edit.php','wats_ticket_edit_admin_head');
 
-			add_submenu_page(WATS_PATH.'wats-edit.php',__('New ticket','WATS'),__('New ticket','WATS'),0,WATS_PATH.'wats-ticket-new.php');
-			add_action('admin_head-wats/wats-ticket-new.php','wats_ticket_creation_admin_head');
+				add_submenu_page(WATS_PATH.'wats-edit.php',__('New ticket','WATS'),__('New ticket','WATS'),0,WATS_PATH.'wats-ticket-new.php');
+				add_action('admin_head-wats/wats-ticket-new.php','wats_ticket_creation_admin_head');
+			}
+			else
+			{
+				if (isset($_GET['post_type']) && ($_GET['post_type'] == 'ticket' || get_post_type($_GET['post']) == 'ticket'))
+				{
+					add_action('manage_posts_custom_column','wats_edit_post_custom_column', 10, 2);
+					add_action('manage_posts_columns','wats_edit_post_column');
+					add_filter('list_terms_exclusions','wats_list_terms_exclusions');
+				}
+			}
 		}
 	}
 	
-	$_registered_pages[get_plugin_page_hookname('wats/wats-ticket.php','')] = true;
+	if ($wp_version < '3.0')
+	{
+		$_registered_pages[get_plugin_page_hookname('wats/wats-ticket.php','')] = true;
+	}
 	
 	add_action('show_user_profile', 'wats_admin_edit_user_profile');
     add_action('edit_user_profile', 'wats_admin_edit_user_profile');

@@ -1,15 +1,30 @@
 <?php
 /*
 Plugin Name: Wats
-Plugin URI: http://www.lautre-monde.fr/wats-going-on/
+Plugin URI: http://www.ticket-system.net/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0.52
-Author URI: http://www.lautre-monde.fr
+Version: 1.0.53
+Author URI: http://www.ticket-system.net/
 */
 
 /*
 1/ Release history :
+- V1.0.53 (07/10/2010) :
++ fixed a bug with ticket listing table formatting when ticket numbering isn't active
++ added compatibility for WP 3.0, 3.0.1
++ fixed a bug inducing a php warning when no category is associated to ticket listing post
++ enhanced title formatting on single ticket page in the frontend
++ fixed a race condition with jQuery Editable plugin
++ fixed a bug inducing javascript error with jQuery Editable plugin
++ added category selector to frontend ticket submission form
++ added Russian translation (prodived by Alexey from http://reservation.isaev.asia/ )
++ added Indonesian translation (provided by Rizal Fauzie from http://fauzievolute.com )
++ added an option to select the ticket default type, priority and status that will then be selected by default in the ticket creation page (admin and frontend submission form)
++ added an option to define specific notification list upon new ticket opening based on ticket priority, type and status
++ enhanced details provided in new ticket notification mail
++ modified ticket update notification to not include admin link if the user level is subscriber
++ fixed a bug enforcing comments for all post type
 - V1.0.52 (13/06/2010) :
 + added an option to select the ticket closed status (to allow bypassing of autodetection)
 + modified checks for ticket status, priority, type and category edition in the options page
@@ -231,7 +246,6 @@ require_once(dirname(__FILE__) .'/wats-dashboard.php');
 require_once(dirname(__FILE__) .'/wats-link-template.php');
 require_once(dirname(__FILE__) .'/wats-template.php');
 require_once(dirname(__FILE__) .'/wats-profile.php');
-require_once(dirname(__FILE__) .'/wats-mail.php');
 
 add_action('admin_head', 'wats_admin_head');
 add_action('wp_print_styles', 'wats_add_my_stylesheet');
@@ -250,16 +264,11 @@ define('WATS_URL',get_option('siteurl').'/wp-content/plugins/'.basename(dirname(
 define('WATS_PATH',ABSPATH.'wp-content/plugins/'.basename(dirname(__FILE__)).'/');
 define('WATS_SHORT_PATH','/wp-content/plugins/'.basename(dirname(__FILE__)).'/');
 define('WATS_THEME_PATH',WATS_PATH.'theme');
-define('WATS_BACKLINK','http://www.lautre-monde.fr/wats-going-on/');
-define('WATS_BACKLINK2','http://www.lautre-monde.fr');
+define('WATS_BACKLINK','http://www.ticket-system.net/');
 define('WATS_ANCHOR','ticket system');
-define('WATS_ANCHOR2',"l'autre monde");
-define("WATS_TICKET_LIST_REGEXP", "/\[WATS_TICKET_LIST ([[:print:]]+)\]/");
-define("WATS_TICKET_SUBMIT_FORM", "/\[WATS_TICKET_SUBMIT_FORM\]/");
-define('WATS_WP_MAIL_INTERVAL', 300);
 
 $wats_settings = array();
-$wats_version = '1.0.52';
+$wats_version = '1.0.53';
 
 $wats_default_ticket_priority = array(1 => "Emergency", 2 => "Critical", 3 => "Major", 4 => "Minor");
 $wats_default_ticket_status = array(1 => "Newly open", 2 => "Under investigation", 3 => "Waiting for reoccurence", 4 => "Waiting for details", 5 => "Solution delivered", 6 => "Closed");
@@ -274,7 +283,7 @@ $wats_default_ticket_type = array(1 => "Question", 2 => "SW Bug", 3 => "Installa
 function wats_init()
 {    
 	wats_register_taxonomy();
-
+	
 	return;
 }
 
@@ -293,7 +302,6 @@ function wats_plugins_loaded()
 	}
 	wats_load_settings();
 	add_action('admin_menu','wats_add_admin_page');
-	wats_check_email_ticket_submission();
 	
 	return;
 }
@@ -342,20 +350,17 @@ add_filter('get_previous_post_where','wats_ticket_get_previous_next_post_where')
 add_filter('get_next_post_where','wats_ticket_get_previous_next_post_where');
 add_filter('getarchives_where','wats_get_archives');
 add_filter('posts_where','wats_posts_where');
-add_filter('the_content', 'wats_list_tickets_filter');
-add_filter('the_content', 'wats_ticket_submit_form_filter');
-add_filter('the_content_rss', 'wats_list_tickets_filter');
 add_filter('wp_insert_post_data', 'wats_insert_post_data');
 add_filter('edit_post_link','wats_filter_edit_ticket_link');
 add_filter('comment_feed_where','wats_filter_comments_rss');
+add_filter('wp_title', 'wats_wp_title');
+add_action('save_post', 'wats_ticket_save_meta', 10, 2);
 
 /* Ajax Actions Hooks */
 add_action('wp_ajax_wats_admin_insert_option_entry','wats_admin_insert_option_entry',10);
 add_action('wp_ajax_wats_admin_remove_option_entry','wats_admin_remove_option_entry',10);
 add_action('wp_ajax_wats_admin_update_option_entry','wats_admin_update_option_entry',10);
+add_action('wp_ajax_wats_admin_insert_notification_rule_entry','wats_admin_insert_notification_rule_entry',10);
+add_action('wp_ajax_wats_admin_remove_notification_rule_entry','wats_admin_remove_notification_rule_entry',10);
 
-add_action('wp_ajax_wats_ticket_list_ajax_processing','wats_ticket_list_ajax_processing',10);
-add_action('wp_ajax_nopriv_wats_ticket_list_ajax_processing','wats_ticket_list_ajax_processing',10);
-add_action('wp_ajax_wats_ticket_submit_form_ajax_processing','wats_ticket_submit_form_ajax_processing',10);
-add_action('wp_ajax_nopriv_wats_ticket_submit_form_ajax_processing','wats_ticket_submit_form_ajax_processing',10);
 ?>

@@ -57,7 +57,7 @@ if ( isset( $_POST['deletepost'] ) )
 elseif ( isset($_POST['wp-preview']) && 'dopreview' == $_POST['wp-preview'] )
 	$action = 'preview';
 
-add_action('save_post','wats_ticket_save_meta');
+//add_action('save_post','wats_ticket_save_meta');
 
 switch($action) {
 case 'postajaxpost':

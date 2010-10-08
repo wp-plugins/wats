@@ -55,7 +55,7 @@ function wats_frontend_widget_stats($args)
 
 function wats_frontend_widget_stats_init()
 {
-   register_sidebar_widget(__('Tickets','WATS'), 'wats_frontend_widget_stats');
+   wp_register_sidebar_widget('wats_frontend_stats',__('Tickets','WATS'), 'wats_frontend_widget_stats');
 }
 
 add_action('plugins_loaded','wats_frontend_widget_stats_init');

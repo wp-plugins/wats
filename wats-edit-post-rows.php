@@ -1,59 +1,5 @@
 <?php
 
-/****************************************************/
-/*                                                  */
-/* Fonction pour ajouter des colonnes personnalisée */
-/*                                                  */
-/****************************************************/
-
-function wats_edit_post_column($defaults)
-{
-	if ($defaults)
-	{
-		$defaults['type'] = __('Type','WATS');
-		$defaults['priority'] = __('Priority','WATS');
-		$defaults['status'] = __('Status','WATS');
-		$defaults['title'] = __('Ticket','WATS');
-		unset($defaults['tags']);
-		return $defaults;
-	}
-	
-	return;
-}
-
-/*****************************************************/
-/*                                                   */
-/* Fonction pour remplir les colonnes personnalisées */
-/*                                                   */
-/*****************************************************/
-
-function wats_edit_post_custom_column($column_name, $post_id)
-{
-	global $wats_settings;
-	
-	$wats_ticket_priority = $wats_settings['wats_priorities'];
-	$wats_ticket_type = $wats_settings['wats_types'];
-	$wats_ticket_status = $wats_settings['wats_statuses'];
-	
-	if ($column_name == 'priority')
-	{
-		$ticket_priority = get_post_meta($post_id,'wats_ticket_priority',true);
-		echo $wats_ticket_priority[$ticket_priority];
-	}
-	else if ($column_name == 'status')
-	{
-		$ticket_status = get_post_meta($post_id,'wats_ticket_status',true);
-		echo $wats_ticket_status[$ticket_status];
-	}
-	else if ($column_name == 'type')
-	{
-		$ticket_type = get_post_meta($post_id,'wats_ticket_type',true);
-		echo $wats_ticket_type[$ticket_type];
-	}
-	
-	return;
-}
-
 /***********************************************************************/
 /*                                                                     */
 /* Fonction pour préparer le remplissage des colonnes pour les tickets */
@@ -62,10 +8,10 @@ function wats_edit_post_custom_column($column_name, $post_id)
 
 function wats_post_rows($posts = array()) 
 {
-	global $wp_query, $post, $mode, $wats_settings, $current_user;
+	global $wp_query, $post, $mode, $wats_settings, $current_user, $wp_version;
 
 	add_filter('the_title','esc_html');
-
+	
 	// Create array of post IDs.
 	$post_ids = array();
 
@@ -89,6 +35,8 @@ function wats_post_rows($posts = array())
 		else if ($wats_settings['visibility'] != 2)
 			wats_post_row($post, $comment_pending_count[$post->ID], $mode);
 	}
+	
+	return;
 }
 
 /***********************************************************/

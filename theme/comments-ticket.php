@@ -86,12 +86,12 @@
 
 <!--<p><small><?php printf(__('<strong>XHTML:</strong> You can use these tags: <code>%s</code>', 'WATS'), allowed_tags()); ?></small></p>-->
 
-<p><textarea name="comment" id="comment" cols="100%" rows="10" tabindex="4"></textarea></p>
+<p><textarea name="comment" id="comment" cols="100%" rows="10" tabindex="4"></textarea></p><br />
 
 <?php wats_ticket_details_meta_box($post); ?>
 
 <p><input name="submit" type="submit" id="submit" tabindex="5" value="<?php _e('Submit update', 'WATS'); ?>" />
-<?php comment_id_fields(); ?> 
+<?php comment_id_fields(); ?>
 </p>
 <?php do_action('comment_form', $post->ID); ?>
 
