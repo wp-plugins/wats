@@ -407,7 +407,6 @@ add_filter('comment_feed_where','wats_filter_comments_rss');
 add_filter('wp_title', 'wats_wp_title');
 add_filter('post_row_actions','wats_post_row_actions',10,2);
 add_action('save_post', 'wats_ticket_save_meta', 10, 2);
-add_filter('pre_user_email','wats_edit_user_email',10,1);
 add_action('pre_comment_on_post','wats_pre_comment_on_post',10,1);
 add_filter('post_type_link','wats_post_type_link',10,4);
 
