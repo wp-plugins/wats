@@ -385,6 +385,7 @@ function wats_deactivation()
 	return;
 }
 
+
 register_activation_hook(__FILE__, 'wats_activation');
 register_deactivation_hook(__FILE__, 'wats_deactivation');
 
