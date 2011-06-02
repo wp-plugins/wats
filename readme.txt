@@ -1,9 +1,9 @@
 === Wordpress Advanced Ticket System ===
 Contributors: Olivier
 Donate link: http://www.ticket-system.net/
-Tags: ticket,system,support,taxonomy,help,cms,crm,customer,helpdesk,community,contact,social,member,company,trouble,issue,problem
+Tags: ticket,case,system,support,taxonomy,help,cms,crm,customer,helpdesk,community,contact,social,member,company,trouble,issue,problem,contact,contact form,feedback,form,custom fields
 Requires at least: 3.0
-Tested up to: 3.1
+Tested up to: 3.1.3
 Stable tag: 1.0.54
 
 == Description ==
@@ -32,6 +32,8 @@ WATS key features :
 * ticket submission on behalf of users, usefull for call centre
 * priority, status, type and product values preset by the admin
 * priority, status, type and product keys selection for each ticket
+* unlimited number of input custom fields for tickets, fully integrated with total control over read/write rights (Premium release)
+* internal comments support for private exchanges between admins (Premium release)
 * mail notification upon new ticket submission for admins (Premium release)
 * mail notification based on key rules (product, priority, status and ticket types as well as author company and country) upon new ticket submission for selected distribution list (Premium release)
 * mail notification upon ticket update for ticket originator, updaters and admins (Premium release)
@@ -39,6 +41,7 @@ WATS key features :
 * ticket list filtering, sorting and export to Excel in the frontend (Premium release)
 * ticket statistics through dashboard and frontend widgets
 * advanced user profile features : account expiration date, country and company definition, user profile email modification prevention (Premium release)
+
 
 WATS offers a wide range of features. A lot of options are available to allow you to set it up according to your needs thus making WATS compliant with most of the requirements.
 
@@ -51,6 +54,8 @@ Examples of use of WATS :
 * service request system
 * company, hotel or real estate service desk
 * helpdesk system
+* contact form with database tracking
+* collaborative content site with frontend post submission
 
 Translations :
 
