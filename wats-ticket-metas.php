@@ -119,12 +119,15 @@ function wats_pre_comment_on_post($comment_post_id)
 	global $wats_settings, $current_user;
 	
 	$post = get_post($comment_post_id);
-	if (get_post_meta($comment_post_id,'wats_ticket_status',true) == wats_get_closed_status_id() && !current_user_can('administrator'))
-		wp_die(__('Sorry, you can\'t update this ticket.','WATS'));
-	else if ($wats_settings['visibility'] == 1 && !is_user_logged_in())
-		wp_die(__('Sorry, you must be logged in to update this ticket.','WATS'));
-	else if ($wats_settings['visibility'] == 2 && (!is_user_logged_in() || (is_user_logged_in() && !current_user_can('administrator') && $current_user->ID != $post->post_author)))
-		wp_die(__('Sorry, you don\'t have the rights to update this ticket.','WATS'));
+	if ($post->post_type == 'ticket')
+	{
+		if (get_post_meta($comment_post_id,'wats_ticket_status',true) == wats_get_closed_status_id() && !current_user_can('administrator'))
+			wp_die(__('Sorry, you can\'t update this ticket.','WATS'));
+		else if ($wats_settings['visibility'] == 1 && !is_user_logged_in())
+			wp_die(__('Sorry, you must be logged in to update this ticket.','WATS'));
+		else if ($wats_settings['visibility'] == 2 && (!is_user_logged_in() || (is_user_logged_in() && !current_user_can('administrator') && $current_user->ID != $post->post_author)))
+			wp_die(__('Sorry, you don\'t have the rights to update this ticket.','WATS'));
+	}
 		
 	return;
 }
