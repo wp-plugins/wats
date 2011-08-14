@@ -110,7 +110,7 @@ function wats_ticket_template_loader($template)
 		{
 			if ($wats_settings['template_selector'] == 0)
 			{
-				$template = get_single_template();
+				$template = str_replace('single-ticket','single',get_single_template());
 				add_filter('the_content','wats_single_ticket_content_filter',10,1);
 			}
 			else
