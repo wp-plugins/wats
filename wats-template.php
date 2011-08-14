@@ -6,25 +6,45 @@
 /*                                                          */
 /************************************************************/
 
-function wats_check_ticket_update_rights()
+function wats_get_ticket_update_rights()
 {
 	global $wats_settings, $current_user, $post;
 	
 	wats_load_settings();
 	
-	if (get_post_meta($post->ID,'wats_ticket_status',true) == wats_get_closed_status_id() && !current_user_can('administrator'))
-	{
-		echo '<div id="ticket_is_closed">'.__('The ticket is closed. Only administrators could reopen it.','WATS').'</div>';
+	if ($wats_settings['ticket_status_key_enabled'] == 1 && get_post_meta($post->ID,'wats_ticket_status',true) == wats_get_closed_status_id() && !current_user_can('administrator'))
 		return false;
-	}
-	else if ($wats_settings['visibility'] == 2 && is_user_logged_in() && !current_user_can('administrator') && $current_user->ID != $post->post_author && $wats_settings['ticket_visibility_read_only_capability'] == 1 && current_user_can('wats_ticket_read_only'))
-	{
-		echo '<div id="ticket_is_read_only">'.__('Only admins and ticket author can update this ticket.','WATS').'</div>';
+	else if ($wats_settings['visibility'] == 2 && (!is_user_logged_in() || (is_user_logged_in() && !current_user_can('administrator') && $current_user->ID != $post->post_author)))
 		return false;
-	}
-		
+
 	return true;
 }
+
+/************************************************************/
+/*                                                          */
+/* Fonction de renvoi du message d'erreur pour l'ouverture des commentaires */
+/*                                                          */
+/************************************************************/
+
+function wats_get_ticket_update_rights_message()
+{
+	global $wats_settings, $current_user, $post;
+	
+	wats_load_settings();
+	
+	$output = '';
+	if ($wats_settings['ticket_status_key_enabled'] == 1 && get_post_meta($post->ID,'wats_ticket_status',true) == wats_get_closed_status_id() && !current_user_can('administrator'))
+	{
+		$output .= '<div id="ticket_is_closed">'.__('The ticket is closed. Only administrators could reopen it.','WATS').'</div>';
+	}
+	else if ($wats_settings['visibility'] == 2 && (!is_user_logged_in() || (is_user_logged_in() && !current_user_can('administrator') && $current_user->ID != $post->post_author)))
+	{
+		$output .= '<div id="ticket_is_read_only">'.__('Only admins and ticket author can update this ticket.','WATS').'</div>';
+	}
+		
+	return $output;
+}
+
 
 /*********************************************************/
 /*                                                       */
@@ -35,17 +55,16 @@ function wats_check_ticket_update_rights()
 function wats_check_visibility_rights()
 {
 	global $wats_settings, $current_user, $post;
-	
+
 	if ($wats_settings['visibility'] == 0)
 		return true;
 	else if ($wats_settings['visibility'] == 1 && is_user_logged_in())
 		return true;
 	else if ($wats_settings['visibility'] == 2 && is_user_logged_in() && (current_user_can('administrator') || $current_user->ID == $post->post_author || (!is_admin() && $wats_settings['ticket_visibility_read_only_capability'] == 1 && current_user_can('wats_ticket_read_only'))))
 		return true;
-		
+
 	return false;
 }
-
 
 /****************************************/
 /*                                      */
@@ -83,15 +102,96 @@ function wats_wp_footer()
 
 function wats_ticket_template_loader($template)
 {
-	global $wp_query;
+	global $wp_query, $wats_settings;
 
 	if (is_singular() && wats_is_ticket($wp_query->post) == true)
 	{
-		if (file_exists(TEMPLATEPATH.'/single-ticket.php')) $template = TEMPLATEPATH.'/single-ticket.php';
-		else $template = WATS_THEME_PATH.'/single-ticket.php';
+		if (wats_check_visibility_rights())
+		{
+			if ($wats_settings['template_selector'] == 0)
+			{
+				$template = get_single_template();
+				add_filter('the_content','wats_single_ticket_content_filter',10,1);
+			}
+			else
+			{
+				if (file_exists(TEMPLATEPATH.'/single-ticket.php')) $template = TEMPLATEPATH.'/single-ticket.php';
+				else $template = WATS_THEME_PATH.'/single-ticket.php';
+			}
+		}
+		else
+		{
+			if (file_exists(TEMPLATEPATH.'/ticket-access-denied.php')) $template = TEMPLATEPATH.'/ticket-access-denied.php';
+			else $template = WATS_THEME_PATH.'/ticket-access-denied.php';
+		}
 	}
 	
 	return($template);
+}
+
+/**************************************************************/
+/*                                                            */
+/* Fonction d'affichage du message d'accès interdit au ticket */
+/*                                                            */
+/**************************************************************/
+
+function wats_ticket_access_denied()
+{
+	global $post;
+
+	if (!is_user_logged_in())
+	{
+		$output = '<p>'.__('Please authenticate yourself to view this ticket.', 'WATS').'</p>';
+		$output .= '<form action="'.get_bloginfo('url').'/wp-login.php" method="post">';
+		$output .= '<table class="wats_submit_form_login_table"><tbody>';
+		$output .= '<tr><td>'.__('User','WATS').'</td><td><input type="text" class="input" name="log" id="log" style="width:12em;" /></td></tr>';
+		$output .= '<tr><td>'.__('Password','WATS').'</td><td><input type="password" class="input" name="pwd" id="pwd" style="width:12em;" /></td></tr>';
+		$output .= '<tr><td><input type="submit" name="submit" value="'.__('Log In').'" class="button" /></td>';
+		$output .= '<td><input name="rememberme" id="rememberme" type="checkbox" value="forever" /> '.__('Remember Me').'</td></tr></tbody></table>';
+		$output .= '<input type="hidden" name="redirect_to" value="'.$_SERVER['REQUEST_URI'].'"/>';
+		$output .= '</form>';
+		echo apply_filters('wats_filter_single_ticket_access_login_form',$output,$post);
+	}
+	else
+	{
+		$output = '<blockquote>'.__('Sorry, you don\'t have the rights to browse this ticket.','WATS').' ';
+		$output .= __('If you believe that you should have access to it, please contact the website administrator.','WATS').'<blockquote>';
+		echo apply_filters('wats_filter_single_ticket_access_denied',$output,$post);
+	}
+	
+	return;
+}
+
+/****************************************************/
+/*                                                  */
+/* Fonction de filtrage du contenu du single ticket */
+/*                                                  */
+/****************************************************/
+
+function wats_single_ticket_content_filter($content)
+{
+	global $wats_settings, $post;
+
+	$output = '';
+	if (wats_check_visibility_rights())
+	{
+		if ($wats_settings['ticket_priority_key_enabled'] == 1)
+			$output .= __("Current priority : ",'WATS'). wats_ticket_get_priority($post)."<br />";
+		if ($wats_settings['ticket_status_key_enabled'] == 1)
+			$output .= __("Current status : ",'WATS'). wats_ticket_get_status($post)."<br />";
+		if ($wats_settings['ticket_type_key_enabled'] == 1)
+			$output .= __("Ticket type : ",'WATS'). wats_ticket_get_type($post)."<br />";
+		if ($wats_settings['ticket_product_key_enabled'] == 1)
+			$output .= __("Ticket product : ",'WATS'). wats_ticket_get_product($post)."<br />";
+		$output .= __("Ticket originator : ",'WATS').get_the_author().'<br />';
+		$content = $output.$content;
+	}
+	else
+	{
+		wp_die(__('You are not allowed to view this ticket.','WATS'));
+	}
+
+	return $content;
 }
 
 /*************************************************/
@@ -119,7 +219,9 @@ function wats_posts_where($where)
 	if (is_admin() && isset($_GET['post_type']) && $_GET['post_type'] == 'ticket')
 	{
 		if ($wats_settings['visibility'] == 2 && !current_user_can('administrator'))
+		{
 			$where = str_replace($wpdb->posts.".post_type = 'ticket' AND",$wpdb->posts.".post_type = 'ticket' AND ".$wpdb->posts.".post_author = ".$current_user->ID." AND", $where);
+		}
 	}
 
 	if (is_search())
@@ -161,17 +263,75 @@ function wats_get_archives($where)
 
 function wats_comments_template($template)
 {
-	global $wp_query;
+	global $wp_query, $wats_settings;
 
 	if (wats_is_ticket($wp_query->post) == true)
 	{
-		if (file_exists(TEMPLATEPATH.'/comments-ticket.php')) 
-			$template = TEMPLATEPATH.'/comments-ticket.php';
-		else 
-			$template = WATS_THEME_PATH.'/comments-ticket.php';
+		if (wats_check_visibility_rights())
+		{
+			if ($wats_settings['template_selector'] == 0)
+			{
+				add_filter('comments_open','wats_ticket_comments_open',10,2);
+				add_action('comment_form_comments_closed','wats_ticket_comments_closed',10);
+			
+				if (wats_get_ticket_update_rights() == true)
+					add_filter('comment_form_field_comment','wats_comment_form_after_fields',10,1);
+			}
+			else
+			{
+				if (file_exists(TEMPLATEPATH.'/comments-ticket.php')) $template = TEMPLATEPATH.'/comments-ticket.php';
+				else $template = WATS_THEME_PATH.'/comments-ticket.php';
+			}
+		}
+		else
+		{
+			wp_die(__('You are not allowed to view this ticket.','WATS'));
+		}
 	}
 
 	return($template);
+}
+
+/****************************************************************************/
+/*                                                                          */
+/* Fonction de fermeture des commentaires WP */
+/*                                                                          */
+/****************************************************************************/
+
+function wats_ticket_comments_open($open,$post_id)
+{
+	if (wats_get_ticket_update_rights() == false)
+		return false;
+	else
+		return true;
+}
+
+/****************************************************************************/
+/*                                                                          */
+/* Fonction d'affichage de la raison de la fermeture des commentaires sur le ticket */
+/*                                                                          */
+/****************************************************************************/
+
+function wats_ticket_comments_closed()
+{
+	echo apply_filters('wats_get_ticket_update_rights_message_filter',wats_get_ticket_update_rights_message());
+	
+	return;
+}
+
+/****************************************************************************/
+/*                                                                          */
+/* Fonction d'affichage des tickets metas dans le formulaire des commentaires */
+/*                                                                          */
+/****************************************************************************/
+
+function wats_comment_form_after_fields($args)
+{
+	global $post;
+	
+	wats_ticket_details_meta_box($post);
+	
+	return $args;
 }
 
 /************************************/
@@ -241,7 +401,7 @@ function wats_update_ticket_term_count($terms)
 /*                                                    */
 /******************************************************/
 
-function wats_title_insert_ticket_number($title, $postID)
+function wats_title_insert_ticket_number($title, $postID = 0)
 {
 	global $wats_printing_inline_data;
 
@@ -293,7 +453,7 @@ function wats_list_terms_exclusions($args)
 	global $wats_settings;
 	
 	$where = "";
-	if ($wats_settings['wats_categories'])
+	if (isset($wats_settings['wats_categories']))
 	{
 		$list = $wats_settings['wats_categories'];
 		$catlist = array();
@@ -360,10 +520,10 @@ function wats_edit_post_custom_column($column_name, $post_id)
 {
 	global $wats_settings;
 	
-	$wats_ticket_priority = $wats_settings['wats_priorities'];
-	$wats_ticket_type = $wats_settings['wats_types'];
-	$wats_ticket_status = $wats_settings['wats_statuses'];
-	$wats_ticket_product = $wats_settings['wats_products'];
+	$wats_ticket_priority = isset($wats_settings['wats_priorities']) ? $wats_settings['wats_priorities'] : 0;
+	$wats_ticket_type = isset($wats_settings['wats_types']) ? $wats_settings['wats_types'] : 0;
+	$wats_ticket_status = isset($wats_settings['wats_statuses']) ? $wats_settings['wats_statuses'] : 0;
+	$wats_ticket_product = isset($wats_settings['wats_products']) ?  $wats_settings['wats_products'] : 0;
 	
 	if ($column_name == 'priority')
 	{

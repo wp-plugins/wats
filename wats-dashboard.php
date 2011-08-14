@@ -112,12 +112,15 @@ function wp_dashboard_wats_recent_comments()
 	$comments = array();
 	$start = 0;
 	
+	$join = " AS wp1 ";
+	$where = " WHERE NOT EXISTS (SELECT * FROM ".$wpdb->commentmeta." AS wp2 WHERE wp1.comment_ID = wp2.comment_id AND wp2.meta_key = 'wats_internal_update' AND wp2.meta_value = 1) ";
+	
 	if ($wats_settings['visibility'] == 0 || $wats_settings['visibility'] == 1)
-		$query = "SELECT * FROM $wpdb->comments ORDER BY comment_date_gmt DESC LIMIT $start, 50";
+		$query = "SELECT * FROM $wpdb->comments AS wp1 WHERE NOT EXISTS (SELECT * FROM $wpdb->commentmeta AS wp2 WHERE wp1.comment_ID = wp2.comment_id AND wp2.meta_key = 'wats_internal_update' AND wp2.meta_value = 1) ORDER BY comment_date_gmt DESC LIMIT $start, 50";
 	else if ($wats_settings['visibility'] == 2 && current_user_can('administrator'))
 		$query = "SELECT * FROM $wpdb->comments ORDER BY comment_date_gmt DESC LIMIT $start, 50";
 	else if ($wats_settings['visibility'] == 2)
-		$query = "SELECT * FROM $wpdb->comments LEFT JOIN $wpdb->posts ON $wpdb->comments.comment_post_ID = $wpdb->posts.ID WHERE $wpdb->posts.post_author = ".$current_user->ID." ORDER BY comment_date_gmt DESC LIMIT ".$start.", 50";
+		$query = "SELECT * FROM $wpdb->comments AS wp1 LEFT JOIN $wpdb->posts ON wp1.comment_post_ID = $wpdb->posts.ID WHERE $wpdb->posts.post_author = ".$current_user->ID." AND NOT EXISTS (SELECT * FROM ".$wpdb->commentmeta." AS wp2 WHERE wp1.comment_ID = wp2.comment_id AND wp2.meta_key = 'wats_internal_update' AND wp2.meta_value = 1) ORDER BY comment_date_gmt DESC LIMIT ".$start.", 50";
 			
 	while (count($comments) < 5 && $possible = $wpdb->get_results($query))
 	{
@@ -130,11 +133,11 @@ function wp_dashboard_wats_recent_comments()
 		}
 		$start = $start + 50;
 		if ($wats_settings['visibility'] == 0 || $wats_settings['visibility'] == 1)
-			$query = "SELECT * FROM $wpdb->comments ORDER BY comment_date_gmt DESC LIMIT $start, 50";
+			$query = "SELECT * FROM $wpdb->comments AS wp1 WHERE NOT EXISTS (SELECT * FROM $wpdb->commentmeta AS wp2 WHERE wp1.comment_ID = wp2.comment_id AND wp2.meta_key = 'wats_internal_update' AND wp2.meta_value = 1) ORDER BY comment_date_gmt DESC LIMIT $start, 50";
 		else if ($wats_settings['visibility'] == 2 && current_user_can('administrator'))
 			$query = "SELECT * FROM $wpdb->comments ORDER BY comment_date_gmt DESC LIMIT $start, 50";
 		else if ($wats_settings['visibility'] == 2)
-			$query = "SELECT * FROM $wpdb->comments LEFT JOIN $wpdb->posts ON $wpdb->comments.comment_post_ID = $wpdb->posts.ID WHERE $wpdb->posts.post_author = ".$current_user->ID." ORDER BY comment_date_gmt DESC LIMIT ".$start.", 50";
+			$query = "SELECT * FROM $wpdb->comments AS wp1 LEFT JOIN $wpdb->posts ON wp1.comment_post_ID = $wpdb->posts.ID WHERE $wpdb->posts.post_author = ".$current_user->ID." AND NOT EXISTS (SELECT * FROM ".$wpdb->commentmeta." AS wp2 WHERE wp1.comment_ID = wp2.comment_id AND wp2.meta_key = 'wats_internal_update' AND wp2.meta_value = 1) ORDER BY comment_date_gmt DESC LIMIT ".$start.", 50";
 	}
 
 	if ($comments) :
@@ -168,7 +171,7 @@ function wats_dashboard_setup()
 {
 	global $wp_meta_boxes, $current_user, $wats_settings;
 
-	wp_add_dashboard_widget('my_wp_dashboard_wats', 'Tickets', 'wats_dashboard_widget_tickets');
+	wp_add_dashboard_widget('my_wp_dashboard_wats', __('Tickets','WATS'), 'wats_dashboard_widget_tickets');
 		
 	unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_recent_comments']);
 	$recent_comments_title = __( 'Recent Comments' );

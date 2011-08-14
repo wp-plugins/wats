@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 
-	<div id="container">
-		<div id="content">
+	<div id="primary">
+		<div id="content" role="main">
 		
 	<?php 
 	if (have_posts()) : while (have_posts()) : the_post(); 
@@ -9,13 +9,21 @@
 	if (wats_check_visibility_rights())
 	{
 	?>
-		<div class="navigation">
-			<div class="alignleft"><?php previous_post_link('&laquo; %link') ?></div>
-			<div class="alignright"><?php next_post_link('%link &raquo;') ?></div>
-		</div>
+		<nav id="nav-single">
+			<h3 class="assistive-text"><?php _e( 'Post navigation', 'twentyeleven' ); ?></h3>
+			<span class="nav-previous"><?php previous_post_link('&larr; %link'); ?></span>
+			<span class="nav-next"><?php next_post_link('%link &rarr;'); ?></span>
+		</nav>
+	
+		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+		<header class="entry-header">
+			<h1 class="entry-title"><?php the_title(); ?></h1>
+			<div class="entry-meta">
+				<?php twentyeleven_posted_on(); ?>
+			</div><!-- .entry-meta -->
+		</header><!-- .entry-header -->
 		
-		<div <?php post_class() ?> id="post-<?php the_ID(); ?>">
-			<h2><?php the_title(); ?></h2>
+		<div class="entry-content">
 			<?php if ($wats_settings['ticket_priority_key_enabled'] == 1)
 					echo __("Current priority : ",'WATS'). wats_ticket_get_priority($post)."<br />"; ?>
 			<?php if ($wats_settings['ticket_status_key_enabled'] == 1)
@@ -28,7 +36,7 @@
 			<div class="entry">
 				<?php the_content('<p class="serif">Read the rest of the ticket &raquo;</p>'); ?>
 				<?php wp_link_pages(array('before' => '<p><strong>Pages:</strong> ', 'after' => '</p>', 'next_or_number' => 'number')); ?>
-				<?php the_tags( '<p>Mots-clefs&nbsp;: ', ', ', '</p>'); ?> 
+				<?php the_tags( '<p>'.__('Tags','WATS').'&nbsp;: ', ', ', '</p>'); ?> 
 				<p class="postmetadata alt">
 					<small>
 						<?php printf(__('This entry was submited on %1$s at %2$s and is filed under %3$s.', 'WATS'), get_the_time(__('l, F jS, Y', 'WATS')), get_the_time(), get_the_category_list(', ')); ?>
@@ -59,7 +67,7 @@
 	}
 	else
 	{
-		echo '<p>'.__('Sorry, you don\'t have the rights to browse this ticket.', 'WATS').'</p>';
+		wats_ticket_access_denied();
 	}
 	?>
 
@@ -69,5 +77,4 @@
 
 </div>
 </div>
-<?php get_sidebar(); ?>
 <?php get_footer(); ?>

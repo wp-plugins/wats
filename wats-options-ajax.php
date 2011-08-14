@@ -392,9 +392,11 @@ jQuery(document).ready(function() {
 		var idpriority = jQuery('#notification_rules_select_ticket_priority option:selected').val();
 		var idstatus = jQuery('#notification_rules_select_ticket_status option:selected').val();
 		var idproduct = jQuery('#notification_rules_select_ticket_product option:selected').val();
+		var idcountry = jQuery('#notification_rules_select_ticket_country option:selected').val();
+		var idcompany = jQuery('#notification_rules_select_ticket_company option:selected').val();
 		var listvalue = jQuery("#rule_mailing_list").val();
 		wats_loading(document.getElementById("resultaddrule"),watsmsg[4]);
-		jQuery.post(ajaxurl, {action:"wats_admin_insert_notification_rule_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idtype:idtype, idpriority:idpriority, idstatus:idstatus, idproduct:idproduct, listvalue:listvalue},
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_notification_rule_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idtype:idtype, idpriority:idpriority, idstatus:idstatus, idproduct:idproduct, idcountry:idcountry, idcompany:idcompany, listvalue:listvalue},
 		function(res)
 		{
 			jQuery('#idaddrule').removeAttr('disabled');
@@ -437,6 +439,65 @@ jQuery(document).ready(function() {
 					}
 					if (jQuery("input[name=notification_rule_check]").length == 0)
 						wats_js_add_blank_cell("tablerules",4,watsmsg[2]);
+				});
+			}
+		});
+		return false;
+	});
+	
+	jQuery('#idaddcustomfields').click(function() {
+		jQuery('#idaddcustomfields').attr('disabled','disabled');
+		var idfsf = jQuery('#fsf option:selected').val();
+		var idatef = jQuery('#atef option:selected').val();
+		var idftdt = jQuery('#ftdt option:selected').val();
+		var idftuf = jQuery('#ftuf option:selected').val();
+		var idftlf = jQuery('#ftlf option:selected').val();
+		var idftltc = jQuery('#ftltc option:selected').val();
+		var customfieldname = jQuery("#customfieldsdisplayname").val();
+		var customfieldmetakey = jQuery("#customfieldsmetakey").val();
+		wats_loading(document.getElementById("resultaddcustomfields"),watsmsg[4]);
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_ticket_custom_field", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idfsf:idfsf, idatef:idatef, idftdt:idftdt, idftuf:idftuf, idftlf:idftlf, idftltc:idftltc, customfieldname:customfieldname, customfieldmetakey:customfieldmetakey},
+		function(res)
+		{
+			jQuery('#idaddcustomfields').removeAttr('disabled');
+			var message_result = eval('(' + res + ')');
+			if (message_result.success == "TRUE")
+			{
+				jQuery('#divticketcustomfieldstable').html(message_result.output);
+				jQuery("#customfieldsdisplayname").val('');
+				jQuery("#customfieldsmetakey").val('');
+			}
+			wats_stop_loading(document.getElementById("resultaddcustomfields"),message_result.error);
+		});
+
+		return false;
+	});
+	
+	jQuery('#idsupcustomfields').click(function() {
+		if (jQuery("input[name=customfieldcheck]").length == 0)
+			wats_stop_loading(document.getElementById("resultsupcustomfields"),watsmsg[0]);
+		else if (jQuery("input[name=customfieldcheck]:checked").length == 0)
+			wats_stop_loading(document.getElementById("resultsupcustomfields"),watsmsg[1]);
+	    jQuery("input[name=customfieldcheck]:checked").each(function()
+		{
+		    if (this.checked == true)
+			{
+				jQuery('#idsupcustomfields').attr('disabled','disabled');
+				var idvalue = this.value;
+				var nodetoremove = this.parentNode;
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_ticket_custom_field", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue},
+				function(res)
+				{
+					jQuery('#idsupcustomfields').removeAttr('disabled');
+					var message_result = eval('(' + res + ')');
+					wats_stop_loading(document.getElementById("resultsupcustomfields"),message_result.error);
+					if (message_result.success == "TRUE")
+					{
+						parenttoremove = nodetoremove.parentNode;
+						parenttoremove.parentNode.removeChild(parenttoremove);
+					}
+					if (jQuery("input[name=customfieldcheck]").length == 0)
+						wats_js_add_blank_cell("tablecustomfields",10,watsmsg[2]);
 				});
 			}
 		});

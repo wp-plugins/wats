@@ -128,3 +128,56 @@ select.wats_select {
 
 .wats_select_ticket_details_frontend {
 }
+
+ul.wats-options-menu {
+	border:1px solid #d1e5ee;
+	background:#eff8ff;
+	width:175px;
+	text-align:center;
+	margin-right:20px;
+	margin-left:20px;
+	font-size:12px;
+	border-top-left-radius:6px;
+	border-top-right-radius:6px;
+}
+
+ul.wats-options-menu li {
+	padding-right:10px;
+	padding-left:10px;
+	background:#ffffff;
+	margin-bottom:0px;
+	padding-top:1px;
+	padding-bottom:3px;
+}
+
+ul.wats-options-menu li.selected, ul.wats-options-menu li.selected a {
+	background:#EFEDE7;
+	color:#333333;
+	font-weight:bold;
+}
+
+ul.wats-options-menu a {
+	text-decoration:none;
+}
+
+.wats-form-table td {
+	font-size:11px;
+	line-height:20px;
+	padding:8px 10px;
+	border-collapse:collapse;
+}
+
+.wats-form-table th {
+	color:#222;
+	font-weight:normal;
+	font-size:13px;
+	width:200px;
+}
+
+#wats_frontend_ticket_listing_div div {
+	margin-bottom:24px;
+}
+
+#wats_frontend_ticket_listing_div input {
+	margin-bottom:0px;
+}

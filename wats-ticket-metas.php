@@ -1,5 +1,6 @@
 <?php
 
+
 /*******************************************************/
 /*                                                     */
 /* Fonction de récupération de la priorité d'un ticket */
@@ -10,7 +11,7 @@ function wats_ticket_get_priority($post)
 {
 	global $wats_settings;
 	
-	$wats_ticket_priority = $wats_settings['wats_priorities'];
+	$wats_ticket_priority = isset($wats_settings['wats_priorities']) ? $wats_settings['wats_priorities'] : 0;
 	
 	$priority = get_post_meta($post->ID,'wats_ticket_priority',true);
 	
@@ -32,7 +33,7 @@ function wats_ticket_get_type($post)
 {
 	global $wats_settings;
 	
-	$wats_ticket_type = $wats_settings['wats_types'];
+	$wats_ticket_type = isset($wats_settings['wats_types']) ? $wats_settings['wats_types'] : 0;
 
 	$type = get_post_meta($post->ID,'wats_ticket_type',true);
 	
@@ -54,7 +55,7 @@ function wats_ticket_get_status($post)
 {
 	global $wats_settings;
 	
-	$wats_ticket_status = $wats_settings['wats_statuses'];
+	$wats_ticket_status = isset($wats_settings['wats_statuses']) ? $wats_settings['wats_statuses'] : 0;
 	
 	$status = get_post_meta($post->ID,'wats_ticket_status',true);
 	
@@ -76,7 +77,7 @@ function wats_ticket_get_product($post)
 {
 	global $wats_settings;
 	
-	$wats_ticket_product = $wats_settings['wats_products'];
+	$wats_ticket_product = isset($wats_settings['wats_products']) ? $wats_settings['wats_products'] : 0;
 	
 	$product = get_post_meta($post->ID,'wats_ticket_product',true);
 	
@@ -88,6 +89,7 @@ function wats_ticket_get_product($post)
 	return($output);
 }
 
+
 /*************************************************/
 /*                                               */
 /* Fonction de mise à jour des metas d'un ticket */
@@ -96,7 +98,10 @@ function wats_ticket_get_product($post)
 
 function wats_comment_update_meta($comment_id)
 {
-		
+	global $wats_settings;
+	
+	wats_load_settings();
+	
 	$comment = get_comment($comment_id); 
 	$status = $comment->comment_approved; 
 	$post_id =  $comment->comment_post_ID;
@@ -121,7 +126,7 @@ function wats_pre_comment_on_post($comment_post_id)
 	$post = get_post($comment_post_id);
 	if ($post->post_type == 'ticket')
 	{
-		if (get_post_meta($comment_post_id,'wats_ticket_status',true) == wats_get_closed_status_id() && !current_user_can('administrator'))
+		if ($wats_settings['ticket_status_key_enabled'] == 1 && get_post_meta($comment_post_id,'wats_ticket_status',true) == wats_get_closed_status_id() && !current_user_can('administrator'))
 			wp_die(__('Sorry, you can\'t update this ticket.','WATS'));
 		else if ($wats_settings['visibility'] == 1 && !is_user_logged_in())
 			wp_die(__('Sorry, you must be logged in to update this ticket.','WATS'));
@@ -140,7 +145,7 @@ function wats_pre_comment_on_post($comment_post_id)
 
 function wats_ticket_save_meta($postID,$post)
 {
-	global $wats_settings;
+	global $wats_settings, $wpdb;
 
 	wats_load_settings();
 	
@@ -154,7 +159,6 @@ function wats_ticket_save_meta($postID,$post)
 			return $postID;
 		}
 		
-
 		
 		$newstatus = -1;
 		if ($wats_settings['ticket_status_key_enabled'] == 1 && isset($_POST['wats_select_ticket_status']))
@@ -209,7 +213,8 @@ function wats_ticket_save_meta($postID,$post)
 			add_post_meta($postID,'wats_ticket_number',wats_get_latest_ticket_number()+1);
 			$newticket = 1;
 		}
-
+		
+		do_action('wats_ticket_saved_meta',$postID);
 	}
 	
 	return;
@@ -247,7 +252,7 @@ function wats_ticket_meta_boxes()
 
 	remove_meta_box('commentsdiv', 'ticket', 'normal');
 	remove_meta_box('commentstatusdiv', 'ticket', 'normal');
-	add_meta_box('ticketdetailsdiv',__('Ticket details','WATS'),'wats_ticket_details_meta_box','ticket','normal');
+	add_meta_box('ticketdetailsdiv',__('Ticket details','WATS'),'wats_ticket_details_meta_box','ticket','normal','default',array('view' => 0));
 	add_meta_box('categorydiv', __('Categories'), 'post_categories_meta_box', 'ticket', 'side', 'core');
 	if ($wats_settings['tickets_custom_fields'] == 1)
 		add_meta_box('postcustom', __('Custom Fields'), 'post_custom_meta_box', 'ticket', 'normal', 'core');
@@ -271,22 +276,46 @@ function wats_ticket_history_meta_box($post)
 	return;
 }
 
+/***************************************************************/
+/*                                                             */
+/* Fonction de filtrage des messages dans la page d'édition des tickets */
+/*                                                             */
+/***************************************************************/
+
+function wats_post_updated_messages($messages)
+{
+
+	if ((isset($_GET['post_type']) && $_GET['post_type'] == 'ticket') || (isset($_GET['post']) && get_post_type($_GET['post']) == 'ticket'))
+	{
+		if (isset($_GET['post']))
+		{
+			$messages['post'][10] = sprintf(__('Ticket draft updated. Please don\'t forget to submit it when edition is complete! <a target="_blank" href="%s">Preview ticket</a>','WATS'), esc_url(add_query_arg('preview','true',get_permalink($_GET['post']))));
+		}
+	}
+	
+	return $messages;
+}
+
 /***********************************************************/
 /*                                                         */
 /* Fonction d'affichage des détails d'un ticket (meta box) */
-/* view : 0 (comment form et ticket edit/creation admin    */
+/* view : 0 (comment form et ticket edit/creation admin)    */
 /* view : 1 (ticket creation frontend) 					   */
 /*                                                         */
 /***********************************************************/
 
 function wats_ticket_details_meta_box($post,$view=0)
 {
-	global $wats_settings, $current_user;
+	global $wats_settings, $current_user, $pagenow;
+
+	if (is_array($view))
+		$view = $view['args']['view'];
+
+	$wats_ticket_priority = isset($wats_settings['wats_priorities']) ? $wats_settings['wats_priorities'] : 0;
+	$wats_ticket_type = isset($wats_settings['wats_types']) ? $wats_settings['wats_types'] : 0;
+	$wats_ticket_status = isset($wats_settings['wats_statuses']) ? $wats_settings['wats_statuses'] : 0;
+	$wats_ticket_product = isset($wats_settings['wats_products']) ? $wats_settings['wats_products'] : 0;
 	
-	$wats_ticket_priority = $wats_settings['wats_priorities'];
-	$wats_ticket_type = $wats_settings['wats_types'];
-	$wats_ticket_status = $wats_settings['wats_statuses'];
-	$wats_ticket_product = $wats_settings['wats_products'];
 	
 	if (is_object($post))
 	{
@@ -309,9 +338,13 @@ function wats_ticket_details_meta_box($post,$view=0)
 	{
 		if ($view == 1)
 			$output .= '<div class="wats_select_ticket_type_frontend">';
+			
+		if ($view == 0 && !is_admin())
+			$output .= '<div class="wats_select_ticket_type_frontend_update_form">';
+			
 		if (is_admin())
 			$output.= '<br />';
-		$output .= __('Ticket type','WATS').' : ';
+		$output .= '<label class="wats_label">'.__('Ticket type','WATS').' : </label>';
 		$output .= '<select name="wats_select_ticket_type" id="wats_select_ticket_type" class="wats_select">';
 		if (is_array($wats_ticket_type))
 		foreach ($wats_ticket_type as $key => $value)
@@ -322,7 +355,7 @@ function wats_ticket_details_meta_box($post,$view=0)
 			$output .= '>'.esc_html__($value,'WATS').'</option>';
 		}
 		$output .= '</select><br /><br />';
-		if ($view == 1)
+		if ($view == 1 || ($view == 0 && !is_admin()))
 			$output .= '</div>';
 	}
 	
@@ -330,7 +363,11 @@ function wats_ticket_details_meta_box($post,$view=0)
 	{
 		if ($view == 1)
 			$output .= '<div class="wats_select_ticket_priority_frontend">';
-		$output .= __('Ticket priority','WATS').' : ';
+		
+		if ($view == 0 && !is_admin())
+			$output .= '<div class="wats_select_ticket_priority_frontend_update_form">';
+		
+		$output .= '<label class="wats_label">'.__('Ticket priority','WATS').' : </label>';
 		$output .= '<select name="wats_select_ticket_priority" id="wats_select_ticket_priority" class="wats_select">';
 		if (is_array($wats_ticket_priority))
 		foreach ($wats_ticket_priority as $key => $value)
@@ -341,7 +378,8 @@ function wats_ticket_details_meta_box($post,$view=0)
 			$output .= '>'.esc_html__($value,'WATS').'</option>';
 		}
 		$output .= '</select><br /><br />';
-		if ($view == 1)
+		
+		if ($view == 1 || ($view == 0 && !is_admin()))
 			$output .= '</div>';
 	}
 	
@@ -349,13 +387,17 @@ function wats_ticket_details_meta_box($post,$view=0)
 	{
 		if ($view == 1)
 			$output .= '<div class="wats_select_ticket_status_frontend">';
+		
+		if ($view == 0 && !is_admin())
+			$output .= '<div class="wats_select_ticket_status_frontend_update_form">';
+		
 		if (is_admin() && is_object($post) && get_post_meta($post->ID,'wats_ticket_status',true) == wats_get_closed_status_id() && !current_user_can('administrator'))
 		{
 			$output .= __('Ticket status','WATS').' : '.$wats_ticket_status[wats_get_closed_status_id()].'<br /><br />';
 		}
 		else
 		{
-			$output .= __('Ticket status','WATS').' : ';
+			$output .= '<label class="wats_label">'.__('Ticket status','WATS').' : </label>';
 			$output .= '<select name="wats_select_ticket_status" id="wats_select_ticket_status" class="wats_select">';
 			if (is_array($wats_ticket_status))
 			foreach ($wats_ticket_status as $key => $value)
@@ -367,7 +409,8 @@ function wats_ticket_details_meta_box($post,$view=0)
 			}
 			$output .= '</select><br /><br />';
 		}
-		if ($view == 1)
+		
+		if ($view == 1 || ($view == 0 && !is_admin()))
 			$output .= '</div>';
 	}
 	
@@ -375,7 +418,11 @@ function wats_ticket_details_meta_box($post,$view=0)
 	{
 		if ($view == 1)
 			$output .= '<div class="wats_select_ticket_product_frontend">';
-		$output .= __('Ticket product','WATS').' : ';
+		
+		if ($view == 0 && !is_admin())
+			$output .= '<div class="wats_select_ticket_product_frontend_update_form">';
+		
+		$output .= '<label class="wats_label">'.__('Ticket product','WATS').' : </label>';
 		$output .= '<select name="wats_select_ticket_product" id="wats_select_ticket_product" class="wats_select">';
 		if (is_array($wats_ticket_product))
 		foreach ($wats_ticket_product as $key => $value)
@@ -386,56 +433,82 @@ function wats_ticket_details_meta_box($post,$view=0)
 			$output .= '>'.esc_html__($value,'WATS').'</option>';
 		}
 		$output .= '</select><br /><br />';
-		if ($view == 1)
+		
+		if ($view == 1 || ($view == 0 && !is_admin()))
 			$output .= '</div>';
 	}
 	
 	if (is_object($post))
 		setup_postdata($post);
 
-	if (is_admin())
+	if ((is_admin() || $view == 1) && current_user_can('administrator') && $wats_settings['call_center_ticket_creation'] == 1)
 	{
-		if (current_user_can('administrator') && $wats_settings['call_center_ticket_creation'] == 1)
-		{
-			if ($post->ID)
-				$selected_login = get_the_author_meta('user_login');
-			else
-				$selected_login = $current_user->user_login;
+		if (is_object($post))
+			$selected_login = get_the_author_meta('user_login');
+		else
+			$selected_login = $current_user->user_login;
+	
+		$output .= '<div id="wats_div_ticket_originator"><label class="wats_label">'.__('Ticket originator : ','WATS').'</label>';
 		
-			$output .= __('Ticket originator : ','WATS');
-			
-			$userlist = wats_build_user_list(0,0);
-			
-			$output .= '<select name="wats_select_ticket_originator" id="wats_select_ticket_originator" class="wats_select">';
-			foreach ($userlist AS $userlogin => $username)
+		if ($wats_settings['profile_company_enabled'] == 1 && function_exists('wats_build_company_list'))
+		{
+			$company_list = wats_build_company_list(2);
+			$my_company = get_user_meta(wats_get_user_ID_from_user_login($selected_login),$wats_settings['company_meta_key_profile'],true);
+			if ($my_company == '')
+				$my_company = 0;
+			$output .= wp_nonce_field('wats-edit-ticket','_wpnonce_wats_edit_ticket',true,false)."\n";
+			$output .= '<br /><br /><label class="wats_label">+ '.__('Company','WATS').' : </label>';
+			$output .= '<select name="wats_company_list" id="wats_company_list">';
+			foreach ($company_list AS $key => $value)
 			{
-				$output .= '<option value="'.$userlogin.'" ';
-				if ($selected_login == $userlogin) $output .= " selected";
-				$output .= '>'.$username.'</option>';
+				$output .= '<option value="'.esc_attr($key).'"';
+				if ($my_company === $key) 
+					$output .= " selected";
+				if ($key == '0')
+					$output .= '>'.esc_html($value).'</option>';
+				else
+					$output .= '>'.esc_html($key).'</option>';
 			}
-			$output .=  '</select></div>';
+			$output .= '</select>';
+			$output .= '<br /><br /><label class="wats_label">+ '.__('User','WATS').' : </label>';
+			$userlist = wats_build_user_list_from_company(0,0,$my_company);
 		}
 		else
 		{
-			if ($post->ID)
-			{
-				$output .= __('Ticket originator : ','WATS');
-				$output .= get_the_author();
-			}
-			
+			$userlist = wats_build_user_list(0,0);
 		}
-	
+		
+		$output .= '<select name="wats_select_ticket_originator" id="wats_select_ticket_originator" class="wats_select">';
+		foreach ($userlist AS $userlogin => $username)
+		{
+			$output .= '<option value="'.$userlogin.'" ';
+			if ($selected_login == $userlogin) $output .= " selected";
+			$output .= '>'.$username.'</option>';
+		}
+		$output .=  '</select></div>';
+	}
+	else if (is_admin())
+	{
+		if ($post->ID)
+		{
+			$output .= '<label class="wats_label">'.__('Ticket originator : ','WATS').'</label>';
+			$output .= get_the_author();
+		}
+	}
+		
+	if (is_admin())
+	{
 		$ticket_author_name = get_post_meta($post->ID,'wats_ticket_author_name',true);
 		if ($ticket_author_name)
-			$output .= '<br /><br />'.__('Ticket author name : ','WATS').$ticket_author_name;
+			$output .= '<br /><br /><label class="wats_label">'.__('Ticket author name : ','WATS').'</label>'.$ticket_author_name;
 		
 		$ticket_author_email = get_post_meta($post->ID,'wats_ticket_author_email',true);
 		if ($ticket_author_email)
-			$output .= '<br /><br />'.__('Ticket author email : ','WATS').'<a href="mailto:'.$ticket_author_email.'">'.$ticket_author_email.'</a>';
+			$output .= '<br /><br /><label class="wats_label">'.__('Ticket author email : ','WATS').'</label>'.'<a href="mailto:'.$ticket_author_email.'">'.$ticket_author_email.'</a>';
 		
 		$ticket_author_url = get_post_meta($post->ID,'wats_ticket_author_url',true);
 		if ($ticket_author_url)
-			$output .= '<br /><br />'.__('Ticket author url : ','WATS').'<a href="'.$ticket_author_url.'">'.$ticket_author_url.'</a>';
+			$output .= '<br /><br /><label class="wats_label">'.__('Ticket author url : ','WATS').'</label>'.'<a href="'.$ticket_author_url.'">'.$ticket_author_url.'</a>';
 		$output .= '<br /><br />';
 	}
 	

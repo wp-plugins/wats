@@ -1,5 +1,26 @@
 <?php
 
+/********************************************************/
+/*                                                      */
+/* Fonction de remplissage des variables globales traduites */
+/*                                                      */
+/********************************************************/
+
+function wats_translate_global_vars()
+{
+	global $wats_custom_fields_selectors;
+
+	$wats_custom_fields_selectors = array(0 => __('Hide for any user','WATS'), 
+									  1 => __('Read access for any user','WATS'),
+									  2 => __('Read access for admins only','WATS'),
+									  3 => __('Read access for regular user and write access for admins','WATS'),
+									  4 => __('Write access for any user','WATS'),
+									  5 => __('Write access for admins only','WATS'));
+
+	return;
+}									  
+
+
 /*****************************************/
 /*                                       */
 /* Fonction d'accroche dans l'admin head */
@@ -29,7 +50,7 @@ function wats_add_my_stylesheet()
 		wp_register_style('wats_css', $myStyleFile); 
 		wp_enqueue_style('wats_css');
 	}
-	
+
 	return;
 }
 
@@ -103,9 +124,8 @@ function wats_add_admin_page()
 	
 	if (function_exists('add_options_page'))
 	{
-		$page = add_options_page('Wats Options', 'Wats Options','administrator', basename(__FILE__), 'wats_options_admin_menu');
+		$page = add_options_page(__('Wats Options','WATS'), __('Wats Options','WATS'),'administrator', basename(__FILE__), 'wats_options_admin_menu');
 		add_action('admin_print_scripts-'.$page,'wats_options_admin_head');
-
 	}
 
 	if (function_exists('add_menu_page') && function_exists('add_submenu_page'))
@@ -190,7 +210,6 @@ function wats_options_admin_head()
 	
 	return;
 }
-
 
 /**********************************************************/
 /*                                                        */

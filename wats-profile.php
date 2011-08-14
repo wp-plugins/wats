@@ -22,7 +22,6 @@ function wats_admin_save_user_profile()
 			wp_set_current_user($_POST['user_id']);
 
 		$wats_capabilities_table = wats_init_capabilities_table();
-		$wats_notifications_table = wats_init_notification_table();
 		
 		foreach ($wats_capabilities_table as $key => $value)
 		{
@@ -57,10 +56,7 @@ function wats_admin_edit_user_profile()
     wp_set_current_user($user_id);
 
 	$wats_capabilities_table = wats_init_capabilities_table();
-	$wats_notifications_table = wats_init_notification_table();
-		
-	$notifications = get_user_meta($current_user->ID,'wats_notifications',true);
-	
+
 	echo '<h3>'.__('Ticket system capabilities','WATS').'</h3><table class="form-table"><tbody>';
 	foreach ($wats_capabilities_table as $key => $value)
 	{
@@ -74,26 +70,7 @@ function wats_admin_edit_user_profile()
 	}
 	echo '</tbody></table><br />';
 	
-	echo '<br /><br />';
-	
 	wp_set_current_user($old_user->ID);
-	
-	return;
-}
-
-/*************************************************************/
-/*								     						 */
-/* Fonction de création des metas pour un nouvel utilisateur */
-/*									    					 */
-/*************************************************************/
-
-function wats_user_register($id)
-{
-	$wats_notifications = array();
-	$wats_notifications['new_ticket_notification_admin'] = 0;
-	$wats_notifications['ticket_update_notification_all_tickets'] = 0;
-	$wats_notifications['ticket_update_notification_my_tickets'] = 0;
-	update_user_meta($id,'wats_notifications',$wats_notifications);
 	
 	return;
 }

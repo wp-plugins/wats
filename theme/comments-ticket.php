@@ -18,7 +18,7 @@
 <!-- You can start editing here. -->
 
 <?php if ( have_comments() ) : ?>
-	<h3 id="comments"><?php comments_number(__('No Responses','WATS'), __('One Response','WATS'), __('% Responses','WATS') ); _e(' to ','WATS'); ?> &#8220;<?php the_title(); ?>&#8221;</h3>
+	<h2 id="comments-title"><?php comments_number(__('No Responses','WATS'), __('One Response','WATS'), __('% Responses','WATS') ); _e(' to ','WATS'); ?> &#8220;<?php the_title(); ?>&#8221;</h3>
 
 	<div class="navigation">
 		<div class="alignleft"><?php previous_comments_link() ?></div>
@@ -48,7 +48,7 @@
 
 <?php 
 
-if (wats_check_ticket_update_rights() == true)
+if (wats_get_ticket_update_rights() == true)
 {
 	if ( comments_open() ) : ?>
 
@@ -100,5 +100,9 @@ if (wats_check_ticket_update_rights() == true)
 </div>
 
 <?php endif; // if you delete this the sky will fall on your head 
+}
+else
+{
+	echo apply_filters('wats_get_ticket_update_rights_message_filter',wats_get_ticket_update_rights_message());
 }
 ?>

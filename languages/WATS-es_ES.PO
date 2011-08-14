@@ -20,9 +20,8 @@ msgstr ""
 #: wats-company.php:79
 #: wats-company.php:122
 #: wats-company.php:158
-#, fuzzy
 msgid "Error : entry not found in the DB!"
-msgstr "Error : entrada no encontrada!"
+msgstr "Error : entrada no encontrada en la base de datos!"
 
 #: wats-company.php:39
 msgid "SLA succesfully assigned!"
@@ -79,14 +78,14 @@ msgstr "Entrada agregada con éxito!"
 #: wats-template.php:291
 #: wats-template.php:543
 msgid "None"
-msgstr "nadie"
+msgstr "ninguno"
 
 #: wats-company.php:312
 #: wats-company.php:391
 #: wats-options.php:715
 #: wats-profile.php:181
 msgid "Company"
-msgstr "Empresa"
+msgstr "Empresa :"
 
 #: wats-company.php:313
 msgid "Users"
@@ -334,7 +333,7 @@ msgstr " Y "
 #: wats-template.php:277
 #: wats-template.php:290
 msgid "Any"
-msgstr "Cualquier"
+msgstr "Cualquiera"
 
 #: wats-link-template.php:44
 msgid "Edit post"
@@ -382,22 +381,22 @@ msgstr "Remover reglas seleccionadas"
 #: wats-options.php:655
 #: wats-template.php:215
 msgid "Ticket type"
-msgstr "Tipo :  "
+msgstr "Tipo "
 
 #: wats-options.php:666
 #: wats-template.php:226
 msgid "Ticket priority"
-msgstr "Prioridad : "
+msgstr "Prioridad "
 
 #: wats-options.php:677
 #: wats-template.php:237
 msgid "Ticket status"
-msgstr "Estado actual : "
+msgstr "Estado actual "
 
 #: wats-options.php:688
 #: wats-template.php:252
 msgid "Ticket product"
-msgstr "Producto : "
+msgstr "Familia de productos "
 
 #: wats-options.php:700
 #: wats-profile.php:162
@@ -407,7 +406,7 @@ msgstr "País"
 #: wats-options.php:726
 #: wats-options.php:1426
 msgid "Mailing list"
-msgstr "Lista de correo"
+msgstr "Lista de direcciones de correo a notificar : "
 
 #: wats-options.php:728
 msgid "Add this rule"
@@ -507,7 +506,7 @@ msgstr "Si la opción está deshabilitada aquí, entonces por defecto será desh
 
 #: wats-options.php:1009
 msgid "The update notification is fired upon the following events : new comment added to a ticket, ownership, priority, status or type change in the ticket edition admin page."
-msgstr "La notificación de actualizado es disparada bajo los siguientes eventos : Comentario agregado al ticket, propietario, prioridad, cambio de estado o cambio de tipo en la pagina de edicion de tickets."
+msgstr "La notificación de actualizado es disparada por cualquiera de los siguientes los siguientes eventos : Comentario agregado al ticket, cambio de asignación, prioridad, estado, o tipo, en la pagina de edicion de tickets."
 
 #: wats-options.php:1010
 msgid "These are global options which can be enabled or disabled individually under user profile if the bypass option is set. "
@@ -567,11 +566,11 @@ msgstr "Seleccione la opción preferida.  El acceso a los tickets en el frontend
 
 #: wats-options.php:1048
 msgid " This option will also affect author and owner selectors filters display for the ticket listing table which will be available for everybody, only logged in users or only admins based on the selected option."
-msgstr "Esta opción también afectará los filtros selectores de autor y creador para mostrar la lista de tickets que estará disponible para todos, solo usuarios registrados o solo admins basado en la opción seleccionada."
+msgstr "Esta opción también afectará los filtros selectores de  Autor y Persona asignada, para mostrar la lista de tickets que estará disponible para todos, solo para usuarios registrados, o solo para admins, basado en la opción seleccionada."
 
 #: wats-options.php:1049
 msgid "If the third option is selected (ticket creator and admins), you can also enable the wats_ticket_read_only capability that you can then assign to specific users under the user profile page to allow them to view all tickets with a read only access (no edition, no update)."
-msgstr "Si se selecciona la tercera opción (creador del ticket y admins), podrástambier permitir la capacidad \"wats_ticket_read_only\" que podras posteriormente asignar a usuarios concretos en la página del perfil de usuario, para permitirle ver todos los tickets con opción de solo lectura (no editar, no actualizar) "
+msgstr "Si se selecciona la tercera opción (creador del ticket y admins), podrás tambien permitir la capacidad \"wats_ticket_read_only\" que podras posteriormente asignar a usuarios concretos en la página del perfil de usuario, para permitirle ver todos los tickets con opción de solo lectura (no editar, no actualizar) "
 
 #: wats-options.php:1052
 msgid "Tickets assignment"
@@ -607,15 +606,15 @@ msgstr "Creador del ticket y admins"
 
 #: wats-options.php:1076
 msgid "Ticket originator and any user with wats_ticket_ownership capability"
-msgstr "Creador del ticket y cualquier usuario con la capacidad wats_ticket_ownership"
+msgstr "Creador del ticket y cualquier usuario con la capacidad wats_ticket_ownership (recbir asignación de tickets)"
 
 #: wats-options.php:1078
 msgid "Select the preferred option. The list of users a ticket can be assigned to will be adjusted based on this option. The wats_ticket_ownership capability can be granted under user profile by admins."
-msgstr "Seleccione la opción preferida.  La lista de usuarios que un ticket puede ser asignado serán ajustadas basadas en esta opción.  La capacidad wats_ticket_ownership capability puede verse por admins en el perfil de usuario."
+msgstr "Seleccione la opción preferida.  La lista de usuarios a los que se les puede asignar un ticket será configurada en base a esta opción.  La capacidad wats_ticket_ownership puede ser concedida  por los admins en el perfil de usuario."
 
 #: wats-options.php:1080
 msgid "Roles with ticket assignment capability"
-msgstr "Roles con capacidad de asignación de tickets"
+msgstr "Roles con capacidad de asignar tickets a determinados usuarios"
 
 #: wats-options.php:1092
 msgid "Select the roles. Only selected roles would be able to assign tickets. To learn more about users roles, check out this page : "
@@ -658,9 +657,8 @@ msgid "Check this option if you want to allow custom fields association to ticke
 msgstr "Marque esta opción si desea permitir la asociación de campos de usuario a los tickets."
 
 #: wats-options.php:1121
-#, fuzzy
 msgid "Global statistics dashboard widget roles visibility"
-msgstr "Visibilidad del widget de Estadisticas globales en el escritorio."
+msgstr "Visibilidad de los roles en el widget de estadísticas globales"
 
 #: wats-options.php:1133
 msgid "Select the roles. Only selected roles would be able to view the global statistics under the stats widget on the dashboard. To learn more about users roles, check out this page : "
@@ -779,9 +777,8 @@ msgid "This feature allows users to submit tickets directly through email. You h
 msgstr "Esta caracteristica permite a los usuarios enviar tickets directamente por email.  Tiene que definir un email secreto en un servidor POP3."
 
 #: wats-options.php:1212
-#, fuzzy
 msgid "Warning : every email received on this account will result in a ticket. Therefore, make sure that your email address isn't known by SPAM robots."
-msgstr "Cuidado : cada email recibido en esta cuenta resultará en un ticket.  Así que, asegúrese que su dirección de email no es conocida por los robots de SPAM."
+msgstr "Cuidado! cada correo recibido en esta cuenta generará un nuevo ticket. Asegúrate, por lo tanto, que no llega a manos de robots SPAM."
 
 #: wats-options.php:1215
 msgid "Default author for unregistered visitors tickets"
@@ -934,7 +931,7 @@ msgstr "Modos de Estado"
 
 #: wats-options.php:1350
 msgid "Product key"
-msgstr "Clave de acceso del producto"
+msgstr "Afecta al producto :"
 
 #: wats-options.php:1352
 msgid "Check the keys you would like to enable. Selected ones will then appear in the ticket creation, edition and listing pages."
@@ -993,7 +990,7 @@ msgstr "Seleccione la meta key usada para el cierre de edición para los usuario
 
 #: wats-options.php:1403
 msgid "Ticket products"
-msgstr "Ticket deProducto"
+msgstr "Ticket referente al Producto"
 
 #: wats-options.php:1406
 #: wats-template.php:471
@@ -1003,7 +1000,7 @@ msgstr "Producto"
 
 #: wats-options.php:1413
 msgid "Categories opened to submission"
-msgstr "Categorías abiertas para tickets"
+msgstr "Categorías predefinidas para recibir Tickets"
 
 #: wats-options.php:1416
 #: wats-template.php:444
@@ -1084,7 +1081,7 @@ msgstr "Autor del Ticket"
 
 #: wats-template.php:287
 msgid "Ticket owner"
-msgstr "Propietario del Ticket"
+msgstr "Ticket asignado a "
 
 #: wats-template.php:301
 msgid "Filter"
@@ -1104,7 +1101,7 @@ msgstr "Autor"
 
 #: wats-template.php:450
 msgid "Owner"
-msgstr "Propietario"
+msgstr "Asignado a "
 
 #: wats-template.php:453
 msgid "Creation date"
@@ -1221,14 +1218,12 @@ msgid "Error : can't submit form"
 msgstr "Error : no se puede enviar"
 
 #: wats-template.php:934
-#, fuzzy
 msgid "ticket"
-msgstr "Ticket"
+msgstr "ticket"
 
 #: wats-template.php:935
-#, fuzzy
 msgid "Add New"
-msgstr "Agregar nuevo ticket"
+msgstr "Añadir nuevo"
 
 #: wats-template.php:936
 msgid "Add New Ticket"
@@ -1264,7 +1259,7 @@ msgstr "Ticket"
 
 #: wats-ticket-metas.php:17
 msgid "Current ticket owner : "
-msgstr "Propietario actual del ticket :"
+msgstr "Ticket actualmente asignado a : "
 
 #: wats-ticket-metas.php:144
 msgid "Sorry, you can't update this ticket."
@@ -1296,11 +1291,11 @@ msgstr "El Producto de este Ticket ha sido cambiado a : "
 
 #: wats-ticket-metas.php:347
 msgid "Ticket owner has been removed"
-msgstr "El propietario del ticket ha sido eliminado "
+msgstr "El usuario al que se asignó el ticket ha sido eliminado "
 
 #: wats-ticket-metas.php:349
 msgid "Ticket owner has been assigned to : "
-msgstr "El propietario del ticket ha sido asignado a : "
+msgstr "El ticket ha sido asignado a : "
 
 #: wats-ticket-metas.php:367
 #: wats-ticket-metas.php:387
@@ -1355,9 +1350,8 @@ msgid "New ticket submitted"
 msgstr "Nuevo ticket enviado"
 
 #: wats-ticket-metas.php:515
-#, fuzzy
 msgid "Hello"
-msgstr "Hola "
+msgstr "Hola"
 
 #: wats-ticket-metas.php:516
 #: wats-ticket-metas.php:581
@@ -1488,7 +1482,7 @@ msgstr "Prioridad actual :"
 
 #: theme/single-ticket.php:22
 msgid "Current status : "
-msgstr "Estado actual :"
+msgstr "Estado actual : "
 
 #: theme/single-ticket.php:24
 msgid "Ticket type : "

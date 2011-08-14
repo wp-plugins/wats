@@ -1,10 +1,10 @@
 === Wordpress Advanced Ticket System ===
 Contributors: Olivier
 Donate link: http://www.ticket-system.net/
-Tags: ticket,case,system,support,taxonomy,help,cms,crm,customer,helpdesk,community,contact,social,member,company,trouble,issue,problem,contact,contact form,feedback,form,custom fields
+Tags: ticket,case,system,support,taxonomy,help,cms,crm,customer,helpdesk,community,contact,social,member,company,trouble,issue,post,problem,contact,contact form,feedback,form,custom fields,custom post,post type,ticket system,support system,wats
 Requires at least: 3.0
-Tested up to: 3.1.3
-Stable tag: 1.0.54
+Tested up to: 3.2.1
+Stable tag: 1.0.55
 
 == Description ==
 
@@ -41,7 +41,7 @@ WATS key features :
 * ticket list filtering, sorting and export to Excel in the frontend (Premium release)
 * ticket statistics through dashboard and frontend widgets
 * advanced user profile features : account expiration date, country and company definition, user profile email modification prevention (Premium release)
-
+* smooth integration with WordPress themes
 
 WATS offers a wide range of features. A lot of options are available to allow you to set it up according to your needs thus making WATS compliant with most of the requirements.
 
@@ -66,7 +66,8 @@ Translations :
 * Lithuanian (Minimum release : 1.0.50, Originator : Arturas from http://www.taisyklajums.lt/ )
 * Russian (Minimum release : 1.0.53, Originator : Alexey from http://reservation.isaev.asia/ )
 * Indonesian (Minimum release : 1.0.53, Originator : Rizal Fauzie from http://fauzievolute.com/ )
-* Italian (Minimum release : 1.0.54, originator : Alessandro Pagano from http://www.alessandropagano.net/ )
+* Italian (Minimum release : 1.0.54, originator : Alessandro Pagano from http://www.alessandropagano.net/ and Roberto Scano from http://robertoscano.info )
+* Polish (Minimum release : 1.0.55, originator : Eryk Lewandowski from http://www.disena.pl/ )
 
 
 == Installation ==
@@ -92,6 +93,43 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 
 
 == Changelog ==
+
+= V1.0.55 (14/08/2011) =
+* added last modification table column to the frontend ticket listing
+* fixed a bug with ticket assignment in the frontend submission form
+* added an option to allow notification of per ticket specific mailing list for ticket updates
+* added an option to define which columns are active in the frontend ticket listing
+* added filter hooks for ticket notification subject title
+* added an option to allow user to view and update tickets raised by any user from the same company
+* fixed a bug with admin notification when using WP release below WP 3.1
+* added an option to allow admins to submit internal comments/updates for ticket that can only be viewed by admins
+* added custom field management options for tickets
+* fixed a bug with ticket numbering causing duplicate ticket number
+* added action hook fired after ticket metas save
+* enhanced options page organization (split options per families)
+* added CSS class and div wrapper for frontend update form ticket keys
+* added an option to define default query for frontend ticket listing
+* modified frontend ticket listing query to be sorted by DESC post creation date (rather than ASC)
+* added CSS id for all form elements in frontend ticket listing
+* added Polish translation (prodived by Eryk Lewandowski from http://www.disena.pl/ )
+* fixed a bug preventing comment on regular posts for non-admin users
+* fixed a bug with WATS shortcode insertion conflict in admin
+* added an authentication form to the single ticket page when the user isn't logged in while only registered users can view the ticket
+* added an authentication form to the frontend ticket listing page when the user isn't logged in while only registered users can view the tickets
+* added an option to allow admins to prevent mail notification from being fired on some updates
+* modified ticket edition page message for draft mode to remind user to submit ticket once edition is completed
+* added last modification author table column to the frontend ticket listing
+* added WP 3.2 compatibility
+* updated Italian translation (provided by Roberto Scano from http://robertoscano.info/ )
+* added filter hook to allow frontend submission form code modification
+* modified template selector to allow active theme selection or WATS custom template
+* added html label to all ticket metas to enable further CSS customization
+* added user_email to list of user meta key column for frontend ticket listing table
+* added action hook after frontend submission of new ticket
+* added action hooks for user to company mapping add, modification and removal
+* modified the_title hook format to workaround misformated call in 3rd party themes/plugins
+* fixed a bug with custom post type permalink structure handling on Windows server
+* added call center ticket creation (author selection) to frontend submission form
 
 = V1.0.54 (19/03/2011) =
 * removed use of deprecated user_level attribute, get_usermeta function (minimum release is now WP 3.0)

@@ -128,7 +128,7 @@ function wats_get_latest_ticket_number()
 {
 	global $wpdb;
 	
-	$value = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = 'wats_ticket_number' ORDER BY post_id DESC LIMIT 0,1"));
+	$value = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = 'wats_ticket_number' ORDER BY ABS(meta_value) DESC LIMIT 0,1"));
 
 	if (!$value)
 		$value = 0;
@@ -222,23 +222,6 @@ function wats_init_capabilities_table()
 	return ($wats_capabilities_table);
 }
 
-/*********************************************************/
-/*                                                       */
-/* Fonction de remplissage de la table des notifications */
-/*                                                       */
-/*********************************************************/
-
-function wats_init_notification_table()
-{
-	
-	$wats_notification_table = array();
-	$wats_notification_table['new_ticket_notification_admin'] = __('Get a mail notification when a new ticket is submitted (admin only)','WATS');
-	$wats_notification_table['ticket_update_notification_all_tickets'] = __('Get a mail notification when any ticket is updated (admin only)','WATS');
-	$wats_notification_table['ticket_update_notification_my_tickets'] = __('Get a mail notification when a ticket originated or updated by me is updated','WATS');
-	
-	return ($wats_notification_table);
-}
-
 /******************************************************/
 /*                                                    */
 /* Fonction de récupération du login du premier admin */
@@ -314,7 +297,6 @@ function wats_build_user_list($firstitem,$cap)
         
     return ($userlist);
 }
-
 
 /*******************************************/
 /*                                         */
@@ -453,213 +435,6 @@ function wats_get_mail_notification_signature()
 	global $wats_settings;
 
 	return(esc_html(str_replace(array('\r\n','\r','<br />'),"\r\n",html_entity_decode(stripslashes($wats_settings['notification_signature'])))));
-}
-
-/**********************************************************/
-/*                                                        */
-/* Fonction d'affichage des règles de notification */
-/*                                                        */
-/**********************************************************/
-
-function wats_admin_display_notification_rule($rule)
-{
-	global $wats_settings;
-	
-	$output = '';
-	
-	$listepriority = $wats_settings['wats_priorities'];
-	$listetype = $wats_settings['wats_types'];
-	$listestatus = $wats_settings['wats_statuses'];
-	$listeproduct = $wats_settings['wats_products'];
-	
-	foreach ($rule AS $key => $value)
-	{
-		if (strlen($output) > 0)
-			$output .= __(' AND ','WATS');
-		if ($value != "0")
-		{
-			switch ($key)
-			{
-				case "priority" : $output .= $key." : ".$listepriority[$value]; break;
-				case "type" : $output .= $key." : ".$listetype[$value]; break;
-				case "status" : $output .= $key." : ".$listestatus[$value]; break;
-				case "product" : $output .= $key." : ".$listeproduct[$value]; break;
-			}
-		}
-		else
-			$output .= $key." : ".__('Any','WATS');
-	}
-
-	return $output;
-}
-
-/*******************************************************/
-/*                                                     */
-/* Fonction de construction des règles de notification */
-/*                                                     */
-/*******************************************************/
-
-function wats_admin_build_notification_rule($rule)
-{
-	$rules = explode(";",$rule);
-	
-	unset($rules[count($rules)-1]);
-	$ruleset = array();
-	foreach ($rules AS $rulesentry)
-	{
-		$newrule = explode(":",$rulesentry);
-		$ruleset = array_merge($ruleset,array($newrule[0] => $newrule[1]));
-	}
-	
-	return $ruleset;
-}
-
-
-/***********************************************************/
-/*                                                         */
-/* Fonction included for backward compatibility before 2.8 */
-/*                                                         */
-/***********************************************************/
-
-if (!function_exists('esc_attr'))
-{
-function esc_attr($text) 
-{
-	$safe_text = wp_check_invalid_utf8($text);
-    $safe_text = _wp_specialchars($safe_text, ENT_QUOTES);
-    
-	return apply_filters('attribute_escape', $safe_text, $text);
-}
-}
-
-/***********************************************************/
-/*                                                         */
-/* Fonction included for backward compatibility before 2.8 */
-/*                                                         */
-/***********************************************************/
-
-if (!function_exists('_wp_specialchars'))
-{
-function _wp_specialchars( $string, $quote_style = ENT_NOQUOTES, $charset = false, $double_encode = false ) {
-	$string = (string) $string;
-
-	if ( 0 === strlen( $string ) ) {
-		return '';
-	}
-
-	// Don't bother if there are no specialchars - saves some processing
-	if ( !preg_match( '/[&<>"\']/', $string ) ) {
-		return $string;
-	}
-
-	// Account for the previous behaviour of the function when the $quote_style is not an accepted value
-	if ( empty( $quote_style ) ) {
-		$quote_style = ENT_NOQUOTES;
-	} elseif ( !in_array( $quote_style, array( 0, 2, 3, 'single', 'double' ), true ) ) {
-		$quote_style = ENT_QUOTES;
-	}
-
-	// Store the site charset as a static to avoid multiple calls to wp_load_alloptions()
-	if ( !$charset ) {
-		static $_charset;
-		if ( !isset( $_charset ) ) {
-			$alloptions = wp_load_alloptions();
-			$_charset = isset( $alloptions['blog_charset'] ) ? $alloptions['blog_charset'] : '';
-		}
-		$charset = $_charset;
-	}
-	if ( in_array( $charset, array( 'utf8', 'utf-8', 'UTF8' ) ) ) {
-		$charset = 'UTF-8';
-	}
-
-	$_quote_style = $quote_style;
-
-	if ( $quote_style === 'double' ) {
-		$quote_style = ENT_COMPAT;
-		$_quote_style = ENT_COMPAT;
-	} elseif ( $quote_style === 'single' ) {
-		$quote_style = ENT_NOQUOTES;
-	}
-
-	// Handle double encoding ourselves
-	if ( !$double_encode ) {
-		$string = wp_specialchars_decode( $string, $_quote_style );
-		$string = preg_replace( '/&(#?x?[0-9a-z]+);/i', '|wp_entity|$1|/wp_entity|', $string );
-	}
-
-	$string = @htmlspecialchars( $string, $quote_style, $charset );
-
-	// Handle double encoding ourselves
-	if ( !$double_encode ) {
-		$string = str_replace( array( '|wp_entity|', '|/wp_entity|' ), array( '&', ';' ), $string );
-	}
-
-	// Backwards compatibility
-	if ( 'single' === $_quote_style ) {
-		$string = str_replace( "'", '&#039;', $string );
-	}
-
-	return $string;
-}
-}
-
-/***********************************************************/
-/*                                                         */
-/* Fonction included for backward compatibility before 2.8 */
-/*                                                         */
-/***********************************************************/
-
-if (!function_exists('esc_html'))
-{
-function esc_html( $text ) {
-	$safe_text = wp_check_invalid_utf8( $text );
-	$safe_text = _wp_specialchars( $safe_text, ENT_QUOTES );
-	return apply_filters( 'esc_html', $safe_text, $text );
-    return $text;
-}
-}
-
-/***********************************************************/
-/*                                                         */
-/* Fonction included for backward compatibility before 2.8 */
-/*                                                         */
-/***********************************************************/
-
-if (!function_exists('esc_url'))
-{
-function esc_url( $url, $protocols = null ) {
-	return clean_url( $url, $protocols, 'display' );
-}
-}
-
-/***********************************************************/
-/*                                                         */
-/* Fonction included for backward compatibility before 2.8 */
-/*                                                         */
-/***********************************************************/
-
-if (!function_exists('esc_attr_e'))
-{
-function esc_attr_e( $text, $domain = 'default' ) {
-    echo esc_attr( translate( $text, $domain ) );
-}
-}
-
-/***********************************************************/
-/*                                                         */
-/* Fonction included for backward compatibility before 2.8 */
-/*                                                         */
-/***********************************************************/
-
-if (!function_exists('esc_js'))
-{
-function esc_js( $text ) {
-	$safe_text = wp_check_invalid_utf8( $text );
-	$safe_text = _wp_specialchars( $safe_text, ENT_COMPAT );
-	$safe_text = preg_replace( '/&#(x)?0*(?(1)27|39);?/i', "'", stripslashes( $safe_text ) );
-	$safe_text = preg_replace( "/\r?\n/", "\\n", addslashes( $safe_text ) );
-	return apply_filters( 'js_escape', $safe_text, $text );
-}
 }
 
 ?>
