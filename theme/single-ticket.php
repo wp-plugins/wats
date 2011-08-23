@@ -19,7 +19,7 @@
 		<header class="entry-header">
 			<h1 class="entry-title"><?php the_title(); ?></h1>
 			<div class="entry-meta">
-				<?php twentyeleven_posted_on(); ?>
+				<?php echo get_the_date(); ?>
 			</div><!-- .entry-meta -->
 		</header><!-- .entry-header -->
 		
