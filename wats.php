@@ -455,6 +455,8 @@ add_action('save_post', 'wats_ticket_save_meta', 10, 2);
 add_action('pre_comment_on_post','wats_pre_comment_on_post',10,1);
 add_filter('post_type_link','wats_post_type_link',10,4);
 add_filter('post_updated_messages','wats_post_updated_messages',10,1);
+add_filter('the_content', 'wats_list_tickets_filter');
+add_filter('the_content', 'wats_ticket_submit_form_filter');
 
 /* Ajax Actions Hooks */
 add_action('wp_ajax_wats_admin_insert_option_entry','wats_admin_insert_option_entry',10);

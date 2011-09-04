@@ -20,6 +20,8 @@ function wats_get_ticket_update_rights()
 	return true;
 }
 
+
+
 /************************************************************/
 /*                                                          */
 /* Fonction de renvoi du message d'erreur pour l'ouverture des commentaires */
@@ -44,7 +46,6 @@ function wats_get_ticket_update_rights_message()
 		
 	return $output;
 }
-
 
 /*********************************************************/
 /*                                                       */
@@ -78,6 +79,55 @@ function wats_is_ticket($post)
 		return true;
 	
 	return false;
+}
+
+/********************************************************************************/
+/*                                                                              */
+/* Fonction de filtrage sur le contenu pour l'affichage de la table des tickets */
+/*                                                                              */
+/********************************************************************************/
+
+function wats_list_tickets_filter($content)
+{
+    return (preg_replace_callback(WATS_TICKET_LIST_REGEXP, 'wats_list_tickets_args', $content));
+}
+
+/********************************************************************************/
+/*                                                                              */
+/* Fonction de filtrage des paramètres pour l'affichage de la table des tickets */
+/*                                                                              */
+/********************************************************************************/
+
+function wats_list_tickets_args($args)
+{
+
+	$output = __('The frontend ticket listing feature is only available in the premium release. Don\'t hesitate to <a href="http://www.ticket-system.net/order/">order it</a>!','WATS');
+	
+	return $output;
+}
+
+/************************************************************************************************/
+/*                                                                                              */
+/* Fonction de filtrage sur le contenu pour l'affichage du formulaire de soumission des tickets */
+/*                                                                                              */
+/************************************************************************************************/
+
+function wats_ticket_submit_form_filter($content)
+{
+	return (preg_replace_callback(WATS_TICKET_SUBMIT_FORM, 'wats_ticket_submit_form', $content));
+}
+
+/****************************************************************/
+/*                                                              */
+/* Fonction d'affichage du formulaire de soumission des tickets */
+/*                                                              */
+/****************************************************************/
+
+function wats_ticket_submit_form()
+{
+	$output = __('The frontend submission form feature is only available in the premium release. Don\'t hesitate to <a href="http://www.ticket-system.net/order/">order it</a>!','WATS');
+	
+	return $output;
 }
 
 /******************************/
