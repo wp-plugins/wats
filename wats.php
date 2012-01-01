@@ -437,7 +437,6 @@ add_action('init','wats_init',0);
 add_action('plugins_loaded','wats_plugins_loaded');
 add_action('comment_post','wats_comment_update_meta');
 add_action('wp_footer','wats_wp_footer');
-add_action('user_register','wats_user_register');
 
 add_filter('template_include', 'wats_ticket_template_loader');
 add_filter('comments_template', 'wats_comments_template');
