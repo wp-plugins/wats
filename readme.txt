@@ -3,7 +3,7 @@ Contributors: Olivier
 Donate link: http://www.ticket-system.net/
 Tags: ticket,case,system,support,taxonomy,help,cms,crm,customer,helpdesk,community,contact,social,member,company,trouble,issue,post,problem,contact,contact form,feedback,form,custom fields,custom post,post type,ticket system,support system,wats
 Requires at least: 3.0
-Tested up to: 3.3
+Tested up to: 3.3.2
 Stable tag: 1.0.55
 
 == Description ==
@@ -32,7 +32,7 @@ WATS key features :
 * ticket submission on behalf of users, usefull for call centre
 * priority, status, type and product values preset by the admin
 * priority, status, type and product keys selection for each ticket
-* unlimited number of input custom fields for tickets, fully integrated with total control over read/write rights (Premium release)
+* unlimited number of text input and drop down selector custom fields for tickets, fully integrated with total control over read/write rights (Premium release)
 * internal comments support for private exchanges between admins (Premium release)
 * mail notification upon new ticket submission for admins (Premium release)
 * mail notification based on key rules (product, priority, status and ticket types as well as author company and country) upon new ticket submission for selected distribution list (Premium release)
@@ -56,6 +56,8 @@ Examples of use of WATS :
 * helpdesk system
 * contact form with database tracking
 * collaborative content site with frontend post submission
+* appointment request system
+* project status tracker
 
 Translations :
 
@@ -64,10 +66,13 @@ Translations :
 * German (Minimum release : 1.0.23, Originator : Tobias Kalleder from http://indivisualists.com/ )
 * Spanish (Minimum release : 1.0.49, Originator : Esteban from http://www.netmdp.com/ )
 * Lithuanian (Minimum release : 1.0.50, Originator : Arturas from http://www.taisyklajums.lt/ )
-* Russian (Minimum release : 1.0.53, Originator : Alexey from http://reservation.isaev.asia/ )
+* Russian (Minimum release : 1.0.53, Originators : Alexey from http://reservation.isaev.asia/ and Eugene from http://1245.ru/ )
 * Indonesian (Minimum release : 1.0.53, Originator : Rizal Fauzie from http://fauzievolute.com/ )
-* Italian (Minimum release : 1.0.54, originator : Alessandro Pagano from http://www.alessandropagano.net/ and Roberto Scano from http://robertoscano.info )
-* Polish (Minimum release : 1.0.55, originator : Eryk Lewandowski from http://www.disena.pl/ )
+* Italian (Minimum release : 1.0.54, Originators : Alessandro Pagano from http://www.alessandropagano.net/ and Roberto Scano from http://robertoscano.info )
+* Polish (Minimum release : 1.0.55, Originator : Eryk Lewandowski from http://www.disena.pl/ )
+* Belarussian (Minimum release : 1.0.56, Originator : Alex from http://webhostinggeeks.com/ )
+* Romanian (Minimum release : 1.0.56, Originator : Alex from http://webhostinggeeks.com/ )
+* Dutch (Minimum release : 1.0.56, Originator : Anita Berghoef from http://www.ab-ct.nl/ )
 
 
 == Installation ==
