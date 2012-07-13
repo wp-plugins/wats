@@ -42,6 +42,7 @@ WATS key features :
 * ticket statistics through dashboard and frontend widgets
 * advanced user profile features : account expiration date, country and company definition, user profile email modification prevention (Premium release)
 * smooth integration with WordPress themes
+* scalability : able to work on websites with more than 50.000 users! (Premium release)
 
 WATS offers a wide range of features. A lot of options are available to allow you to set it up according to your needs thus making WATS compliant with most of the requirements.
 
