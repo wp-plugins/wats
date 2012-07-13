@@ -95,7 +95,7 @@ jQuery(document).ready(function() {
 						parenttoremove.parentNode.removeChild(parenttoremove);
 					}
 					if (jQuery("input[name=typecheck]").length == 0)
-						wats_js_add_blank_cell("tabletype",3,watsmsg[2]);
+						wats_js_add_blank_cell("tabletype",4,watsmsg[2]);
 				});
 			}
 		});
@@ -152,7 +152,7 @@ jQuery(document).ready(function() {
 						parenttoremove.parentNode.removeChild(parenttoremove);
 					}
 					if (jQuery("input[name=prioritycheck]").length == 0)
-						wats_js_add_blank_cell("tablepriority",3,watsmsg[2]);
+						wats_js_add_blank_cell("tablepriority",4,watsmsg[2]);
 				});
 			}
 		});
@@ -209,7 +209,7 @@ jQuery(document).ready(function() {
 						parenttoremove.parentNode.removeChild(parenttoremove);
 					}
 					if (jQuery("input[name=statuscheck]").length == 0)
-						wats_js_add_blank_cell("tablestatus",3,watsmsg[2]);
+						wats_js_add_blank_cell("tablestatus",4,watsmsg[2]);
 				});
 			}
 		});
@@ -266,7 +266,7 @@ jQuery(document).ready(function() {
 						parenttoremove.parentNode.removeChild(parenttoremove);
 					}
 					if (jQuery("input[name=productcheck]").length == 0)
-						wats_js_add_blank_cell("tableproduct",3,watsmsg[2]);
+						wats_js_add_blank_cell("tableproduct",4,watsmsg[2]);
 				});
 			}
 		});
@@ -394,9 +394,10 @@ jQuery(document).ready(function() {
 		var idproduct = jQuery('#notification_rules_select_ticket_product option:selected').val();
 		var idcountry = jQuery('#notification_rules_select_ticket_country option:selected').val();
 		var idcompany = jQuery('#notification_rules_select_ticket_company option:selected').val();
+		var idcategorie = jQuery('#notification_rules_select_category option:selected').val();
 		var listvalue = jQuery("#rule_mailing_list").val();
 		wats_loading(document.getElementById("resultaddrule"),watsmsg[4]);
-		jQuery.post(ajaxurl, {action:"wats_admin_insert_notification_rule_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idtype:idtype, idpriority:idpriority, idstatus:idstatus, idproduct:idproduct, idcountry:idcountry, idcompany:idcompany, listvalue:listvalue},
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_notification_rule_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idtype:idtype, idpriority:idpriority, idstatus:idstatus, idproduct:idproduct, idcountry:idcountry, idcompany:idcompany, idcategorie:idcategorie, listvalue:listvalue},
 		function(res)
 		{
 			jQuery('#idaddrule').removeAttr('disabled');
@@ -453,10 +454,11 @@ jQuery(document).ready(function() {
 		var idftuf = jQuery('#ftuf option:selected').val();
 		var idftlf = jQuery('#ftlf option:selected').val();
 		var idftltc = jQuery('#ftltc option:selected').val();
+		var idtype = jQuery('#wats_custom_field_type option:selected').val();
 		var customfieldname = jQuery("#customfieldsdisplayname").val();
 		var customfieldmetakey = jQuery("#customfieldsmetakey").val();
 		wats_loading(document.getElementById("resultaddcustomfields"),watsmsg[4]);
-		jQuery.post(ajaxurl, {action:"wats_admin_insert_ticket_custom_field", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idfsf:idfsf, idatef:idatef, idftdt:idftdt, idftuf:idftuf, idftlf:idftlf, idftltc:idftltc, customfieldname:customfieldname, customfieldmetakey:customfieldmetakey},
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_ticket_custom_field", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idfsf:idfsf, idatef:idatef, idftdt:idftdt, idftuf:idftuf, idftlf:idftlf, idftltc:idftltc, customfieldname:customfieldname, customfieldmetakey:customfieldmetakey, idtype:idtype},
 		function(res)
 		{
 			jQuery('#idaddcustomfields').removeAttr('disabled');
@@ -466,6 +468,7 @@ jQuery(document).ready(function() {
 				jQuery('#divticketcustomfieldstable').html(message_result.output);
 				jQuery("#customfieldsdisplayname").val('');
 				jQuery("#customfieldsmetakey").val('');
+				wats_js_options_bind_edit_custom_field();
 			}
 			wats_stop_loading(document.getElementById("resultaddcustomfields"),message_result.error);
 		});
@@ -503,6 +506,142 @@ jQuery(document).ready(function() {
 		});
 		return false;
 	});
+	
+	jQuery('#idaddcustomselector').click(function() {
+		jQuery('#idaddcustomselector').attr('disabled','disabled');
+		var type = "wats_custom_selector";
+		var idvalue = jQuery("#idcustomselector").val();
+		var idcat = jQuery('#wats_custom_fields_selector option:selected').val();
+		wats_loading(document.getElementById("resultaddcustomselector"),watsmsg[4]);
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+		function(res)
+		{
+			jQuery('#idaddcustomselector').removeAttr('disabled');
+			var message_result = eval('(' + res + ')');
+			if (message_result.success == "TRUE")
+			{
+				var x = jQuery("input[name=customselectorcheck]").length;
+				var liste = [message_result.id,message_result.idvalue];
+				var editable = [0,0];
+				wats_js_add_table_col_with_default(document.getElementById("custom_fields_selector_values_table"),liste,"customselectorcheck",x,message_result.id,editable,"group_default_custom_selector");
+				jQuery("#idcustomselector").val("");
+				wats_options_editable_init();
+			}
+			wats_stop_loading(document.getElementById("resultaddcustomselector"),message_result.error);
+		});
+		return false;
+	});
+	
+	jQuery('#idsupcustomselector').click(function() {
+		if (jQuery("input[name=customselectorcheck]").length == 0)
+			wats_stop_loading(document.getElementById("resultsupcustomselector"),watsmsg[0]);
+		else if (jQuery("input[name=customselectorcheck]:checked").length == 0)
+			wats_stop_loading(document.getElementById("resultsupcustomselector"),watsmsg[1]);
+		var type = "wats_custom_selector";
+		var idcat = jQuery('#wats_custom_fields_selector option:selected').val();
+	    jQuery("input[name=customselectorcheck]:checked").each(function()
+		{
+		    if (this.checked == true)
+			{
+				jQuery('#idsupcustomselector').attr('disabled','disabled');
+				var idvalue = this.value;
+				var nodetoremove = this.parentNode;
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+				function(res)
+				{
+					jQuery('#idsupcustomselector').removeAttr('disabled');
+					var message_result = eval('(' + res + ')');
+					wats_stop_loading(document.getElementById("resultsupcustomselector"),message_result.error);
+					if (message_result.success == "TRUE")
+					{
+						parenttoremove = nodetoremove.parentNode;
+						parenttoremove.parentNode.removeChild(parenttoremove);
+					}
+					if (jQuery("input[name=customselectorcheck]").length == 0)
+						wats_js_add_blank_cell("custom_fields_selector_values_table",4,watsmsg[2]);
+				});
+			}
+		});
+		return false;
+	});
+	
+	jQuery('#wats_custom_fields_selector').change(function() {
+		var idvalue = jQuery('#wats_custom_fields_selector option:selected').val();
+		jQuery.post(ajaxurl, {action:"wats_admin_get_custom_fields_selector_values_table", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue},
+				function(res)
+				{
+					var message_result = eval('(' + res + ')');
+					if (message_result.success == "TRUE")
+					{
+						jQuery("#custom_fields_selector_values_table_div").html(message_result.id).hide();
+				        jQuery("#custom_fields_selector_values_table_div").fadeIn("slow");
+					}
+					else
+						wats_stop_loading(document.getElementById("custom_fields_selector_values_table_div"),message_result.error);
+				});
+				
+		return false;
+	});
+	
+	jQuery('#wats_custom_fields_selector').change();
+	
+function wats_js_options_bind_edit_custom_field()
+{
+	jQuery('[name^=wats_edit_custom_field]').click(function() {
+		jQuery('[name^=wats_edit_custom_field]').attr('disabled','disabled');
+		idvalue = jQuery(this).parent('td').next('td').find('input').val();
+		jQuery.post(ajaxurl, {action:"wats_admin_options_get_custom_field_table_row", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue},
+				function(res)
+				{
+					var message_result = eval('(' + res + ')');
+
+					if (message_result.success == "TRUE")
+					{
+						jQuery('#wats_edit_custom_field'+idvalue).parent('td').parent('tr').html(message_result.output);
+						wats_js_options_bind_save_custom_field();
+					}
+					else
+						wats_stop_loading(document.getElementById("resultsupcustomfields"),message_result.error);
+				});
+		return false;
+	});
+	
+	return false;
+}
+
+function wats_js_options_bind_save_custom_field()
+{
+	jQuery('[name^=wats_save_custom_field]').click(function() {
+		idvalue = jQuery(this).parent('td').next('td').find('input').val();
+		var idfsf = jQuery('#fsf'+idvalue+' option:selected').val();
+		var idatef = jQuery('#atef'+idvalue+' option:selected').val();
+		var idftdt = jQuery('#ftdt'+idvalue+' option:selected').val();
+		var idftuf = jQuery('#ftuf'+idvalue+' option:selected').val();
+		var idftlf = jQuery('#ftlf'+idvalue+' option:selected').val();
+		var idftltc = jQuery('#ftltc'+idvalue+' option:selected').val();
+		var idtype = jQuery('#wats_custom_field_type_'+idvalue+' option:selected').val();
+		var customfieldname = jQuery("#customfieldsdisplayname"+idvalue).val();
+		var customfieldmetakey = jQuery("#customfieldsmetakey"+idvalue).val();
+		
+		jQuery.post(ajaxurl, {action:"wats_admin_update_ticket_custom_field", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, idfsf:idfsf, idatef:idatef, idftdt:idftdt, idftuf:idftuf, idftlf:idftlf, idftltc:idftltc, customfieldname:customfieldname, customfieldmetakey:customfieldmetakey, idtype:idtype},
+		function(res)
+		{
+			jQuery('#idaddcustomfields').removeAttr('disabled');
+			var message_result = eval('(' + res + ')');
+			if (message_result.success == "TRUE")
+			{
+				jQuery('#divticketcustomfieldstable').html(message_result.output);
+				wats_js_options_bind_edit_custom_field();
+			}
+			wats_stop_loading(document.getElementById("resultsupcustomfields"),message_result.error);
+		});
+		return false;
+	});
+	
+	return false;
+}
+	
+	wats_js_options_bind_edit_custom_field();
 	
 	return false;
 });

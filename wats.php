@@ -4,12 +4,45 @@ Plugin Name: Wats
 Plugin URI: http://www.ticket-system.net/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0.55
+Version: 1.0.56
 Author URI: http://www.ticket-system.net/
 */
 
 /*
 1/ Release history :
+- V1.0.56 (13/07/2012) :
++ added CSS ID to single ticket page meta keys in the ticket content
++ fixed a bug with source email address on new ticket notifications for admin when the ticket was submitted by email
++ added CSS ID to custom fields in frontend submission form
++ added ticket author meta details (non registered user submission) to single ticket display page
++ removed ticket number from notifications when ticket numbering is disabled
++ added CSS class to individual priorities, types, products and status on single ticket page
++ removed current admin user from shared guest user list to prevent inappropriate setting that would prevent further admin access
++ added pagination feature to frontend ticket listing (page selection and number of tickets per page)
++ enhanced last modification date relevance in frontend ticket listing
++ added filter hook for product list before selector display
++ added custom field management for drop down selectors in addition to input fields
++ added flag to bypass input verification (only to be used with Chinese characters)
++ enhanced ticket update notification handling to avoid multiple notifications for same email and notification of current updater of own update
++ modified owner output to user nickname rather than login
++ added ticket owner to notification cycle for ticket update
++ modified username in notifications to use nickname rather than firstname
++ added ticket number to new ticket notification title
++ added an option to hide empty ticket listing below the authentication form in the frontend ticket listing page
++ added an option page to directly assist with WATS setup and troubleshooting in case of problems
++ added an option to turn user drop down selector into text input with auto complete (usefull for large user list)
++ added Belarussian translation (provided by Alex from http://webhostinggeeks.com/ )
++ added jQuery hook after frontend submission form submission to allow custom JS code to be fired after that
++ added Romanian translation (provided by Alex from http://webhostinggeeks.com/ )
++ fixed an interworking problem with qTranslate in frontend ticket listing
++ added ticket age column to frontend ticket listing
++ added Dutch translation (provided by Anita Berghoef from http://www.ab-ct.nl/ )
++ added capability to edit custom field entries
++ added closure date column to frontend ticket listing together with closure date background management
++ added Hindi translation (provided by Outshine Solutions from http://outshinesolutions.com/ )
++ modified password field type for ticket submission by email option to be password rather than text
++ added category filter to rules notification
++ added WP 3.4 compatibility
 - V1.0.55 (14/08/2011) :
 + added last modification table column to the frontend ticket listing
 + fixed a bug with ticket assignment in the frontend submission form
@@ -331,6 +364,7 @@ add_action('admin_head', 'wats_admin_head');
 add_action('wp_print_styles', 'wats_add_my_stylesheet');
 add_action('admin_print_styles', 'wats_add_my_stylesheet');
 add_action('wp_dashboard_setup', 'wats_dashboard_setup');
+add_action('wp_footer','wats_enqueue_script_frontend');
 
 /*************************************/
 /*                                   */
@@ -346,18 +380,23 @@ define('WATS_THEME_PATH',WATS_PATH.'theme');
 define("WATS_TICKET_LIST_REGEXP", "/\[WATS_TICKET_LIST ([[:print:]]+)\]/");
 define("WATS_TICKET_SUBMIT_FORM", "/\[WATS_TICKET_SUBMIT_FORM\]/");
 define('WATS_WP_MAIL_INTERVAL', 300);
+define('WATS_VERIFY_STRING', true);
+define('WATS_MAX_NUMBER_OF_RESULTS_FOR_AUTO_COMPLETE',10);
+
+define('WATS_PREMIUM', false);
 define('WATS_BACKLINK','http://www.ticket-system.net/');
 define('WATS_ANCHOR','ticket system');
 
 $wats_settings = array();
-$wats_version = '1.0.55';
+$wats_version = '1.0.56';
 $wats_printing_inline_data = false;
+$wats_current_post_author = 0;
 
 $wats_default_ticket_priority = array(1 => "Emergency", 2 => "Critical", 3 => "Major", 4 => "Minor");
 $wats_default_ticket_status = array(1 => "Newly open", 2 => "Under investigation", 3 => "Waiting for reoccurence", 4 => "Waiting for details", 5 => "Solution delivered", 6 => "Closed");
 $wats_default_ticket_type = array(1 => "Question", 2 => "SW Bug", 3 => "Installation request", 4 => "Feature request");
 $wats_default_sla = array(1 => "Gold", 2 => "Silver", 3 => "Bronze");
-$wats_default_ticket_listing_columns = array("id" => "ID","title" => "Title","category" => "Category","author" => "Author","owner" => "Owner","creation_date" => "Creation date","modification_date" => "Last modification date","last_updater" => "Last modification author","type" => "Type","priority" => "Priority","status" => "Status","product" => "Product");
+$wats_default_ticket_listing_columns = array("id" => "ID","title" => "Title","category" => "Category","author" => "Author","owner" => "Owner","creation_date" => "Creation date","modification_date" => "Last modification date","last_updater" => "Last modification author","ticket_age" => "Ticket age","closure_date" => "Closure date","type" => "Type","priority" => "Priority","status" => "Status","product" => "Product");
 
 $wats_custom_fields_selectors;
 
@@ -437,6 +476,7 @@ add_action('init','wats_init',0);
 add_action('plugins_loaded','wats_plugins_loaded');
 add_action('comment_post','wats_comment_update_meta');
 add_action('wp_footer','wats_wp_footer');
+add_action('user_register','wats_user_register');
 
 add_filter('template_include', 'wats_ticket_template_loader');
 add_filter('comments_template', 'wats_comments_template');
@@ -445,17 +485,22 @@ add_filter('get_previous_post_where','wats_ticket_get_previous_next_post_where')
 add_filter('get_next_post_where','wats_ticket_get_previous_next_post_where');
 add_filter('getarchives_where','wats_get_archives');
 add_filter('posts_where','wats_posts_where');
+add_filter('the_content', 'wats_list_tickets_filter');
+add_filter('the_content', 'wats_ticket_submit_form_filter');
+add_filter('the_content_rss', 'wats_list_tickets_filter');
 add_filter('wp_insert_post_data', 'wats_insert_post_data');
 add_filter('edit_post_link','wats_filter_edit_ticket_link');
 add_filter('comment_feed_where','wats_filter_comments_rss');
 add_filter('wp_title', 'wats_wp_title');
 add_filter('post_row_actions','wats_post_row_actions',10,2);
 add_action('save_post', 'wats_ticket_save_meta', 10, 2);
+add_filter('pre_user_email','wats_edit_user_email',10,1);
 add_action('pre_comment_on_post','wats_pre_comment_on_post',10,1);
 add_filter('post_type_link','wats_post_type_link',10,4);
+add_filter('comments_clauses','wats_get_comments_clauses');
+add_filter('comments_array','wats_comments_array',10,2);
+add_filter('get_comments_number','wats_get_comments_number',10,2);
 add_filter('post_updated_messages','wats_post_updated_messages',10,1);
-add_filter('the_content', 'wats_list_tickets_filter');
-add_filter('the_content', 'wats_ticket_submit_form_filter');
 
 /* Ajax Actions Hooks */
 add_action('wp_ajax_wats_admin_insert_option_entry','wats_admin_insert_option_entry',10);
@@ -465,5 +510,8 @@ add_action('wp_ajax_wats_admin_insert_notification_rule_entry','wats_admin_inser
 add_action('wp_ajax_wats_admin_remove_notification_rule_entry','wats_admin_remove_notification_rule_entry',10);
 add_action('wp_ajax_wats_admin_insert_ticket_custom_field','wats_admin_insert_ticket_custom_field',10);
 add_action('wp_ajax_wats_admin_remove_ticket_custom_field','wats_admin_remove_ticket_custom_field',10);
+add_action('wp_ajax_wats_admin_get_custom_fields_selector_values_table','wats_admin_get_custom_fields_selector_values_table',10);
+add_action('wp_ajax_wats_admin_options_get_custom_field_table_row','wats_admin_options_get_custom_field_table_row',10);
+add_action('wp_ajax_wats_admin_update_ticket_custom_field','wats_admin_update_ticket_custom_field',10);
 
 ?>

@@ -20,7 +20,6 @@ function wats_translate_global_vars()
 	return;
 }									  
 
-
 /*****************************************/
 /*                                       */
 /* Fonction d'accroche dans l'admin head */
@@ -28,6 +27,18 @@ function wats_translate_global_vars()
 /*****************************************/
 
 function wats_admin_head()
+{
+	
+	return;
+}
+
+/*********************************************/
+/*                                           */
+/* Fonction d'accroche dans le frontend head */
+/*                                           */
+/*********************************************/
+
+function wats_enqueue_script_frontend()
 {
 	
 	return;
@@ -43,7 +54,7 @@ function wats_add_my_stylesheet()
 {
     global $post;
 
-    if (is_admin())
+    if ((is_object($post) && ($post->post_type == "ticket" || strstr($post->post_content, '[WATS_TICKET_SUBMIT_FORM]') || strstr($post->post_content, '[WATS_TICKET_LIST'))) || is_admin())
 	{
 	    $plugin_url = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) .'/';
 		$myStyleFile = $plugin_url."css/wats.css";
@@ -126,6 +137,7 @@ function wats_add_admin_page()
 	{
 		$page = add_options_page(__('Wats Options','WATS'), __('Wats Options','WATS'),'administrator', basename(__FILE__), 'wats_options_admin_menu');
 		add_action('admin_print_scripts-'.$page,'wats_options_admin_head');
+
 	}
 
 	if (function_exists('add_menu_page') && function_exists('add_submenu_page'))
@@ -155,7 +167,6 @@ function wats_add_admin_page()
 			{
 				add_action('manage_posts_custom_column','wats_edit_post_custom_column', 10, 2);
 				add_action('manage_posts_columns','wats_edit_post_column');
-				//add_filter('list_terms_exclusions','wats_list_terms_exclusions');
 				add_action('admin_print_scripts','wats_ticket_edit_admin_head');
 	
 				if ($wats_settings['ticket_edition_media_upload'] == 0)
@@ -219,8 +230,20 @@ function wats_options_admin_head()
 
 function wats_ticket_edit_admin_head()
 {
+	global $post;
+	
 	wats_admin_scripts();
 	add_filter('list_terms_exclusions','wats_list_terms_exclusions');
+	
+	if (isset($post) && $post->post_type == 'ticket')
+	{
+		?>
+		<script type="text/javascript">
+		var watsid = "<?php echo $post->ID ?>";
+		</script>
+		<?php
+	}
+
 	
 	return;
 }

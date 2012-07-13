@@ -3,8 +3,8 @@ Contributors: Olivier
 Donate link: http://www.ticket-system.net/
 Tags: ticket,case,system,support,taxonomy,help,cms,crm,customer,helpdesk,community,contact,social,member,company,trouble,issue,post,problem,contact,contact form,feedback,form,custom fields,custom post,post type,ticket system,support system,wats
 Requires at least: 3.0
-Tested up to: 3.3.2
-Stable tag: 1.0.55
+Tested up to: 3.4.1
+Stable tag: 1.0.56
 
 == Description ==
 
@@ -57,7 +57,6 @@ Examples of use of WATS :
 * contact form with database tracking
 * collaborative content site with frontend post submission
 * appointment request system
-* project status tracker
 
 Translations :
 
@@ -73,6 +72,7 @@ Translations :
 * Belarussian (Minimum release : 1.0.56, Originator : Alex from http://webhostinggeeks.com/ )
 * Romanian (Minimum release : 1.0.56, Originator : Alex from http://webhostinggeeks.com/ )
 * Dutch (Minimum release : 1.0.56, Originator : Anita Berghoef from http://www.ab-ct.nl/ )
+* Hindi (Minimum release : 1.0.56, Originator : Outshine Solutions from http://outshinesolutions.com/ )
 
 
 == Installation ==
@@ -98,6 +98,41 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 
 
 == Changelog ==
+
+
+= V1.0.56 (13/07/2012) =
+* added CSS ID to single ticket page meta keys in the ticket content
+* fixed a bug with source email address on new ticket notifications for admin when the ticket was submitted by email
+* added CSS ID to custom fields in frontend submission form
+* added ticket author meta details (non registered user submission) to single ticket display page
+* removed ticket number from notifications when ticket numbering is disabled
+* added CSS class to individual priorities, types, products and status on single ticket page
+* removed current admin user from shared guest user list to prevent inappropriate setting that would prevent further admin access
+* added pagination feature to frontend ticket listing (page selection and number of tickets per page)
+* enhanced last modification date relevance in frontend ticket listing
+* added filter hook for product list before selector display
+* added custom field management for drop down selectors in addition to input fields
+* added flag to bypass input verification (only to be used with Chinese characters)
+* enhanced ticket update notification handling to avoid multiple notifications for same email and notification of current updater of own update
+* modified owner output to user nickname rather than login
+* added ticket owner to notification cycle for ticket update
+* modified username in notifications to use nickname rather than firstname
+* added ticket number to new ticket notification title
+* added an option to hide empty ticket listing below the authentication form in the frontend ticket listing page
+* added an option page to directly assist with WATS setup and troubleshooting in case of problems
+* added an option to turn user drop down selector into text input with auto complete (usefull for large user list)
+* added Belarussian translation (provided by Alex from http://webhostinggeeks.com/ )
+* added jQuery hook after frontend submission form submission to allow custom JS code to be fired after that
+* added Romanian translation (provided by Alex from http://webhostinggeeks.com/ )
+* fixed an interworking problem with qTranslate in frontend ticket listing
+* added ticket age column to frontend ticket listing
+* added Dutch translation (provided by Anita Berghoef from http://www.ab-ct.nl/ )
+* added capability to edit custom field entries
+* added closure date column to frontend ticket listing together with closure date background management
+* added Hindi translation (provided by Outshine Solutions from http://outshinesolutions.com/ )
+* modified password field type for ticket submission by email option to be password rather than text
+* added category filter to rules notification
+* added WP 3.4 compatibility
 
 = V1.0.55 (14/08/2011) =
 * added last modification table column to the frontend ticket listing

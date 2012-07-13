@@ -1,6 +1,5 @@
 <?php
 
-
 /*******************************************************/
 /*                                                     */
 /* Fonction de récupération de la priorité d'un ticket */
@@ -89,6 +88,38 @@ function wats_ticket_get_product($post)
 	return($output);
 }
 
+/****************************************************************/
+/*                                                              */
+/* Fonction de récupération de la date de fermeture d'un ticket */
+/*                                                              */
+/****************************************************************/
+
+function wats_ticket_get_closure_date($post)
+{
+	global $wats_settings;
+
+	$output = mysql2date('M d, Y',get_post_meta($post->ID,'wats_ticket_closure_date',true),false);
+	
+	return($output);
+}
+
+/*******************************************/
+/*                                         */
+/* Fonction de calcul de l'âge d'un ticket */
+/*                                         */
+/*******************************************/
+
+function wats_ticket_get_age($post)
+{
+	global $wats_settings;
+	
+	if ($wats_settings['ticket_status_key_enabled'] == 1 && get_post_meta($post->ID,'wats_ticket_status',true) != wats_get_closed_status_id())
+		$days = (strtotime(date("Y-m-d")) - strtotime(get_post_time('Y-m-d',false,$post->ID,false))) / (60 * 60 * 24);
+	else if ($wats_settings['ticket_status_key_enabled'] == 1 && get_post_meta($post->ID,'wats_ticket_status',true) == wats_get_closed_status_id())
+		$days = (strtotime(mysql2date('Y-m-d',get_post_meta($post->ID,'wats_ticket_closure_date',true),false)) - strtotime(get_post_time('Y-m-d',false,$post->ID,false))) / (60 * 60 * 24);
+
+	return $days;
+}
 
 /*************************************************/
 /*                                               */
@@ -107,8 +138,8 @@ function wats_comment_update_meta($comment_id)
 	$post_id =  $comment->comment_post_ID;
 	if ($status !== "spam" && wats_is_ticket($post_id))
 	{
-		wats_ticket_save_meta($post_id,get_post($post_id));
-	}
+		wats_ticket_save_meta($post_id,get_post($post_id),$comment->comment_author_email);
+    }
 
 	return;
 }
@@ -130,7 +161,7 @@ function wats_pre_comment_on_post($comment_post_id)
 			wp_die(__('Sorry, you can\'t update this ticket.','WATS'));
 		else if ($wats_settings['visibility'] == 1 && !is_user_logged_in())
 			wp_die(__('Sorry, you must be logged in to update this ticket.','WATS'));
-		else if ($wats_settings['visibility'] == 2 && (!is_user_logged_in() || (is_user_logged_in() && !current_user_can('administrator') && $current_user->ID != $post->post_author)))
+		else if ($wats_settings['visibility'] == 2 && (!is_user_logged_in() || (is_user_logged_in() && !current_user_can('administrator') && $current_user->ID != $post->post_author && ($wats_settings['ticket_visibility_same_company'] == 0 || wats_check_user_same_company($current_user->ID,$post->post_author) == false))))
 			wp_die(__('Sorry, you don\'t have the rights to update this ticket.','WATS'));
 	}
 		
@@ -143,7 +174,7 @@ function wats_pre_comment_on_post($comment_post_id)
 /*                                              */
 /************************************************/
 
-function wats_ticket_save_meta($postID,$post)
+function wats_ticket_save_meta($postID,$post,$comment_author_email = '')
 {
 	global $wats_settings, $wpdb;
 
@@ -164,14 +195,20 @@ function wats_ticket_save_meta($postID,$post)
 		if ($wats_settings['ticket_status_key_enabled'] == 1 && isset($_POST['wats_select_ticket_status']))
 		{
 			$status = get_post_meta($postID,'wats_ticket_status',true);
-						
+
 			if (get_post_meta($postID,'wats_ticket_status',true) != wats_get_closed_status_id() || current_user_can('administrator'))
 			{
 				if ($status != $_POST['wats_select_ticket_status'])
 					$newstatus = $_POST['wats_select_ticket_status'];
+					
+				if ($status == wats_get_closed_status_id() && $newstatus != wats_get_closed_status_id())
+					delete_post_meta($postID,'wats_ticket_closure_date');
 
 				if ($_POST['wats_select_ticket_status'] > 0)
 					update_post_meta($postID,'wats_ticket_status',$_POST['wats_select_ticket_status']);
+					
+				if ($newstatus == wats_get_closed_status_id())
+					update_post_meta($postID,'wats_ticket_closure_date',current_time('mysql'));
 			}
 		}
 
@@ -212,6 +249,14 @@ function wats_ticket_save_meta($postID,$post)
 		{
 			add_post_meta($postID,'wats_ticket_number',wats_get_latest_ticket_number()+1);
 			$newticket = 1;
+		}
+		
+		if ($newticket == 1)
+		{
+			if (!isset($_POST['view']) || (isset($_POST['view']) && $_POST['view'] != 1))
+			{
+				do_action('wats_ticket_admin_submission_saved_meta',$postID);
+			}
 		}
 		
 		do_action('wats_ticket_saved_meta',$postID);
@@ -314,8 +359,8 @@ function wats_ticket_details_meta_box($post,$view=0)
 	$wats_ticket_priority = isset($wats_settings['wats_priorities']) ? $wats_settings['wats_priorities'] : 0;
 	$wats_ticket_type = isset($wats_settings['wats_types']) ? $wats_settings['wats_types'] : 0;
 	$wats_ticket_status = isset($wats_settings['wats_statuses']) ? $wats_settings['wats_statuses'] : 0;
-	$wats_ticket_product = isset($wats_settings['wats_products']) ? $wats_settings['wats_products'] : 0;
-	
+	$wats_ticket_product = isset($wats_settings['wats_products']) ? apply_filters('wats_product_list_filter',$wats_settings['wats_products']) : 0;
+	$wats_ticket_assign = $wats_settings['ticket_assign'];
 	
 	if (is_object($post))
 	{
@@ -437,9 +482,12 @@ function wats_ticket_details_meta_box($post,$view=0)
 		if ($view == 1 || ($view == 0 && !is_admin()))
 			$output .= '</div>';
 	}
-	
+		
 	if (is_object($post))
 		setup_postdata($post);
+
+	if (is_admin())
+		$output .= wp_nonce_field('wats-edit-ticket','_wpnonce_wats_edit_ticket',true,false)."\n";
 
 	if ((is_admin() || $view == 1) && current_user_can('administrator') && $wats_settings['call_center_ticket_creation'] == 1)
 	{
@@ -450,33 +498,7 @@ function wats_ticket_details_meta_box($post,$view=0)
 	
 		$output .= '<div id="wats_div_ticket_originator"><label class="wats_label">'.__('Ticket originator : ','WATS').'</label>';
 		
-		if ($wats_settings['profile_company_enabled'] == 1 && function_exists('wats_build_company_list'))
-		{
-			$company_list = wats_build_company_list(2);
-			$my_company = get_user_meta(wats_get_user_ID_from_user_login($selected_login),$wats_settings['company_meta_key_profile'],true);
-			if ($my_company == '')
-				$my_company = 0;
-			$output .= wp_nonce_field('wats-edit-ticket','_wpnonce_wats_edit_ticket',true,false)."\n";
-			$output .= '<br /><br /><label class="wats_label">+ '.__('Company','WATS').' : </label>';
-			$output .= '<select name="wats_company_list" id="wats_company_list">';
-			foreach ($company_list AS $key => $value)
-			{
-				$output .= '<option value="'.esc_attr($key).'"';
-				if ($my_company === $key) 
-					$output .= " selected";
-				if ($key == '0')
-					$output .= '>'.esc_html($value).'</option>';
-				else
-					$output .= '>'.esc_html($key).'</option>';
-			}
-			$output .= '</select>';
-			$output .= '<br /><br /><label class="wats_label">+ '.__('User','WATS').' : </label>';
-			$userlist = wats_build_user_list_from_company(0,0,$my_company);
-		}
-		else
-		{
-			$userlist = wats_build_user_list(0,0);
-		}
+		$userlist = wats_build_user_list(0,0);
 		
 		$output .= '<select name="wats_select_ticket_originator" id="wats_select_ticket_originator" class="wats_select">';
 		foreach ($userlist AS $userlogin => $username)

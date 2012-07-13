@@ -38,7 +38,10 @@ function wats_is_numeric($i)
 
 function wats_is_string($i)
 {
-	return (preg_match("/^[\.\,\#\&\;\'\"\+\-\_\:?!()@ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽکگچپژیàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d ]+$/", $i));
+	if (WATS_VERIFY_STRING)
+		return (preg_match("/^[\.\,\#\&\;\'\"\+\-\_\:?!()@ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽکگچپژیàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d ]+$/", $i));
+	else
+		return 1;
 }
 
 /**************************************************************/
@@ -49,7 +52,10 @@ function wats_is_string($i)
 
 function wats_is_paragraph($i)
 {
-	return (preg_match("/^[\.\,\#\&\;\'\"\+\-\_\:\/?!()@ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽکگچپژیàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d\s ]+$/", $i));
+	if (WATS_VERIFY_STRING)
+		return (preg_match("/^[\.\,\#\&\;\'\"\+\-\_\:\/?!()@ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽکگچپژیàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d\s ]+$/", $i));
+	else
+		return 1;
 }
 
 /****************************************************/
@@ -84,6 +90,43 @@ function wats_is_letter($i)
 function wats_is_date($i)
 {
 	return (preg_match("#^(\d{4})\-(\d{2})\-(\d{2})$#", $i));
+}
+
+/*************************************************************/
+/*                                                           */
+/* Fonction pour remplir une drop down list sans echo direct */
+/*                                                           */
+/*************************************************************/
+
+function wats_fill_drop_down_no_echo($type_array,$selected_value)
+{
+	$output = '';
+
+    foreach ($type_array as $key => $value)
+    {
+		$output .= '<option value="'.$key.'"';
+        if ($selected_value == $key) $output .= ' selected';
+		$output .= '>'.$value.'</option>';
+	}
+
+    return $output;
+}
+
+/***************************************************/
+/*                                                 */
+/* Fonction de construction d'un tableau numérique */
+/*                                                 */
+/***************************************************/
+
+function wats_build_numeric_array($first,$last)
+{
+	$temptable = array();
+	for ($i = $first; $i <= $last; $i++)
+	{
+		$temptable[$i] = $i;
+	}
+	
+	return $temptable;
 }
 
 /******************************************/
@@ -222,6 +265,7 @@ function wats_init_capabilities_table()
 	return ($wats_capabilities_table);
 }
 
+
 /******************************************************/
 /*                                                    */
 /* Fonction de récupération du login du premier admin */
@@ -244,10 +288,17 @@ function wats_get_first_admin_login()
 	return 0;
 }
 
+/****************************************************/
+/*                                                  */
+/* Fonction de récupération du nom à partir d'un ID */
+/*                                                  */
+/****************************************************/
+
 function wats_get_full_name($id)
 {
 	return (get_user_meta($id,"first_name",true)." ".get_user_meta($id,"last_name",true));
 }
+
 
 /*********************************************************/
 /*                                                       */
@@ -297,6 +348,7 @@ function wats_build_user_list($firstitem,$cap)
         
     return ($userlist);
 }
+
 
 /*******************************************/
 /*                                         */
@@ -435,6 +487,86 @@ function wats_get_mail_notification_signature()
 	global $wats_settings;
 
 	return(esc_html(str_replace(array('\r\n','\r','<br />'),"\r\n",html_entity_decode(stripslashes($wats_settings['notification_signature'])))));
+}
+
+/**********************************************************/
+/*                                                        */
+/* Fonction d'affichage des règles de notification */
+/*                                                        */
+/**********************************************************/
+
+function wats_admin_display_notification_rule($rule)
+{
+	global $wats_settings;
+	
+	$output = '';
+	
+	$listepriority = isset($wats_settings['wats_priorities']) ? $wats_settings['wats_priorities'] : 0;
+	$listetype = isset($wats_settings['wats_types']) ? $wats_settings['wats_types'] : 0;
+	$listestatus = isset($wats_settings['wats_statuses']) ? $wats_settings['wats_statuses'] : 0;
+	$listeproduct = isset($wats_settings['wats_products']) ? $wats_settings['wats_products'] : 0;
+	
+	foreach ($rule AS $key => $value)
+	{
+		if (strlen($output) > 0)
+			$output .= __(' AND ','WATS');
+		if ($value != "0")
+		{
+			switch ($key)
+			{
+				case "priority" : $output .= $key." : ".$listepriority[$value]; break;
+				case "type" : $output .= $key." : ".$listetype[$value]; break;
+				case "status" : $output .= $key." : ".$listestatus[$value]; break;
+				case "product" : $output .= $key." : ".$listeproduct[$value]; break;
+				case "country" : $output .= $key." : ".$value; break;
+				case "company" : $output .= $key." : ".$value; break;
+				case "category" : $output .= $key." : ".get_cat_name($value); break;
+			}
+		}
+		else
+			$output .= $key." : ".__('Any','WATS');
+	}
+
+	return $output;
+}
+
+/*******************************************************/
+/*                                                     */
+/* Fonction de construction des règles de notification */
+/*                                                     */
+/*******************************************************/
+
+function wats_admin_build_notification_rule($rule)
+{
+	$rules = explode(";",$rule);
+	
+	unset($rules[count($rules)-1]);
+	$ruleset = array();
+	foreach ($rules AS $rulesentry)
+	{
+		$newrule = explode(":",$rulesentry);
+		$ruleset = array_merge($ruleset,array($newrule[0] => $newrule[1]));
+	}
+	
+	return $ruleset;
+}
+
+
+function wats_get_posts_with_shortcode($shortcode)
+{
+	global $wpdb;
+	
+	$posts = $wpdb->get_results($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_content LIKE %s AND post_status='publish'",'%'.like_escape($shortcode).'%'));
+	
+	return $posts;
+}
+
+function wats_compare_url($url1,$url2)
+{
+	if (parse_url($url1,PHP_URL_HOST) != parse_url($url2,PHP_URL_HOST))
+		return false;
+		
+	return true;
 }
 
 ?>

@@ -107,6 +107,10 @@ function wats_load_settings()
 		$wats_default_ticket_listing_default_query['author'] = 0;
 		$wats_default_ticket_listing_default_query['owner'] = 0;
 		$default['wats_default_ticket_listing_default_query'] = $wats_default_ticket_listing_default_query;
+		$default['display_list_not_authenticated'] = 1;		
+		$default['drop_down_user_selector_format'] = 0;
+		$default['wats_ticket_custom_fields'] = array();
+		$default['wats_categories'] = array();
 		
    	    add_option('wats', $default);
 	}
@@ -422,6 +426,26 @@ function wats_load_settings()
 			$wats_settings['template_selector'] = 0;
 		}
 		
+		if (!isset($wats_settings['display_list_not_authenticated']))
+		{
+			$wats_settings['display_list_not_authenticated'] = 1;
+		}
+		
+		if (!isset($wats_settings['drop_down_user_selector_format']))
+		{
+			$wats_settings['drop_down_user_selector_format'] = 0;
+		}
+		
+		if (!isset($wats_settings['wats_ticket_custom_fields']))
+		{
+			$wats_settings['wats_ticket_custom_fields'] = array();
+		}
+		
+		if (!isset($wats_settings['wats_categories']))
+		{
+			$wats_settings['wats_categories'] = array();
+		}
+		
 		$wats_settings['wats_version'] = $wats_version;
 		update_option('wats', $wats_settings);
 	}
@@ -518,24 +542,63 @@ function wats_admin_remove_option_entry()
 
 	$idvalue = stripslashes_deep($_POST['idvalue']);
 	$type = $_POST['type'];
-	
+		
 	if (!current_user_can('administrator'))
 		die('-1');
 	
 	check_ajax_referer('update-wats-options');
 	wp_cache_flush();
 	wats_load_settings();
-	$wats_options = $wats_settings[$type];
-	if ($wats_options[$idvalue])
+	
+	if ($type == "wats_custom_selector")
 	{
-		unset($wats_options[$idvalue]);
-		$wats_settings[$type] = $wats_options;
-		update_option('wats', $wats_settings);
-		$message_result = array('id' => $idvalue,'success' => "TRUE", 'error' => __("Entry successfully removed!",'WATS'));
+		$idcat = isset($_POST['idcat']) ? $_POST['idcat'] : 0;
+		$wats_ticket_custom_field_values = $wats_settings['wats_ticket_custom_fields'];
+		$error = '';
+		
+		if (isset($wats_ticket_custom_field_values[$idcat]))
+		{
+			$table = $wats_ticket_custom_field_values[$idcat];
+
+			if (isset($table['type']) && $table['type'] == 1)
+			{
+				$values = $table['values'];
+				if (isset($values[$idvalue]))
+				{
+					unset($values[$idvalue]);
+					$table['values'] = $values;
+					$wats_ticket_custom_field_values[$idcat] = $table;
+					$wats_settings['wats_ticket_custom_fields'] = $wats_ticket_custom_field_values;
+					update_option('wats', $wats_settings);
+				}
+				else
+					$error = __("Error : entry not existing!",'WATS');
+			}
+			else
+				$error = __("Error : Invalid custom field selected!",'WATS');
+		}
+		else
+			$error = __("Error : Invalid custom field selected!",'WATS');
+			
+		if (strlen($error) > 0)
+			$message_result = array('id' => $idvalue, 'success' => "FALSE", 'error' => $error);
+		else
+			$message_result = array('id' => $idvalue, 'success' => "TRUE", 'error' => __("Entry successfully removed!",'WATS'));
 	}
 	else
 	{
-		$message_result = array('id' => $idvalue,'success' => "FALSE", 'error' => __("Error : entry not existing!",'WATS'));
+		$wats_options = $wats_settings[$type];
+		if ($wats_options[$idvalue])
+		{
+			unset($wats_options[$idvalue]);
+			$wats_settings[$type] = $wats_options;
+			update_option('wats', $wats_settings);
+			$message_result = array('id' => $idvalue,'success' => "TRUE", 'error' => __("Entry successfully removed!",'WATS'));
+		}
+		else
+		{
+			$message_result = array('id' => $idvalue,'success' => "FALSE", 'error' => __("Error : entry not existing!",'WATS'));
+		}
 	}
 	
 	echo json_encode($message_result);
@@ -568,37 +631,80 @@ function wats_admin_insert_option_entry()
 	}
 	else
     {
-		$res = 0;
-		$length = 0;
-		if ($wats_settings[$type])
+		if ($type == "wats_custom_selector")
 		{
-			$wats_options = $wats_settings[$type];
-			foreach ($wats_options as $key => $value)
+			$wats_ticket_custom_field_values = $wats_settings['wats_ticket_custom_fields'];
+			$length = 0;
+			$error = '';
+			if (isset($wats_ticket_custom_field_values[$idcat]))
 			{
-				if ($key > $length)
-					$length = $key;
-				if (($value == $idvalue) || ($key == $idcat))
+				$table = $wats_ticket_custom_field_values[$idcat];
+				if (isset($table['type']) && $table['type'] == 1)
 				{
-					$res = 1;
+					$values = $table['values'];
+					foreach ($values as $key => $value)
+					{
+						if ($key > $length)
+							$length = $key;
+						if ($value == $idvalue)
+							$error = __("Error : already existing entry!",'WATS');
+					}
 				}
+				else
+					$error = __("Error : Invalid custom field selected!",'WATS');
+			}
+			else
+				$error = __("Error : Invalid custom field selected!",'WATS');
+			
+			if (strlen($error) > 0)
+			{
+				$message_result = array('id' => "", 'idvalue' => "",'success' => "FALSE", 'error' => $error);
+			}
+			else
+			{
+				$length++;
+				$values[$length] = $idvalue;
+				$table['values'] = $values;
+				$wats_ticket_custom_field_values[$idcat] = $table;
+				$wats_settings['wats_ticket_custom_fields'] = $wats_ticket_custom_field_values;
+				update_option('wats', $wats_settings);
+				$message_result = array('id' => $length, 'idvalue' => $idvalue,'success' => "TRUE", 'error' => __("Entry successfully added!",'WATS'));
 			}
 		}
+		else
+		{
+			$res = 0;
+			$length = 0;
+			if ($wats_settings[$type])
+			{
+				$wats_options = $wats_settings[$type];
+				foreach ($wats_options as $key => $value)
+				{
+					if ($key > $length)
+						$length = $key;
+					if (($value == $idvalue) || ($key == $idcat))
+					{
+						$res = 1;
+					}
+				}
+			}
 
-		if ($res == 1)
-        {
-            $message_result = array('id' => "", 'idvalue' => "",'success' => "FALSE", 'error' => __("Error : already existing entry!",'WATS'));
-		}
-        else
-        {
-			if ($idcat > 0)
-				$length = $idcat;
+			if ($res == 1)
+			{
+				$message_result = array('id' => "", 'idvalue' => "",'success' => "FALSE", 'error' => __("Error : already existing entry!",'WATS'));
+			}
 			else
-				$length++;
-			$wats_options[$length] = $idvalue;
-			$wats_settings[$type] = $wats_options;
-			update_option('wats', $wats_settings);
-			$message_result = array('id' => $length, 'idvalue' => $idvalue,'success' => "TRUE", 'error' => __("Entry successfully added!",'WATS'));
-        }
+			{
+				if ($idcat > 0)
+					$length = $idcat;
+				else
+					$length++;
+				$wats_options[$length] = $idvalue;
+				$wats_settings[$type] = $wats_options;
+				update_option('wats', $wats_settings);
+				$message_result = array('id' => $length, 'idvalue' => $idvalue,'success' => "TRUE", 'error' => __("Entry successfully added!",'WATS'));
+			}
+		}
 	}
 	
 	echo json_encode($message_result);
@@ -669,6 +775,8 @@ function wats_admin_insert_notification_rule_entry()
 	if ($wats_settings['profile_company_enabled'] == 1)
 		$idcompany = stripslashes_deep($_POST['idcompany']);
 	
+	$idcategorie = stripslashes_deep($_POST['idcategorie']);
+	
 	if (!current_user_can('administrator'))
 		die('-1');
 		
@@ -694,6 +802,7 @@ function wats_admin_insert_notification_rule_entry()
 			$rule .= "country:".$idcountry.";";
 		if ($wats_settings['profile_company_enabled'] == 1)
 			$rule .= "company:".$idcompany.";";
+		$rule .= "category:".$idcategorie.";";
 
 		$wats_notification_rules[] = array($rule => $listvalue);
 		
@@ -708,17 +817,20 @@ function wats_admin_insert_notification_rule_entry()
 	exit;
 }
 
-/************************************************/
-/*                                              */
+/*******************************************************/
+/*                                                     */
 /* Fonction d'ajout d'un custom field pour les tickets */
-/*                               			    */
-/************************************************/
+/*                               			           */
+/*******************************************************/
 
-function wats_admin_insert_ticket_custom_field()
+function wats_admin_insert_ticket_custom_field($idvalue)
 {
 	global $wats_settings;
 	
 	wats_load_settings();
+	
+	if (!wats_is_numeric($idvalue))
+		$idvalue = -1;
 	
 	$idfsf = stripslashes_deep($_POST['idfsf']);
 	$idatef = stripslashes_deep($_POST['idatef']);
@@ -726,6 +838,7 @@ function wats_admin_insert_ticket_custom_field()
 	$idftuf = stripslashes_deep($_POST['idftuf']);
 	$idftlf = stripslashes_deep($_POST['idftlf']);
 	$idftltc = stripslashes_deep($_POST['idftltc']);
+	$idtype = stripslashes_deep($_POST['idtype']);
 	$customfieldname = stripslashes_deep($_POST['customfieldname']);
 	$customfieldmetakey = stripslashes_deep($_POST['customfieldmetakey']);
 	
@@ -766,36 +879,98 @@ function wats_admin_insert_ticket_custom_field()
 	{
 		$message_result = array('success' => "FALSE", 'error' => __("Error : please select a valid value for frontend ticket listing table column custom field visibility!",'WATS'));
 	}
+	else if ($idtype != 0 && $idtype != 1)
+	{
+		$message_result = array('success' => "FALSE", 'error' => __("Error : please select a valid value for custom field type!",'WATS'));
+	}
 	else
 	{
 		$customfieldmetakey = str_replace(" ","_",esc_html($customfieldmetakey));
 		$wats_ticket_custom_field_values = $wats_settings['wats_ticket_custom_fields'];
 		$error = '';
+
 		foreach ($wats_ticket_custom_field_values as $key => $table)
 		{
-			if ($table['name'] == $customfieldname || $table['meta_key'] == $customfieldmetakey)
+			if (($table['name'] == $customfieldname || $table['meta_key'] == $customfieldmetakey) && ($idvalue == -1 || ($idvalue != -1 && $key != $idvalue)))
 				$error = __('Error : already existing entry!','WATS');
 		}
+		
 		if (strlen($error) > 0)
 			$message_result = array('success' => "FALSE", 'error' => $error);
 		else
 		{
-			$wats_ticket_custom_field_values[] = array('name' => $customfieldname,
-													   'meta_key' => $customfieldmetakey,
-													   'fsf' => $idfsf,
-													   'atef' => $idatef,
-													   'ftdt' => $idftdt,
-													   'ftuf' => $idftuf,
-													   'ftlf' => $idftlf,
-													   'ftltc' => $idftltc);
-			$wats_settings['wats_ticket_custom_fields'] = $wats_ticket_custom_field_values;
-			update_option('wats', $wats_settings);
-			$output = wats_options_display_custom_fields_table();
-			$message_result = array('success' => "TRUE", 'output' => $output, 'error' => __("Entry successfully added!",'WATS'));
+			if ($idvalue == -1)
+			{
+				$wats_ticket_custom_field_values[] = array('name' => $customfieldname,
+														   'meta_key' => $customfieldmetakey,
+														   'type' => $idtype,
+														   'values' => array(),
+														   'default_value' => 1,
+														   'fsf' => $idfsf,
+														   'atef' => $idatef,
+														   'ftdt' => $idftdt,
+														   'ftuf' => $idftuf,
+														   'ftlf' => $idftlf,
+														   'ftltc' => $idftltc);
+				$wats_settings['wats_ticket_custom_fields'] = $wats_ticket_custom_field_values;
+				update_option('wats', $wats_settings);
+				$output = wats_options_display_custom_fields_table();
+				$message_result = array('success' => "TRUE", 'output' => $output, 'error' => __("Entry successfully added!",'WATS'));
+			}
+			else
+			{
+				$table = $wats_ticket_custom_field_values[$idvalue];
+				$table['name'] = $customfieldname;
+				$table['meta_key'] = $customfieldmetakey;
+				$table['type'] = $idtype;
+				$table['fsf'] = $idfsf;
+				$table['atef'] = $idatef;
+				$table['ftdt'] = $idftdt;
+				$table['ftuf'] = $idftuf;
+				$table['ftlf'] = $idftlf;
+				$table['ftltc'] = $idftltc;
+				$wats_ticket_custom_field_values[$idvalue] = $table;
+				$wats_settings['wats_ticket_custom_fields'] = $wats_ticket_custom_field_values;
+				update_option('wats', $wats_settings);
+				$output = wats_options_display_custom_fields_table();
+				$message_result = array('success' => "TRUE", 'output' => $output, 'error' => __("Entry successfully updated!",'WATS'));
+			}
 		}
 	}
 
 	echo json_encode($message_result);
+	exit;
+}
+
+/**************************************************************/
+/*                                                            */
+/* Fonction de mise à jour d'un custom field pour les tickets */
+/*                               			                  */
+/**************************************************************/
+
+function wats_admin_update_ticket_custom_field()
+{
+	global $wats_settings;
+	
+	wats_load_settings();
+	
+	$idvalue = stripslashes_deep($_POST['idvalue']);
+	
+	if (!current_user_can('administrator'))
+		die('-1');
+		
+	check_ajax_referer('update-wats-options');
+	
+	$wats_ticket_custom_field_values = $wats_settings['wats_ticket_custom_fields'];
+	if (!isset($wats_ticket_custom_field_values[$idvalue]))
+	{
+		$message_result = array('success' => "FALSE", 'error' => __("Error : please select a valid custom field to modify!",'WATS'));
+		echo json_encode($message_result);
+		exit;
+	}
+	
+	wats_admin_insert_ticket_custom_field($idvalue);
+
 	exit;
 }
 
@@ -908,7 +1083,7 @@ function wats_admin_add_notification_rules_interface($resultsup,$resultadd,$idsu
 		{
 			echo '<option value="'.esc_attr($key).'">'.esc_html($key).'</option>';
 		}
-		echo '</select></td>';
+		echo '</select></td></tr>';
 	}
 	
 	if ($wats_settings['profile_company_enabled'] == 1)
@@ -923,9 +1098,17 @@ function wats_admin_add_notification_rules_interface($resultsup,$resultadd,$idsu
 			{
 				echo '<option value="'.esc_attr($key).'">'.esc_html($key).'</option>';
 			}
-			echo '</select></td>';
+			echo '</select></td></tr>';
 		}
 	}
+	
+	echo '<tr><th><label>'.__('Category','WATS').'</label></th>';
+	echo '<td><select name="notification_rules_select_category" id="notification_rules_select_category">';
+	add_filter('list_terms_exclusions','wats_list_terms_exclusions');
+	$categories = get_categories('type=post&hide_empty=0');
+	foreach ($categories as $category)
+		echo '<option value="'.$category->cat_ID.'" >'.esc_html($category->cat_name).'</option>';
+	echo '</select></td></tr>';
 	
 	echo '<tr><th><label>'.__('Mailing list','WATS').'</label></th><td><input type="text" name="rule_mailing_list" id="rule_mailing_list" size="30" class="regular-text" /></td><td></td></tr>';
 	echo '</table><br />';
@@ -979,11 +1162,11 @@ function wats_admin_add_table_interface($resultsup,$resultadd,$idsup,$idadd,$val
 	return;
 }
 
-/***************************************************************/
-/*                                                             */
+/***************************************************************************/
+/*                                                                         */
 /* Fonction de remplissage de la table des règles dans la page des options */
-/*                                                             */
-/***************************************************************/
+/*                                                                         */
+/***************************************************************************/
 
 function wats_admin_display_notification_rules_list()
 {
@@ -1074,11 +1257,62 @@ function wats_admin_display_options_list($type,$check,$defaultvalue)
     return;
 }
 
-/***********************************************/
-/*                                             */
+/*******************************************************************************/
+/*                                                                             */
+/* Fonction de récupération d'une ligne de la table des custom fields à éditer */
+/*                                                                             */
+/*******************************************************************************/
+
+function wats_admin_options_get_custom_field_table_row()
+{
+	global $wats_settings;
+	
+	wats_load_settings();
+	
+	$idvalue = stripslashes_deep($_POST['idvalue']);
+	
+	if (!current_user_can('administrator'))
+		die('-1');
+		
+	check_ajax_referer('update-wats-options');
+	
+	$wats_ticket_custom_field_values = $wats_settings['wats_ticket_custom_fields'];
+	if (!isset($wats_ticket_custom_field_values[$idvalue]))
+	{
+		$message_result = array('success' => "FALSE", 'error' => __("Error : please select a valid custom field to modify!",'WATS'));
+	}
+	else
+	{
+		$table = $wats_ticket_custom_field_values[$idvalue];
+		$output = '<td>'.$idvalue.'</td><td><input type="text" id="customfieldsdisplayname'.$idvalue.'" size=30 value="'.esc_attr($table['name']).'" /></td><td><input type="text" id="customfieldsmetakey'.$idvalue.'" size=30 value="'.esc_attr($table['meta_key']).'" /></td>';
+		$output .= '<td><select name="wats_custom_field_type_'.$idvalue.'" id ="wats_custom_field_type_'.$idvalue.'" size="1"><option value="0"';
+		if (isset($table['type']) && $table['type'] == 0)
+			$output .= ' selected';
+		$output .= '>'.__('Text input','WATS').'</option><option value="1"';
+		if (isset($table['type']) && $table['type'] == 1)
+			$output .= ' selected';
+		$output .= '>'.__('Drop down selector','WATS').'</option></select></td>';
+		$output .= '<td>'.wats_options_display_custom_fields_selectors_field(array(0,4,5),'fsf'.$idvalue,$table['fsf']).'</td>';
+		$output .= '<td>'.wats_options_display_custom_fields_selectors_field(array(0,1,2,3,4,5),'atef'.$idvalue,$table['atef']).'</td>';
+		$output .= '<td>'.wats_options_display_custom_fields_selectors_field(array(0,1,2),'ftdt'.$idvalue,$table['ftdt']).'</td>';
+		$output .= '<td>'.wats_options_display_custom_fields_selectors_field(array(0,4,5),'ftuf'.$idvalue,$table['ftuf']).'</td>';
+		$output .= '<td>'.wats_options_display_custom_fields_selectors_field(array(0,1,2),'ftlf'.$idvalue,$table['ftlf']).'</td>';
+		$output .= '<td>'.wats_options_display_custom_fields_selectors_field(array(0,1,2),'ftltc'.$idvalue,$table['ftltc']).'</td>';
+		$output .= '<td><input type="submit" name="wats_save_custom_field'.$idvalue.'" id="wats_save_custom_field'.$idvalue.'" value="'.__('Save','WATS').'" class="button-primary" /></td>';
+		$output .= '<td><input type="checkbox" name="customfieldcheck" id="customfieldcheck'.$idvalue.'" value="'.$idvalue.'" /></td>';
+		
+		$message_result = array('success' => "TRUE", 'output' => $output);
+	}
+
+	echo json_encode($message_result);
+	exit;	
+}
+
+/******************************************************/
+/*                                                    */
 /* Fonction d'affichage de la table des custom fields */
-/*                                             */
-/***********************************************/
+/*                                                    */
+/******************************************************/
 
 function wats_options_display_custom_fields_table()
 {
@@ -1086,18 +1320,20 @@ function wats_options_display_custom_fields_table()
 
 	wats_load_settings();
 
-	$wats_ticket_custom_field_values = $wats_settings['wats_ticket_custom_fields'];
+	$wats_ticket_custom_field_values = (isset($wats_settings['wats_ticket_custom_fields'])) ? $wats_settings['wats_ticket_custom_fields'] : 0;
 
 	$output = '<table class="widefat" cellspacing="0" id="tablecustomfields" style="text-align:center;"><thead><tr class="thead">';
 	$output .= '<th scope="col" class="manage-column" width="10%" style="text-align:center;">ID</th>';
 	$output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Custom field display name','WATS').'</th>';
 	$output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Custom field meta key (DB) identifier','WATS').'</th>';
+	$output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Custom field type','WATS').'</th>';
 	$output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Frontend submission form','WATS').'</th>';
 	$output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Admin ticket edition page','WATS').'</th>';
 	$output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Frontend ticket display template','WATS').'</th>';
 	$output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Frontend ticket update form','WATS').'</th>';
 	$output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Frontend ticket listing filter','WATS').'</th>';
 	$output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Frontend ticket listing table column','WATS').'</th>';
+	$output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Edit','WATS').'</th>';
     $output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Selection','WATS').'</th>';
     $output .= '</tr></thead><tbody class="list:user user-list">';
 	$x = 0;
@@ -1106,13 +1342,18 @@ function wats_options_display_custom_fields_table()
 	{
 		$x = 1;
 		$output .= '<tr><td>'.$key.'</td><td>'.esc_html($table['name']).'</td><td>'.esc_html($table['meta_key']).'</td>';
+		if (!isset($table['type']) || $table['type'] == 0)
+			$output .= '<td>'.__('Text input','WATS').'</td>';
+		else if ($table['type'] == 1)
+			$output .= '<td>'.__('Drop down selector','WATS').'</td>';
 		$output .= '<td>'.$wats_custom_fields_selectors[$table['fsf']].'</td>';
 		$output .= '<td>'.$wats_custom_fields_selectors[$table['atef']].'</td>';
 		$output .= '<td>'.$wats_custom_fields_selectors[$table['ftdt']].'</td>';
 		$output .= '<td>'.$wats_custom_fields_selectors[$table['ftuf']].'</td>';
 		$output .= '<td>'.$wats_custom_fields_selectors[$table['ftlf']].'</td>';
 		$output .= '<td>'.$wats_custom_fields_selectors[$table['ftltc']].'</td>';
-		$output .= '<td><input type="checkbox" name="customfieldcheck" id="customfieldcheck" value="'.$key.'" /></td>';
+		$output .= '<td><input type="submit" name="wats_edit_custom_field'.$key.'" id="wats_edit_custom_field'.$key.'" value="'.__('Edit','WATS').'" class="button-primary" /></td>';
+		$output .= '<td><input type="checkbox" name="customfieldcheck" id="customfieldcheck'.$key.'" value="'.$key.'" /></td>';
 		$output .= '</tr>';
 	}
 	
@@ -1124,31 +1365,51 @@ function wats_options_display_custom_fields_table()
 	return $output;
 }
 
-/***********************************************/
-/*                                             */
-/* Fonction d'affichage des sélecteurs de custom fields */
-/*                                             */
-/***********************************************/
+/**************************************************************************/
+/*                                                                        */
+/* Fonction de préparation de l'affichage des sélecteurs de custom fields */
+/*                                                                        */
+/**************************************************************************/
 
 function wats_options_display_custom_fields_selectors($table,$id,$label)
 {
 	global $wats_custom_fields_selectors;
 	
-	$output = '<tr><th><label>'.$label.'</label></th><td><select name="'.$id.'" id="'.$id.'" size="1">';
-	foreach ($table as $key)
-	{
-        $output .= '<option value="'.$key.'" >'.esc_html($wats_custom_fields_selectors[$key]).'</option>';
-	}
-	$output .= '</select></td></tr>';
+	$output = '<tr><th><label>'.$label.'</label></th><td>'.wats_options_display_custom_fields_selectors_field($table,$id,NULL).'</td></tr>';
 
 	return $output;
 }
 
-/***********************************************/
-/*                                             */
+/********************************************************/
+/*                                                      */
+/* Fonction d'affichage des sélecteurs de custom fields */
+/*                                                      */
+/********************************************************/
+
+function wats_options_display_custom_fields_selectors_field($table,$id,$selection)
+{
+	global $wats_custom_fields_selectors;
+	
+	$output = '<select name="'.$id.'" id="'.$id.'" size="1">';
+	foreach ($table as $key)
+	{
+        $output .= '<option value="'.$key.'" ';
+		if ($selection !== NULL && $selection == $key)
+			$output .= 'selected';
+		$output .= '>'.esc_html($wats_custom_fields_selectors[$key]).'</option>';
+	}
+	$output .= '</select>';
+
+	return $output;
+}
+
+
+
+/*****************************************************************/
+/*                                                               */
 /* Fonction d'affichage de l'interface d'entrée de custom fields */
-/*                                             */
-/***********************************************/
+/*                                                               */
+/*****************************************************************/
 
 function wats_options_display_custom_fields_interface()
 {
@@ -1158,6 +1419,8 @@ function wats_options_display_custom_fields_interface()
 	$output .= '<table class="wats-form-table" cellspacing="1" cellpadding="1">';
 	$output .= '<tr><th><label>'.__('Custom field display name','WATS').'</label></th><td><input type="text" id="customfieldsdisplayname" size=30 /></td></tr>';
 	$output .= '<tr><th><label>'.__('Custom field meta key (DB) identifier','WATS').'</label></th><td><input type="text" id="customfieldsmetakey" size=30 /></td></tr>';
+	$output .= '<tr><th><label>'.__('Custom field type','WATS').'</label></th><td>';
+	$output .= '<select name="wats_custom_field_type" id ="wats_custom_field_type" size="1"><option value="0">'.__('Text input','WATS').'</option><option value="1">'.__('Drop down selector','WATS').'</option></select></td></tr>';
 	$output .= wats_options_display_custom_fields_selectors(array(0,4,5),'fsf',__('Frontend submission form','WATS'));
 	$output .= wats_options_display_custom_fields_selectors(array(0,1,2,3,4,5),'atef',__('Admin ticket edition page','WATS'));
 	$output .= wats_options_display_custom_fields_selectors(array(0,1,2),'ftdt',__('Frontend ticket display template','WATS'));
@@ -1170,11 +1433,103 @@ function wats_options_display_custom_fields_interface()
 	return $output;
 }
 
-/***********************************************/
-/*                                             */
+/*********************************************************************************************/
+/*                                                               					         */
+/* Fonction ajax de récupération de la table des valeurs d'un custom fields de type selector */
+/*                                                                                           */
+/*********************************************************************************************/
+
+function wats_admin_get_custom_fields_selector_values_table()
+{
+	global $wats_settings;
+	
+	$idvalue = $_POST['idvalue'];
+	
+	if (!current_user_can('administrator'))
+		die('-1');
+	
+	check_ajax_referer('update-wats-options');
+	
+	wp_cache_flush();
+	wats_load_settings();
+	
+	$wats_ticket_custom_field_values = $wats_settings['wats_ticket_custom_fields'];
+	if (isset($wats_ticket_custom_field_values[$idvalue]))
+	{
+		$table = $wats_ticket_custom_field_values[$idvalue];
+		if (isset($table['type']) && $table['type'] == 1)
+			$message_result = array('id' => wats_admin_display_custom_fields_selector_values_table($idvalue),'success' => "TRUE", 'error' => '');
+		else
+			$message_result = array('id' => $idvalue,'success' => "FALSE", 'error' => __("Error : not a selector custom field!",'WATS'));
+	}
+	else
+	{
+		$message_result = array('id' => $idvalue,'success' => "FALSE", 'error' => __("Error : entry not existing!",'WATS'));
+	}
+	
+	echo json_encode($message_result);
+
+	exit;
+}
+
+/************************************************************************************/
+/*                                                               					*/
+/* Fonction d'affichage de la table des valeurs d'un custom fields de type selector */
+/*                                                                                  */
+/************************************************************************************/
+
+function wats_admin_display_custom_fields_selector_values_table($id)
+{
+	global $wats_settings;
+	
+	$wats_ticket_custom_field_values = $wats_settings['wats_ticket_custom_fields'];
+
+	$output = '<table class="widefat" cellspacing="0" id="custom_fields_selector_values_table" style="text-align:center;"><thead><tr class="thead">';
+	$output .= '<th scope="col" class="manage-column" width="10%" style="text-align:center;">ID</th>';
+	$output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Value','WATS').'</th>';
+	$output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Default','WATS').'</th>';
+    $output .= '<th scope="col" class="manage-column" style="text-align:center;">'.__('Selection','WATS').'</th>';
+    $output .= '</tr></thead><tbody class="list:user user-list">';
+	$x = 0;
+	$alt = false;
+	if (isset($wats_ticket_custom_field_values[$id]))
+	{
+		$table = $wats_ticket_custom_field_values[$id];
+		if (isset($table['type']) && $table['type'] == 1)
+		{
+			if (isset($table['values']))
+			{
+				$values = $table['values'];
+				$default_value = (isset($table['default_value'])) ? $table['default_value'] : 1;
+				foreach ($values as $key => $value)
+				{
+					$x = 1;
+					$output .= '<tr valign="middle"';
+					$output .= ($alt == true) ? ' class="alternate"' : '';
+					$output .= '>';
+					$output .= '<td>'.$key.'</td>';
+					$output .= '<td>'.esc_html($value).'</td>';
+					$output .= '<td><input type="radio" value="'.$key.'" name="group_default_custom_selector" ';
+					$output .= ($default_value == $key) ? 'checked' : '';
+					$output .= ' ></td>';
+					$output .= '<td><input type="checkbox" name="customselectorcheck" id="customselectorcheck" value="'.$key.'" /></td></tr>';
+					$alt = !$alt;
+				}
+			}
+		}
+	}
+	if ($x == 0)
+		$output .= '<tr valign="middle"><td colspan="4" style="text-align:center">'.__('No entry','WATS').'</td></tr>';
+	$output .= 	'</tbody></table>';
+	
+	return $output;
+}
+
+/****************************************************/
+/*                                                  */
 /* Fonction d'affichage des options de notification */
-/*                                             */
-/***********************************************/
+/*                                                  */
+/****************************************************/
 
 function wats_options_manage_notification_options()
 {
@@ -1193,7 +1548,7 @@ function wats_options_manage_notification_options()
 	echo '<tr><td><input type="checkbox" name="ticket_update_notification_my_tickets"';
 	if ($wats_settings['ticket_update_notification_my_tickets'] == 1)
 		echo ' checked';
-	echo '> '.__('Notify user by email when ticket is updated. Applies only to tickets originated by the user and will notify only ticket originator and updaters.','WATS').'</td></tr><tr><td>';
+	echo '> '.__('Notify user by email when ticket is updated. Applies only to tickets originated by the user and will notify only ticket originator, ticket owner and ticket updaters.','WATS').'</td></tr><tr><td>';
 	echo '<tr><td><input type="checkbox" name="ticket_notification_bypass_mode"';
 	if ($wats_settings['ticket_notification_bypass_mode'] == 1)
 		echo ' checked';
@@ -1214,7 +1569,7 @@ function wats_options_manage_notification_options()
 	echo __('Warning : with these options enabled, the system may send a lot of emails, especially if you have many users. So please make sure that you really understand the implications before enabling these.','WATS').'<br /><br />';
 	echo __('The latest option allows admins to define a mailing list for each ticket so that specific email addresses can be notified of updates.','WATS');
 	echo '</div></td></tr></table><br />';
-	
+
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("notification_signature_tip");>'.__('Mail notifications signature','WATS').' : </a></h3>';
 	echo '<table class="wats-form-table">';
 	echo '<tr><td><textarea id="notification_signature" name="notification_signature" cols="40" rows="5">';
@@ -1233,7 +1588,7 @@ function wats_options_manage_notification_options()
 	wats_options_premium_only();
 	echo '<div class="wats_tip" id="wats_source_email_tip">';
 	echo __('Check this option if you want notification messages to use the user email as the source address. Otherwise, the global wordpress email address will be used.','WATS').'</div></td></tr></table><br />';
-		
+
 	echo '<br /><h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("notification_rule_tip");>'.__('New ticket notification rules','WATS').' :</a></h3><br />';
 	echo '<table class="widefat" cellspacing="0" id="tablerules" style="text-align:center;"><thead><tr class="thead">';
 	echo '<th scope="col" class="manage-column" width="10%" style="text-align:center;">ID</th>';
@@ -1249,19 +1604,19 @@ function wats_options_manage_notification_options()
 	echo __('Associate specific priority, status and type with an email distribution list. Those will get a mail when a new ticket is raised with the specified values.','WATS').'<br /><br />';
 	echo __('Warning : if you enter multiple email addresses, please separate them with a comma ",".','WATS');
 	echo '</div>';
-		
+	
 	return;
 }
 
-/***********************************************/
-/*                                             */
+/**************************************************************/
+/*                                                            */
 /* Fonction d'affichage des options de soumission des tickets */
-/*                                             */
-/***********************************************/
+/*                                                            */
+/**************************************************************/
 
 function wats_options_manage_ticket_submission_options()
 {
-	global $wpdb, $wats_settings, $wats_default_ticket_listing_columns;
+	global $wpdb, $wats_settings, $wats_default_ticket_listing_columns, $current_user;
 
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("ticket_edition_media_upload_tip");>'.__('Media upload','WATS').' : </a></h3>';
 	echo '<table class="wats-form-table">';
@@ -1282,18 +1637,22 @@ function wats_options_manage_ticket_submission_options()
 	echo __('Check this option if you want to allow media library browsing during media upload while creating and editing tickets. This will allow users to view the library and insert files directly from it.','WATS').'</div></td></tr></table><br />';
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("guestlist_tip");>'.__('Shared guest user','WATS').' : </a></h3>';
-	echo '<table class="wats-form-table"><tr><td>'.__('User','WATS').' : <select name="guestlist" id="guestlist" class="wats_select">';
-	$userlist = wats_build_user_list(__("None",'WATS'),'edit_posts');
-	foreach ($userlist AS $userlogin => $username)
-	{
-        echo '<option value="'.$userlogin.'" ';
-        if ($userlogin == $wats_settings['wats_guest_user']) echo 'selected';
-			echo '>'.$username.'</option>';
-	}
-	echo '</select></td></tr><tr><td>';
+	echo '<table class="wats-form-table"><tr><td>'.__('User','WATS').' : ';
+		echo '<select name="guestlist" id="guestlist" class="wats_select">';
+		$userlist = wats_build_user_list(__("None",'WATS'),'edit_posts');
+		foreach ($userlist AS $userlogin => $username)
+		{
+			if ($current_user->user_login !== $userlogin)
+			{
+				echo '<option value="'.$userlogin.'" ';
+				if ($userlogin == $wats_settings['wats_guest_user']) echo 'selected';
+					echo '>'.$username.'</option>';
+			}
+		}
+		echo '</select></td></tr><tr><td>';
 	echo '<div class="wats_tip" id="guestlist_tip">';
 	echo __('The shared guest user is a user that must have at least contributor user level. This user will only have access to the ticket creation page on the admin side. You can share the guest user login/password with your visitors so that they can submit tickets without having to register first. This is a shared account.','WATS');
-	echo '<br /><br />'.__('Warning : if you set the current user (your admin account) as the guest user, you won\'t be able to access the admin options anymore after the save. So please make sure that you understand what it is about before setting this option.','WATS').'</div></td></tr></table><br />';
+	echo '</div></td></tr></table><br />';
 
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("frontendsubmitformaccess_tip");>'.__('Frontend submission form access','WATS').' : </a></h3>';
 	echo '<table class="wats-form-table">';
@@ -1339,7 +1698,7 @@ function wats_options_manage_ticket_submission_options()
 	echo '<tr><td>'.__('Server : ','WATS').'<input type="text" name="ms_mail_server" value="'.esc_attr(stripslashes($wats_settings['ms_mail_server'])).'" size=30></td></tr><tr><td>';
 	echo '<tr><td>'.__('Port : ','WATS').'<input type="text" name="ms_port_server" value="'.esc_attr(stripslashes($wats_settings['ms_port_server'])).'" size=30></td></tr><tr><td>';
 	echo '<tr><td>'.__('Login : ','WATS').'<input type="text" name="ms_mail_address" value="'.esc_attr(stripslashes($wats_settings['ms_mail_address'])).'" size=30></td></tr><tr><td>';
-	echo '<tr><td>'.__('Password : ','WATS').'<input type="text" name="ms_mail_password" value="'.esc_attr(stripslashes($wats_settings['ms_mail_password'])).'" size=30></td></tr><tr><td>';
+	echo '<tr><td>'.__('Password : ','WATS').'<input type="password" name="ms_mail_password" value="'.esc_attr(stripslashes($wats_settings['ms_mail_password'])).'" size=30></td></tr><tr><td>';
 	wats_options_premium_only();
 	echo '<div class="wats_tip" id="email_ticket_submission_tip">';
 	echo __('This feature allows users to submit tickets directly through email. You have to define a secret email on a POP3 server.','WATS');
@@ -1347,15 +1706,16 @@ function wats_options_manage_ticket_submission_options()
 	echo '</div></td></tr></table><br />';
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("submitformdefaultauthor_tip");>'.__('Default author for unregistered visitors tickets','WATS').' : </a></h3>';
-	echo '<table class="wats-form-table"><tr><td>'.__('User','WATS').' : <select name="defaultauthorlist" id="defaultauthorlist" class="wats_select">';
-	$userlist = wats_build_user_list(0,0);
-	foreach ($userlist AS $userlogin => $username)
-	{
-        echo '<option value="'.$userlogin.'" ';
-        if ($userlogin == $wats_settings['submit_form_default_author']) echo 'selected';
-			echo '>'.$username.'</option>';
-	}
-	echo '</select></td></tr><tr><td>';
+	echo '<table class="wats-form-table"><tr><td>'.__('User','WATS').' : ';
+		echo '<select name="defaultauthorlist" id="defaultauthorlist" class="wats_select">';
+		$userlist = wats_build_user_list(0,0);
+		foreach ($userlist AS $userlogin => $username)
+		{
+			echo '<option value="'.$userlogin.'" ';
+			if ($userlogin == $wats_settings['submit_form_default_author']) echo 'selected';
+				echo '>'.$username.'</option>';
+		}
+		echo '</select></td></tr><tr><td>';
 	wats_options_premium_only();
 	echo '<div class="wats_tip" id="submitformdefaultauthor_tip">';
 	echo __('This option will be used to set the author of tickets submitted through the frontend submit form or through email by unregistered users.','WATS').'</div></td></tr></table><br />';
@@ -1372,11 +1732,11 @@ function wats_options_manage_ticket_submission_options()
 	return;
 }
 
-/***********************************************/
-/*                                             */
+/************************************************************/
+/*                                                          */
 /* Fonction d'affichage des options d'affichage des tickets */
-/*                                             */
-/***********************************************/
+/*                                                          */
+/************************************************************/
 
 function wats_options_manage_ticket_display_options()
 {
@@ -1460,7 +1820,7 @@ function wats_options_manage_ticket_display_options()
 	echo '<tr><td><input type="radio" name="group_template_selector" value="0" ';
 	echo ($wats_settings['template_selector'] == 0) ? 'checked' : '';
 	echo '>'.__('Use active theme default template','WATS').' ('.get_template().') </td></tr>';
-	if (file_exists(TEMPLATEPATH.'/single-ticket.php'))
+	if (file_exists(get_stylesheet_directory().'/single-ticket.php'))
 		$output = __('custom files available','WATS');
 	else
 		$output = __('custom files need to be copied first','WATS');
@@ -1475,11 +1835,11 @@ function wats_options_manage_ticket_display_options()
 	return;
 }
 
-/***********************************************/
-/*                                             */
+/***********************************************************/
+/*                                                         */
 /* Fonction d'affichage des options de listing des tickets */
-/*                                             */
-/***********************************************/
+/*                                                         */
+/***********************************************************/
 
 function wats_options_manage_ticket_listing_options()
 {
@@ -1569,7 +1929,7 @@ function wats_options_manage_ticket_listing_options()
 			echo '<tr>';
 		$x++;
 		echo '<td><input type="checkbox" name="ticket_listing_active_'.$column.'"';
-		if ($wats_default_ticket_listing_active_columns[$column] == 1)
+		if (isset($wats_default_ticket_listing_active_columns[$column]) && $wats_default_ticket_listing_active_columns[$column] == 1)
 			echo ' checked';
 		echo '> '.__($value,'WATS').'</td>';
 		if ($x == 4)
@@ -1691,14 +2051,24 @@ function wats_options_manage_ticket_listing_options()
 	echo '<div class="wats_tip" id="ticket_listing_default_query_tip">';
 	echo __('Select the values you want to use for the default query when the ticket listing is loaded in the frontend. Setting values for disabled keys will not have any impact.','WATS').'</div></td></tr></table><br />';
 	
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("ticket_listing_display_tip");>'.__('Ticket listing display','WATS').' : </a></h3>';
+	echo '<table class="wats-form-table">';
+	echo '<tr><td><input type="checkbox" name="display_list_not_authenticated"';
+	if ($wats_settings['display_list_not_authenticated'] == 1)
+		echo ' checked';
+	echo '> '.__('Display empty ticket list for not authenticated users beyond the login form','WATS').'</td></tr><tr><td>';
+	wats_options_premium_only();
+	echo '<div class="wats_tip" id="ticket_listing_display_tip">';
+	echo __('Check this option if you want to allow not authenticated users to view empty ticket listing when the ticket visibility requires an authentication.','WATS').'</div></td></tr></table><br />';
+	
 	return;
 }
 
-/***********************************************/
-/*                                             */
+/********************************************************/
+/*                                                      */
 /* Fonction d'affichage des options de clés des tickets */
-/*                                             */
-/***********************************************/
+/*                                                      */
+/********************************************************/
 
 function wats_options_manage_ticket_keys_options()
 {
@@ -1755,11 +2125,28 @@ function wats_options_manage_ticket_keys_options()
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("tickets_wats_custom_fields_tip");>'.__('Custom fields management','WATS').' : </a></h3>';
 	echo '<div id="divticketcustomfieldstable">'.wats_options_display_custom_fields_table().'</div>';
-	echo wats_options_display_custom_fields_interface();
+	echo wats_options_display_custom_fields_interface().'<br />';
 	wats_options_premium_only();
 	echo '<br /><div class="wats_tip" id="tickets_wats_custom_fields_tip">';
-	echo __('Add custom fields and set the visibility options for each area according to your needs.','WATS').'</div><br />';
+	echo __('Add custom fields and set the visibility options for each area according to your needs.','WATS').'<br />';
+	echo __('Warning : when you edit an existing entry, if you modify the meta key value, this will break existing mapping in the DB for existing tickets so make sure you understand this while modifying this.','WATS').'</div><br />';
 
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("tickets_wats_custom_fields_selector_tip");>'.__('Custom fields drop down selector values','WATS').' : </a></h3>';
+	$wats_ticket_custom_field_values = $wats_settings['wats_ticket_custom_fields'];
+	echo __('Custom field','WATS').' : <select name="wats_custom_fields_selector" id="wats_custom_fields_selector" size="1">';
+	if (is_array($wats_ticket_custom_field_values))
+	foreach ($wats_ticket_custom_field_values as $key => $table)
+	{
+		if (isset($table['type']) && $table['type'] == 1)
+			echo '<option value="'.$key.'">'.esc_html($table['name']).'</option>';
+	}
+	echo '</select><br /><br />';
+	echo '<div id="custom_fields_selector_values_table_div">'.__('Please select a key to customize selector values','WATS').'</div><br />';
+	wats_admin_add_table_interface('resultsupcustomselector','resultaddcustomselector','idsupcustomselector','idaddcustomselector','Value','idcustomselector');
+	wats_options_premium_only();
+	echo '<br /><div class="wats_tip" id="tickets_wats_custom_fields_selector_tip">';
+	echo __('Add custom values to each custom field drop down selector according to your needs.','WATS').'</div><br />';
+	
 	echo '<h3>'.__('Ticket types','WATS').' :</h3><br />';
 	echo '<table class="widefat" cellspacing="0" id="tabletype" style="text-align:center;"><thead><tr class="thead">';
 	echo '<th scope="col" class="manage-column" width="10%" style="text-align:center;">ID</th>';
@@ -1933,11 +2320,68 @@ function wats_options_manage_user_profile_options()
 	return;
 }
 
-/***********************************************/
-/*                                             */
+/****************************************************/
+/*                                                  */
+/* Fonction d'affichage des options de troubleshoot */
+/*                                                  */
+/****************************************************/
+
+function wats_options_manage_troubleshoot_options()
+{
+	global $wpdb, $wats_settings, $wats_default_ticket_listing_columns;
+
+	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("drop_down_user_selector_format_tip");>'.__('Scalability options','WATS').' : </a></h3>';
+	echo '<table class="wats-form-table">';
+	echo '<tr><td><input type="checkbox" name="drop_down_user_selector_format"';
+	if ($wats_settings['drop_down_user_selector_format'] == 1)
+		echo ' checked';
+	echo '> '.__('Turn drop down user list into text input with auto complete (better for sites with more than 1.000 users)','WATS').'</td></tr><tr><td>';
+	echo '<div class="wats_tip" id="drop_down_user_selector_format_tip">';
+	echo __('Check this option if you want to turn drop down user list into text input with auto complete.','WATS').'</div></td></tr></table><br />';
+	wats_options_premium_only();
+	
+	$result_users = count_users();
+	echo '<h3>'.__('Site configuration details','WATS').'</h3>';
+	echo __('Number of users','WATS').' : '.$result_users['total_users'];
+	if ($result_users['total_users'] > 1000)
+		echo ', '.__('the number of users is huge, you should probably think about enabling the scalability option above to avoid DB overloading.', 'WATS');
+	echo '<br /><br />';
+	$posts = wats_get_posts_with_shortcode('[WATS_TICKET_SUBMIT_FORM]');
+	echo __('Frontend submission form','WATS').' : ';
+	if (is_array($posts) && sizeof($posts) > 0)
+	{
+		echo '<br /><ul style="list-style-type:disc; padding-left:30px;">';
+		foreach ($posts as $post)
+			echo '<li><a href="'.get_permalink($post->ID).'">'.get_the_title($post->ID).'</a></li>';
+		echo '</ul>';
+	}
+	else
+		echo __('Not configured','WATS').'<br />';
+	$posts = wats_get_posts_with_shortcode('[WATS_TICKET_LIST');
+	echo __('Frontend ticket listing','WATS').' : ';
+	if (is_array($posts) && sizeof($posts) > 0)
+	{
+		echo '<br /><ul style="list-style-type:disc; padding-left:30px;">';
+		foreach ($posts as $post)
+			echo '<li><a href="'.get_permalink($post->ID).'">'.get_the_title($post->ID).'</a></li>';
+		echo '</ul>';
+	}
+	else
+		echo __('Not configured','WATS').'<br />';
+	
+	echo __('WordPress address','WATS').' : '.site_url().'<br />';
+	echo __('Site address','WATS').' : '.home_url().'<br />';
+	if (wats_compare_url(site_url(),home_url()) == false)
+		echo '<span style="color:red;">'.__('The domain part of the URLs is different, this could cause some problems.','WATS').'</span><br />';
+	
+	return;
+}
+
+/****************************************************/
+/*                                                  */
 /* Fonction d'affichage des options de statistiques */
-/*                                             */
-/***********************************************/
+/*                                                  */
+/****************************************************/
 
 function wats_options_manage_stats_options()
 {
@@ -1969,26 +2413,51 @@ function wats_options_manage_stats_options()
 function wats_options_manage_home_options()
 {
 
-	echo __('Just select a menuitem in the right sidebar widget and set the options according to your needs.','WATS');
+	echo __('Just select a menuitem in the right sidebar widget and set the options according to your needs.','WATS').'<br /><br />';
+	echo __('You can also browse the documentation on <a href="http://www.ticket-system.net/">official website</a> to get further help.','WATS');
+
+	if (WATS_PREMIUM == false)
+	{
+		echo '<h3>'.__('Upgrade to Premium release','WATS').' :</h3>';
+		echo __('You are currently using the standard release of WATS. This release is free.','WATS');
+		echo __(' There is a Premium release available for you. It contains all the features of the standard release plus many advanced features.','WATS');
+		echo __(' You can learn more about the premium release and order it on ','WATS').'<a href="http://www.ticket-system.net">'.__('WATS official website','WATS').'</a>.';
+	}
 	
-	echo '<h3>'.__('Upgrade to Premium release','WATS').' :</h3>';
-	echo __('You are currently using the standard release of WATS. This release is free.','WATS');
-	echo __(' There is a Premium release available for you. It contains all the features of the standard release plus many advanced features.','WATS');
-	echo __(' You can learn more about the premium release and order it on ','WATS').'<a href="http://www.ticket-system.net">'.__('WATS official website','WATS').'</a>.';
+	echo '<br /><br />'.__('In order to be always updated on the news around WATS, you can :','WATS');
+	echo '<ul style="list-style-type:disc;margin-left:40px;"><li><a href="http://www.ticket-system.net">'.__('Subscribe to the newsletter','WATS').'</a></li>';
+	echo '<li><a href="https://twitter.com/wpwats" class="twitter-follow-button" data-show-count="false">Follow @wpwats</a>';
+	echo '<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li></ul>';
+
+	echo __('If you like WATS, please be social and refer it on the social networks :','WATS').'<br /><br />';
+	echo '<div style="float:left;"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.ticket-system.net/" data-lang="en" data-text="WordPress Advanced Ticket System from" data-related="anywhereTheJavascriptAPI" data-count="vertical">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></div>';
+	echo '<div style="float:left; margin-left:10px;"><iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.ticket-system.net%2F&amp;send=false&amp;layout=box_count&amp;width=65&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=90" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:65px; height:90px;" allowTransparency="true"></iframe></div>';
+	echo '<div style="" class="g-plusone" data-size="tall" data-href="http://www.ticket-system.net/"></div>';
+	echo '<script type="text/javascript">
+		  (function() {
+			var po = document.createElement("script"); po.type = "text/javascript"; po.async = true;
+			po.src = "https://apis.google.com/js/plusone.js";
+			var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(po, s);
+		  })();
+		  </script>';
+	echo '<div style="float:left;margin-right:10px;"><script src="//platform.linkedin.com/in.js" type="text/javascript"></script><script type="IN/Share" data-url="http://www.ticket-system.net/" data-counter="top"></script></div>';
 	
 	return;
 }
 
 function wats_options_premium_only()
 {
-	echo '<div style="font-weight:bold;">'.__('Warning : this feature isn\'t available in the standard release. Please upgrade to benefit from it!','WATS').'</div>';
+	if (WATS_PREMIUM == false)
+		echo '<div style="font-weight:bold;">'.__('Warning : this feature isn\'t available in the standard release. Please upgrade to benefit from it!','WATS').'</div>';
 
 	return;
 }
 
 function wats_options_premium_only_without_div()
 {
-	echo '('.__('Warning : this feature isn\'t available in the standard release. Please upgrade to benefit from it!','WATS').')';
+	if (WATS_PREMIUM == false)
+		echo '('.__('Warning : this feature isn\'t available in the standard release. Please upgrade to benefit from it!','WATS').')';
 
 	return;
 }
@@ -2029,13 +2498,22 @@ function wats_options_admin_menu()
 		}
 		else if ($submenu == 'ticket-submission')
 		{
-			$wats_settings['wats_guest_user'] = $_POST['guestlist'];
+			if (get_user_by('login', $_POST['guestlist']))
+				$wats_settings['wats_guest_user'] = $_POST['guestlist'];
+			else
+				$wats_settings['wats_guest_user'] = -1;
+
 			$wats_settings['ticket_edition_media_upload'] = isset($_POST['ticket_edition_media_upload']) ? 1 : 0;
 			$wats_settings['ticket_edition_media_upload_tabs'] = isset($_POST['ticket_edition_media_upload_tabs']) ? 1 : 0;
 			$wats_settings['call_center_ticket_creation'] = isset($_POST['call_center_ticket_creation']) ? 1 : 0;
 			$wats_settings['frontend_submit_form_access'] = $_POST['group5'];
 			$wats_settings['frontend_submit_form_ticket_status'] = $_POST['group6'];
-			$wats_settings['submit_form_default_author'] = $_POST['defaultauthorlist'];
+			
+			if (get_user_by('login', $_POST['defaultauthorlist']))
+				$wats_settings['submit_form_default_author'] = $_POST['defaultauthorlist'];
+			else
+				$wats_settings['submit_form_default_author'] = wats_get_first_admin_login();
+
 			$wats_settings['ms_ticket_submission'] = isset($_POST['ms_ticket_submission']) ? 1 : 0;
 			$wats_settings['ms_mail_server'] = strlen($_POST['ms_mail_server']) ? esc_html(stripslashes($_POST['ms_mail_server'])) : 'mail.example.com';
 			$wats_settings['ms_port_server'] = wats_is_numeric(stripslashes($_POST['ms_port_server'])) ? esc_html(stripslashes($_POST['ms_port_server'])) : '110';
@@ -2079,6 +2557,7 @@ function wats_options_admin_menu()
 			$wats_default_ticket_listing_default_query['author'] = $_POST['wats_select_ticket_author_tl_query'];
 			$wats_default_ticket_listing_default_query['owner'] = $_POST['wats_select_ticket_owner_tl_query'];
 			$wats_settings['wats_default_ticket_listing_default_query'] = $wats_default_ticket_listing_default_query;
+			$wats_settings['display_list_not_authenticated'] = isset($_POST['display_list_not_authenticated']) ? 1 : 0;
 		}
 		else if ($submenu == 'ticket-keys')
 		{
@@ -2093,6 +2572,24 @@ function wats_options_admin_menu()
 			$wats_settings['ticket_status_key_enabled'] = isset($_POST['ticket_status_key_enabled']) ? 1 : 0;
 			$wats_settings['ticket_type_key_enabled'] = isset($_POST['ticket_type_key_enabled']) ? 1 : 0;
 			$wats_settings['default_ticket_product'] = isset($_POST['group_default_wats_products']) ? $_POST['group_default_wats_products'] : 0;
+			if (isset($_POST['group_default_custom_selector']) && isset($_POST['wats_custom_fields_selector']))
+			{
+				$wats_ticket_custom_field_values = $wats_settings['wats_ticket_custom_fields'];
+				if (isset($wats_ticket_custom_field_values[$_POST['wats_custom_fields_selector']]))
+				{
+					$table = $wats_ticket_custom_field_values[$_POST['wats_custom_fields_selector']];
+					if (isset($table['type']) && $table['type'] == 1 && isset($table['values']))
+					{
+						$values = $table['values'];
+						if (isset($values[$_POST['group_default_custom_selector']]))
+						{
+							$table['default_value'] = $_POST['group_default_custom_selector'];
+							$wats_ticket_custom_field_values[$_POST['wats_custom_fields_selector']] = $table;
+							$wats_settings['wats_ticket_custom_fields'] = $wats_ticket_custom_field_values;
+						}
+					}
+				}
+			}
 		}
 		else if ($submenu == 'ticket-assign')
 		{
@@ -2124,12 +2621,19 @@ function wats_options_admin_menu()
 				$wats_settings['dashboard_stats_widget_'.$rolename] = isset($_POST['dashboard_stats_widget_'.$rolename ]) ? 1 : 0;
 			}
 		}
+		else if ($submenu == 'ticket-troubleshoot')
+		{
+			$wats_settings['drop_down_user_selector_format'] = isset($_POST['drop_down_user_selector_format']) ? 1 : 0;
+		}
 		
 		update_option('wats', $wats_settings);
 	}
 	
 	wats_load_settings();
-	echo '<H2><div style="text-align:center">WATS '.$wats_settings['wats_version'].'</div></H2><br />';
+	if (WATS_PREMIUM == true)
+		echo '<H2><div style="text-align:center">WATS Premium '.$wats_settings['wats_version'].'</div></H2><br />';
+	else
+		echo '<H2><div style="text-align:center">WATS '.$wats_settings['wats_version'].'</div></H2><br />';
 	
 	echo '<form action="" method="post">';
 	wp_nonce_field('update-wats-options');
@@ -2146,6 +2650,7 @@ function wats_options_admin_menu()
 	echo '<li '.(($submenu == 'user-profile') ? 'class="selected"': '').'><a href="'.$url.'&amp;sub=user-profile">'.__('User profile','WATS').'</a></li>';
 	echo '<li '.(($submenu == 'notifications') ? 'class="selected"': '').'><a href="'.$url.'&amp;sub=notifications">'.__('Notifications','WATS').'</a></li>';
 	echo '<li '.(($submenu == 'ticket-stats') ? 'class="selected"': '').'><a href="'.$url.'&amp;sub=ticket-stats">'.__('Statistics','WATS').'</a></li>';
+	echo '<li '.(($submenu == 'ticket-troubleshoot') ? 'class="selected"': '').'><a href="'.$url.'&amp;sub=ticket-troubleshoot">'.__('Troubleshoot','WATS').'</a></li>';
 	echo '</ul>';
 	
 	echo '<br /><ul class="wats-options-menu">';
@@ -2171,6 +2676,8 @@ function wats_options_admin_menu()
 		wats_options_manage_user_profile_options();
 	else if ($submenu == 'ticket-stats')
 		wats_options_manage_stats_options();
+	else if ($submenu == 'ticket-troubleshoot')
+		wats_options_manage_troubleshoot_options();
 	else if ($submenu == '')
 		wats_options_manage_home_options();
 	

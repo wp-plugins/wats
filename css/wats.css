@@ -97,6 +97,11 @@ li.wats {
 	background-color: #8dbdd8;
 }
 
+.wats_table tbody tr:hover {
+  background-color: #DDEAFF;
+}
+
+
 .wats_edit_table th.column-title {
 	width:200px;
 }
@@ -123,7 +128,6 @@ select.wats_select {
 .wats_select_ticket_type_frontend,
 .wats_select_ticket_status_frontend,
 .wats_select_ticket_priority_frontend {
-	text-align:left;
 }
 
 .wats_select_ticket_details_frontend {
@@ -180,4 +184,12 @@ ul.wats-options-menu a {
 
 #wats_frontend_ticket_listing_div input {
 	margin-bottom:0px;
+}
+
+#wats_tickets_per_page_selector {
+	margin-bottom:10px;
+}
+
+.ui-autocomplete-loading { 
+	background: white url('../img/ajax-loader.gif') right center no-repeat;
 }
