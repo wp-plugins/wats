@@ -161,7 +161,7 @@ function wats_pre_comment_on_post($comment_post_id)
 			wp_die(__('Sorry, you can\'t update this ticket.','WATS'));
 		else if ($wats_settings['visibility'] == 1 && !is_user_logged_in())
 			wp_die(__('Sorry, you must be logged in to update this ticket.','WATS'));
-		else if ($wats_settings['visibility'] == 2 && (!is_user_logged_in() || (is_user_logged_in() && !current_user_can('administrator') && $current_user->ID != $post->post_author && ($wats_settings['ticket_visibility_same_company'] == 0 || wats_check_user_same_company($current_user->ID,$post->post_author) == false))))
+		else if ($wats_settings['visibility'] == 2 && (!is_user_logged_in() || (is_user_logged_in() && !current_user_can('administrator') && $current_user->ID != $post->post_author)))
 			wp_die(__('Sorry, you don\'t have the rights to update this ticket.','WATS'));
 	}
 		
