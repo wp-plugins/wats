@@ -72,7 +72,7 @@ function wats_dashboard_widget_tickets()
 
 	$role = array_shift($current_user->roles);
 	$user_can_view_stats = 0;
-	if ($wats_settings['dashboard_stats_widget_'.$role] == 1)
+	if (isset($wats_settings['dashboard_stats_widget_'.$role]) && $wats_settings['dashboard_stats_widget_'.$role] == 1)
 		$user_can_view_stats = 1;
 		
 	if ($user_can_view_stats == 1)
