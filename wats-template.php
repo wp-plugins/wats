@@ -560,8 +560,13 @@ function wats_list_terms_exclusions($args)
 		{
 			$catlist[] = $key;
 		}
-		$catlist = implode(',',$catlist);
-		$where = " AND t.term_id IN ($catlist)";
+		if (count($catlist))
+		{
+			$catlist = implode(',',$catlist);
+			$where = " AND t.term_id IN ($catlist)";
+		}
+		else
+			$where = " AND t.term_id IN ('')";
 	}
 	
 	return $where;
