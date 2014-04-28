@@ -1,7 +1,7 @@
 === Wordpress Advanced Ticket System ===
 Contributors: Olivier
 Donate link: http://www.ticket-system.net/
-Tags: ticket,case,system,support,taxonomy,help,cms,crm,customer,helpdesk,community,contact,social,member,company,trouble,issue,post,problem,contact,contact form,feedback,form,custom fields,custom post,post type,ticket system,support system,wats,español,français,english,italiano,deutsch,german,dutch,french,spanish
+Tags: ticket,case,system,support,help,helpdesk,ticket system,support system,crm,contact
 Requires at least: 3.0
 Tested up to: 3.9
 Stable tag: 1.0.57
