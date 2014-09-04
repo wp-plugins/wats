@@ -2,8 +2,8 @@
 Contributors: Olivier
 Donate link: http://www.ticket-system.net/
 Tags: ticket,case,system,support,help,helpdesk,ticket system,support system,crm,contact
-Requires at least: 4.0
-Tested up to: 3.9
+Requires at least: 3.0
+Tested up to: 4.0
 Stable tag: 1.0.57
 
 == Description ==
