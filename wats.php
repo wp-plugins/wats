@@ -534,10 +534,8 @@ add_action('wp_ajax_wats_admin_remove_notification_rule_entry','wats_admin_remov
 add_action('wp_ajax_wats_admin_insert_ticket_custom_field','wats_admin_insert_ticket_custom_field',10);
 add_action('wp_ajax_wats_admin_remove_ticket_custom_field','wats_admin_remove_ticket_custom_field',10);
 add_action('wp_ajax_wats_admin_get_custom_fields_selector_values_table','wats_admin_get_custom_fields_selector_values_table',10);
-add_action('wp_ajax_wats_ajax_admin_get_user_list','wats_ajax_admin_get_user_list',10);
 add_action('wp_ajax_wats_admin_options_get_custom_field_table_row','wats_admin_options_get_custom_field_table_row',10);
 add_action('wp_ajax_wats_admin_update_ticket_custom_field','wats_admin_update_ticket_custom_field',10);
-add_action('wp_ajax_wats_ajax_frontend_get_user_list','wats_ajax_frontend_get_user_list',10);
-add_action('wp_ajax_nopriv_wats_ajax_frontend_get_user_list','wats_ajax_frontend_get_user_list',10);
+
 
 ?>

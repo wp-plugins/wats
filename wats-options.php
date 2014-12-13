@@ -1768,38 +1768,20 @@ function wats_options_manage_ticket_submission_options()
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("guestlist_tip");>'.__('Shared guest user','WATS').' : </a></h3>';
 	echo '<table class="wats-form-table"><tr><td>'.__('User','WATS').' : ';
-	if ($wats_settings['drop_down_user_selector_format'] == 0)
+
+	echo '<select name="guestlist" id="guestlist" class="wats_select">';
+	$userlist = wats_build_user_list(__("None",'WATS'),'edit_posts');
+	foreach ($userlist AS $userlogin => $username)
 	{
-		echo '<select name="guestlist" id="guestlist" class="wats_select">';
-		$userlist = wats_build_user_list(__("None",'WATS'),'edit_posts');
-		foreach ($userlist AS $userlogin => $username)
+		if ($current_user->user_login !== $userlogin)
 		{
-			if ($current_user->user_login !== $userlogin)
-			{
-				echo '<option value="'.$userlogin.'" ';
-				if ($userlogin == $wats_settings['wats_guest_user']) echo 'selected';
-					echo '>'.$username.'</option>';
-			}
+			echo '<option value="'.$userlogin.'" ';
+			if ($userlogin == $wats_settings['wats_guest_user']) echo 'selected';
+				echo '>'.$username.'</option>';
 		}
-		echo '</select></td></tr><tr><td>';
 	}
-	else
-	{
-		if ($wats_settings['wats_guest_user'] === -1)
-		{
-			$guest_user = __('None','WATS');
-			$guest_user_hidden = -1;
-		}
-		else
-		{
-			$guest_user = get_user_by('login',$wats_settings['wats_guest_user']);
-			$guest_user = wats_build_formatted_name($guest_user->ID);
-			$guest_user = $guest_user[$wats_settings['wats_guest_user']];
-			$guest_user_hidden = $wats_settings['wats_guest_user'];
-		}
-		echo '<input class="ui-autocomplete-input" type="text" name="guestlist_ac" id="guestlist_ac" value="'.esc_attr($guest_user).'" />';
-		echo '<input type="hidden" name="guestlist" id="guestlist" value="'.esc_attr($guest_user_hidden).'" /></td></tr><tr><td>';
-	}
+	echo '</select></td></tr><tr><td>';
+
 	echo '<div class="wats_tip" id="guestlist_tip">';
 	echo __('The shared guest user is a user that must have at least contributor user level. This user will only have access to the ticket creation page on the admin side. You can share the guest user login/password with your visitors so that they can submit tickets without having to register first. This is a shared account.','WATS');
 	echo '</div></td></tr></table><br />';
@@ -1906,25 +1888,17 @@ function wats_options_manage_ticket_submission_options()
 	
 	echo '<h3><a style="cursor:pointer;" title="'.__('Click to get some help!', 'WATS').'" onclick=javascript:wats_invert_visibility("submitformdefaultauthor_tip");>'.__('Default author for unregistered visitors tickets','WATS').' : </a></h3>';
 	echo '<table class="wats-form-table"><tr><td>'.__('User','WATS').' : ';
-	if ($wats_settings['drop_down_user_selector_format'] == 0)
+
+	echo '<select name="defaultauthorlist" id="defaultauthorlist" class="wats_select">';
+	$userlist = wats_build_user_list(0,0);
+	foreach ($userlist AS $userlogin => $username)
 	{
-		echo '<select name="defaultauthorlist" id="defaultauthorlist" class="wats_select">';
-		$userlist = wats_build_user_list(0,0);
-		foreach ($userlist AS $userlogin => $username)
-		{
-			echo '<option value="'.$userlogin.'" ';
-			if ($userlogin == $wats_settings['submit_form_default_author']) echo 'selected';
-				echo '>'.$username.'</option>';
-		}
-		echo '</select></td></tr><tr><td>';
+		echo '<option value="'.$userlogin.'" ';
+		if ($userlogin == $wats_settings['submit_form_default_author']) echo 'selected';
+			echo '>'.$username.'</option>';
 	}
-	else
-	{
-		$author = get_user_by('login',$wats_settings['submit_form_default_author']);
-		$author = wats_build_formatted_name($author->ID);
-		echo '<input type="text" name="defaultauthorlist_ac" id="defaultauthorlist_ac" value="'.esc_attr($author[$wats_settings['submit_form_default_author']]).'" />';
-		echo '<input type="hidden" name="defaultauthorlist" id="defaultauthorlist" value="'.esc_attr($wats_settings['submit_form_default_author']).'" /></td></tr><tr><td>';
-	}
+	echo '</select></td></tr><tr><td>';
+
 	wats_options_premium_only();
 	echo '<div class="wats_tip" id="submitformdefaultauthor_tip">';
 	echo __('This option will be used to set the author of tickets submitted through the frontend submit form or through email by unregistered users.','WATS').'</div></td></tr></table><br />';
@@ -2558,6 +2532,7 @@ function wats_options_manage_troubleshoot_options()
 	if ($wats_settings['drop_down_user_selector_format'] == 1)
 		echo ' checked';
 	echo '> '.__('Turn drop down user list into text input with auto complete (better for sites with more than 1.000 users)','WATS').'</td></tr><tr><td>';
+	wats_options_premium_only();
 	echo '<div class="wats_tip" id="drop_down_user_selector_format_tip">';
 	echo __('Check this option if you want to turn drop down user list into text input with auto complete.','WATS').'</div></td></tr></table><br />';
 	

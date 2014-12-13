@@ -41,24 +41,6 @@ function wats_admin_head()
 function wats_enqueue_script_frontend()
 {
 	global $post;
-	if (is_single() && isset($post) && $post->post_type == 'ticket')
-	{
-		wp_enqueue_script('jquery');
-		
-		wp_enqueue_script('jquery-ui-autocomplete');
-		
-		?>
-		<script type="text/javascript">
-		var ajaxurl = "<?php echo admin_url('admin-ajax.php',(is_ssl() ? 'https' : 'http')); ?>";
-		var watsid = "<?php echo $post->ID ?>";
-		</script>
-		<?php
-		
-		$ajaxfileloc = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) .'/wats-single-ticket-ajax.php';
-		wp_enqueue_script('wats-single-ticket',$ajaxfileloc);
-	}
-
-	wp_print_scripts();
 	
 	return;
 }
@@ -270,10 +252,6 @@ function wats_ticket_edit_admin_head()
 		</script>
 		<?php
 	}
-	
-	$ajaxfileloc = trailingslashit(get_option('siteurl')) . 'wp-content/plugins/' . basename(dirname(__FILE__)) . '/wats-ticket-edit-ac-ajax.php';
-    wp_enqueue_script('wats-ticket-edit-ac-ajax', $ajaxfileloc);
-	
 	
 	return;
 }
