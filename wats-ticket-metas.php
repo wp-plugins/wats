@@ -190,6 +190,30 @@ function wats_pre_comment_on_post($comment_post_id)
 	return;
 }
 
+/*************************************************/
+/*                                               */
+/* Fonction de filtrage d'un nouveau commentaire */
+/*                                               */
+/*************************************************/
+
+function wats_preprocess_comment($commentdata)
+{
+	global $wats_settings, $current_user;
+	
+	wats_load_settings();
+	
+	if (!is_admin() && current_user_can('administrator') && $wats_settings['call_center_ticket_update'] == 1 && isset($_POST['wats_select_ticket_updater']) && get_post_type($commentdata['comment_post_ID']) == 'ticket' && $current_user->user_login != $_POST['wats_select_ticket_updater'])
+	{
+		$commentdata['user_ID'] = intval(wats_get_user_ID_from_user_login($_POST['wats_select_ticket_updater']));
+		$commentdata['comment_author'] = $_POST['wats_select_ticket_updater'];
+		$user = new WP_user($commentdata['user_ID']);
+		$commentdata['comment_author_email'] = $user->user_email;
+		$commentdata['comment_author_url'] = $user->user_url;
+	}
+
+	return $commentdata;
+}
+
 /************************************************/
 /*                                              */
 /* Fonction de sauvegarde des metas d'un ticket */
@@ -512,25 +536,92 @@ function wats_ticket_details_meta_box($post,$view=0)
 	if (is_admin())
 		$output .= wp_nonce_field('wats-edit-ticket','_wpnonce_wats_edit_ticket',true,false)."\n";
 
-	if ((is_admin() || $view == 1) && current_user_can('administrator') && $wats_settings['call_center_ticket_creation'] == 1)
+	if ($view == 0 && !is_admin())
 	{
-		if (is_object($post))
+		$output .= wp_nonce_field('wats-single-ticket','_wpnonce_wats_single_ticket',true,false);
+	}
+		
+	if (((is_admin() || $view == 1) && current_user_can('administrator') && $wats_settings['call_center_ticket_creation'] == 1) || (!is_admin() && $view == 0 && current_user_can('administrator') && $wats_settings['call_center_ticket_update'] == 1))
+	{
+		if (is_object($post) && is_admin())
 			$selected_login = get_the_author_meta('user_login');
 		else
 			$selected_login = $current_user->user_login;
-	
-		$output .= '<div id="wats_div_ticket_originator"><label class="wats_label">'.__('Ticket originator : ','WATS').'</label>';
+
+
+		if (!is_admin() && $view == 0 && current_user_can('administrator') && $wats_settings['call_center_ticket_update'] == 1)
+			$output .= '<div id="wats_div_ticket_updater"><label class="wats_label">'.__('Ticket updater : ','WATS').'</label>';
+		else
+			$output .= '<div id="wats_div_ticket_originator"><label class="wats_label">'.__('Ticket originator : ','WATS').'</label>';
 		
-		$userlist = wats_build_user_list(0,0);
-		
-		$output .= '<select name="wats_select_ticket_originator" id="wats_select_ticket_originator" class="wats_select">';
-		foreach ($userlist AS $userlogin => $username)
+		if (!isset($wats_settings['drop_down_user_selector_format']) || $wats_settings['drop_down_user_selector_format'] == 0)
 		{
-			$output .= '<option value="'.$userlogin.'" ';
-			if ($selected_login == $userlogin) $output .= " selected";
-			$output .= '>'.$username.'</option>';
+			if ($wats_settings['profile_company_enabled'] == 1 && function_exists('wats_build_company_list'))
+			{
+				$company_list = wats_build_company_list(2);
+				$my_company = get_user_meta(wats_get_user_ID_from_user_login($selected_login),$wats_settings['company_meta_key_profile'],true);
+				if ($my_company == '')
+					$my_company = 0;
+				$output .= '<br /><br /><label class="wats_label">+ '.__('Company','WATS').' : </label>';
+				$output .= '<select name="wats_company_list" id="wats_company_list">';
+				foreach ($company_list AS $key => $value)
+				{
+					$output .= '<option value="'.esc_attr($key).'"';
+					if ($my_company === $key) 
+						$output .= " selected";
+					if ($key == '0')
+						$output .= '>'.esc_html($value).'</option>';
+					else
+						$output .= '>'.esc_html($key).'</option>';
+				}
+				$output .= '</select>';
+				if (!is_admin() && $view == 0 && current_user_can('administrator') && $wats_settings['call_center_ticket_update'] == 1)
+					$output .= '<br /><br /><div id="wats_div_ticket_updater_from_company"><label class="wats_label">+ '.__('User','WATS').' : </label>';
+				else
+					$output .= '<br /><br /><div id="wats_div_ticket_originator_from_company"><label class="wats_label">+ '.__('User','WATS').' : </label>';
+				$userlist = wats_build_user_list_from_company(0,0,$my_company);
+			}
+			else
+			{
+				$userlist = wats_build_user_list(0,0);
+			}
+			
+			if (!is_admin() && $view == 0 && current_user_can('administrator') && $wats_settings['call_center_ticket_update'] == 1)
+				$output .= '<select name="wats_select_ticket_updater" id="wats_select_ticket_updater" class="wats_select">';
+			else
+				$output .= '<select name="wats_select_ticket_originator" id="wats_select_ticket_originator" class="wats_select">';
+
+			foreach ($userlist AS $userlogin => $username)
+			{
+				$output .= '<option value="'.$userlogin.'" ';
+				if ($selected_login == $userlogin) $output .= " selected";
+				$output .= '>'.$username.'</option>';
+			}
+			$output .=  '</select>';
+			
+			if ($wats_settings['profile_company_enabled'] == 1 && function_exists('wats_build_company_list'))
+				$output .= '</div>';
 		}
-		$output .=  '</select></div>';
+		else
+		{
+			$selected_login_formatted = get_user_by('login',$selected_login);
+			if (is_object($selected_login_formatted))
+			{
+				$selected_login_formatted = wats_build_formatted_name($selected_login_formatted->ID);
+				$selected_login_formatted  = $selected_login_formatted[$selected_login];
+				if (!is_admin() && $view == 0 && current_user_can('administrator') && $wats_settings['call_center_ticket_update'] == 1)
+				{
+					$output .= '<input type="text" id="wats_select_ticket_updater_ac" name="wats_select_ticket_updater_ac" value="'.$selected_login_formatted.'" /><br />';
+					$output .= '<input type="hidden" id="wats_select_ticket_updater" name="wats_select_ticket_updater" value="'.$selected_login.'" /><br />';
+				}
+				else
+				{
+					$output .= '<input type="text" id="wats_select_ticket_originator_ac" name="wats_select_ticket_originator_ac" value="'.$selected_login_formatted.'" /><br />';
+					$output .= '<input type="hidden" id="wats_select_ticket_originator" name="wats_select_ticket_originator" value="'.$selected_login.'" /><br />';
+				}
+			}
+		}
+		$output .= '</div>';
 	}
 	else if (is_admin())
 	{

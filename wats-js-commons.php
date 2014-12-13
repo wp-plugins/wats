@@ -25,6 +25,17 @@ function wats_stop_loading(cell,msg)
 		cell.innerHTML = msg;
 }
 
+function wats_js_get_selected_checkbox(name)
+{
+	var result = new Array();
+	jQuery('input[name^='+name+']:checked').each(function()
+	{
+		result.push(this.value);
+	});
+	
+	return result;
+}
+
 function wats_js_add_blank_cell(idtable,colspan,message)
 {
 	var table = document.getElementById(idtable);

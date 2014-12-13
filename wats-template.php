@@ -150,8 +150,8 @@ function wats_is_ticket($post)
 
 function wats_wp_footer()
 {
-	if (WATS_PREMIUM == false && is_front_page() && (!is_paged()))
-		echo '<div style="text-align:center;">Wordpress advanced <a href="'.WATS_BACKLINK.'">'.WATS_ANCHOR.'</a></div>';
+	/*if (WATS_PREMIUM == false && is_front_page() && (!is_paged()))
+		echo '<div style="text-align:center;">Wordpress advanced <a href="'.WATS_BACKLINK.'">'.WATS_ANCHOR.'</a></div>';*/
 		
 	return;
 }

@@ -39,7 +39,7 @@ function wats_is_numeric($i)
 function wats_is_string($i)
 {
 	if (WATS_VERIFY_STRING)
-		return (preg_match("/^[\.\,\#\&\;\'\"\+\-\_\:?!()@ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽکگچپژیàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d ]+$/", $i));
+		return (preg_match("/^[\.\,\#\&\;\'\"\+\-\_\:?¿!¡()@ßÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽکگچپژیàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d ]+$/", $i));
 	else
 		return 1;
 }
@@ -53,7 +53,7 @@ function wats_is_string($i)
 function wats_is_paragraph($i)
 {
 	if (WATS_VERIFY_STRING)
-		return (preg_match("/^[\.\,\#\&\;\'\"\+\-\_\:\/?!()@ÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽکگچپژیàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d\s ]+$/", $i));
+		return (preg_match("/^[\.\,\#\&\;\'\"\+\-\_\:\/?¿!¡()@ßÀÁÂÃÄÅÇČĎĚÈÉÊËÌÍÎÏŇÒÓÔÕÖŘŠŤÙÚÛÜŮÝŽکگچپژیàáâãäåçčďěèéêëìíîïňðòóôõöřšťùúûüůýÿžدجحخهعغفقثصضطكمنتاأللأبيسشظزوةىآلالآرؤءئa-zA-Z-\d\s ]+$/", $i));
 	else
 		return 1;
 }
@@ -171,7 +171,7 @@ function wats_get_latest_ticket_number()
 {
 	global $wpdb;
 	
-	$value = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = 'wats_ticket_number' ORDER BY ABS(meta_value) DESC LIMIT 0,1",0));
+	$value = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = %s ORDER BY ABS(meta_value) DESC LIMIT 0,1",'wats_ticket_number'));
 
 	if (!$value)
 		$value = 0;
@@ -189,7 +189,7 @@ function wats_get_number_of_tickets()
 {
 	global $wpdb;
 	
-	$value = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = 'wats_ticket_number'",0));
+	$value = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $wpdb->postmeta WHERE meta_key = %s",'wats_ticket_number'));
 
 	if (!$value)
 		$value = 0;
@@ -209,14 +209,14 @@ function wats_get_number_of_tickets_by_status($status,$userid)
 	
 	$query = "SELECT COUNT(*) FROM $wpdb->posts";
 	if ($status != 0)
-		$query .= " LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id) WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->postmeta.meta_key = 'wats_ticket_status' AND $wpdb->postmeta.meta_value = $status AND $wpdb->posts.post_status = 'publish'";
+		$query .= " LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id) WHERE $wpdb->posts.post_type = %s AND $wpdb->postmeta.meta_key = 'wats_ticket_status' AND $wpdb->postmeta.meta_value = $status AND $wpdb->posts.post_status = 'publish'";
 	else
-		$query .= " WHERE  $wpdb->posts.post_type = 'ticket' AND $wpdb->posts.post_status = 'publish'";
+		$query .= " WHERE $wpdb->posts.post_type = %s AND $wpdb->posts.post_status = 'publish'";
 		
 	if ($userid != 0)
 		$query .= " AND $wpdb->posts.post_author = $userid";
 
-	$value = $wpdb->get_var($wpdb->prepare($query,0));
+	$value = $wpdb->get_var($wpdb->prepare($query,'ticket'));
 
 	if (!$value)
 		$value = 0;
@@ -265,7 +265,6 @@ function wats_init_capabilities_table()
 	return ($wats_capabilities_table);
 }
 
-
 /******************************************************/
 /*                                                    */
 /* Fonction de récupération du login du premier admin */
@@ -276,7 +275,7 @@ function wats_get_first_admin_login()
 {
     global $wpdb;
 
-	$users = $wpdb->get_results($wpdb->prepare("SELECT ID FROM $wpdb->users",0));
+	$users = $wpdb->get_results("SELECT ID FROM $wpdb->users");
 	
 	foreach ($users AS $user)
 	{
@@ -299,6 +298,264 @@ function wats_get_full_name($id)
 	return (get_user_meta($id,"first_name",true)." ".get_user_meta($id,"last_name",true));
 }
 
+/******************************************************************************************/
+/*                                                                                        */
+/* Fonction Ajax de préparation à la construction de la liste des utilisateurs (frontend) */
+/*                                                                                        */
+/******************************************************************************************/
+
+function wats_ajax_frontend_get_user_list()
+{
+	global $wpdb, $current_user, $wats_settings;
+
+	wats_load_settings();
+
+	$post = 0;
+	$view = 0;
+	if (isset($_GET['watsid']) && $_GET['type'] == 'frontendownerlist')
+		$view = 1;
+	else if (!isset($_GET['watsid']) && $_GET['type'] == 'fsfownerlist')
+		$view = 0;
+	else if (isset($_GET['watsid']) && $_GET['type'] == 'adminticketeditownerlist')
+		$view = 2;
+	else if ($_GET['type'] == 'ftlownerlist')
+		$view = 3;
+	else if ($_GET['type'] == 'ftlauthorlist')
+		$view = 4;
+	else if ($_GET['type'] == 'fsfauthorlist')
+		$view = 5;
+	else if ($_GET['type'] == 'adminticketeditauthorlist')
+		$view = 6;
+	else  if (isset($_GET['watsid']) && $_GET['type'] == 'frontendupdaterlist')
+		$view = 7;
+		
+	if ($view == 1 || $view == 7)
+		check_ajax_referer('wats-single-ticket');
+	else if ($view == 0 || $view == 5)
+		check_ajax_referer('filter-wats-submit-form');
+	else if ($view == 3 || $view == 4)
+		check_ajax_referer('filter-wats-tickets-list');
+	else
+		check_ajax_referer('wats-edit-ticket');
+	
+	if ($view == 1 || $view == 2 || $view == 6 || $view == 7)
+	{
+		$postid = $_GET['watsid'];
+		
+		if (wats_is_numeric($postid))
+			$post = get_post($postid);
+		else
+		{
+			echo json_encode(array(array("label" => __('Unknow ticket!','WATS'), "value" => "0")));
+			exit;
+		}
+
+		if ($wats_settings['ticket_status_key_enabled'] == 1 && get_post_meta($post->ID,'wats_ticket_status',true) == wats_get_closed_status_id() && !current_user_can('administrator'))
+		{
+			echo json_encode(array(array("label" => __('The ticket is closed. Only administrators could reopen it.','WATS'), "value" => "0")));
+			exit;
+		}
+		else if ($wats_settings['visibility'] == 2 && (!is_user_logged_in() || (is_user_logged_in() && !current_user_can('administrator') && $current_user->ID != $post->post_author && ($wats_settings['ticket_visibility_same_company'] == 0 || wats_check_user_same_company($current_user->ID,$post->post_author) == false))))
+		{
+			echo json_encode(array(array("label" => __("Only admins and ticket author can update this ticket.","WATS"), "value" => "0")));
+			exit;
+		}
+	}
+	else if ($view == 0)
+	{
+		if ($wats_settings['frontend_submit_form_access'] == 0 || ($wats_settings['frontend_submit_form_access'] == 2 && !is_user_logged_in()))
+		{
+			echo json_encode(array(array("label" => __("You don't have the rights to submit a ticket!","WATS"), "value" => "0")));
+			exit;
+		}
+	}
+	else if ($view == 3)
+	{
+		if ($wats_settings['ticket_assign'] == 0 || (($wats_settings['visibility'] == 1 && !is_user_logged_in()) || ($wats_settings['visibility'] == 2 && !current_user_can('administrator') && ($wats_settings['ticket_visibility_read_only_capability'] == 0 || !current_user_can('wats_ticket_read_only')))))
+		{
+			echo json_encode(array(array("label" => __("You don't have the rights to filter on the ticket owner!","WATS"), "value" => "0")));
+			exit;
+		}
+	}
+	else if ($view == 4)
+	{
+		if (($wats_settings['visibility'] == 1 && !is_user_logged_in()) || ($wats_settings['visibility'] == 2 && !current_user_can('administrator') && ($wats_settings['ticket_visibility_read_only_capability'] == 0 || !current_user_can('wats_ticket_read_only'))))
+		{
+			echo json_encode(array(array("label" => __("You don't have the rights to filter on the ticket author!","WATS"), "value" => "0")));
+			exit;
+		}
+	}
+	else if ($view == 5)
+	{
+		if ($wats_settings['frontend_submit_form_access'] == 0 || ($wats_settings['frontend_submit_form_access'] == 2 && !is_user_logged_in()) || !current_user_can('administrator'))
+		{
+			echo json_encode(array(array("label" => __("You don't have the rights to submit a ticket!","WATS"), "value" => "0")));
+			exit;
+		}
+	}
+	
+	if ($view == 4 || $view == 5 || $view == 6 || $view == 7)
+	{
+		$searched_value = stripslashes($_GET['value']);
+		$result = wats_ajax_get_user_list($searched_value,0,array(),array());
+		if ($view == 4)
+			array_push($result,array('label' => __('Any','WATS'), 'value' => "0"));
+		echo (json_encode($result));
+		exit;
+	}
+	else
+	{	
+		$wats_ticket_assign = $wats_settings['ticket_assign'];
+		
+		$role = array_shift($current_user->roles);
+		$user_can_assign = 0;
+		if (isset($role) && isset($wats_settings['ticket_assignment_'.$role]) && $wats_settings['ticket_assignment_'.$role] == 1)
+			$user_can_assign = 1;
+		
+		$searched_value = stripslashes($_GET['value']);
+		if ($wats_ticket_assign == 1 || ($wats_ticket_assign == 2 && $user_can_assign == 1))
+		{
+			$capability = array("administrator");
+			$included = array();
+			if ($wats_settings['ticket_assign_user_list'] == 0)
+			{
+				$capability = 0;
+			}
+			else if ($wats_settings['ticket_assign_user_list'] == 1)
+			{
+				$capability = array("administrator");
+				if (is_object($post))
+					$included[] = $post->post_author;
+			}
+			else if ($wats_settings['ticket_assign_user_list'] == 2)
+			{
+				$capability = array("wats_ticket_ownership");
+				if (is_object($post))
+					$included[] = $post->post_author;
+			}
+			else if ($wats_settings['ticket_assign_user_list'] == 3)
+			{
+				$capability = array("administrator","wats_ticket_ownership");
+			}
+			
+		
+			switch ($_GET['type'])
+			{
+				case 'frontendownerlist':echo json_encode(wats_ajax_get_user_list($searched_value,$capability,array(),$included));break;
+				case 'fsfownerlist':echo json_encode(wats_ajax_get_user_list($searched_value,$capability,array(),$included));break;
+				case 'adminticketeditownerlist':echo json_encode(wats_ajax_get_user_list($searched_value,$capability,array(),$included));break;
+				case 'ftlownerlist':
+					$result = wats_ajax_get_user_list($searched_value,0,array(),array());
+					array_push($result,array('label' => __('Any','WATS'), 'value' => "0"));
+					array_push($result,array('label' => __('None','WATS'), 'value' => "1"));
+					echo (json_encode($result));
+					break;
+				default:break;
+			}
+		}
+		else
+		{
+			echo json_encode(array(array("label" => __("You don't have the rights to assign this ticket!","WATS"), "value" => "0")));
+			exit;
+		}
+	}
+	
+	exit;
+}
+
+/***************************************************************************************/
+/*                                                                                     */
+/* Fonction Ajax de préparation à la construction de la liste des utilisateurs (admin) */
+/*                                                                                     */
+/***************************************************************************************/
+
+function wats_ajax_admin_get_user_list()
+{
+	global $wpdb, $current_user;
+
+	check_ajax_referer('update-wats-options');
+
+	$searched_value = stripslashes($_GET['value']);
+	if (current_user_can('administrator'))
+	{
+		switch ($_GET['type'])
+		{
+			case 'guestlist':echo json_encode(wats_ajax_get_user_list($searched_value,array('edit_posts'),array($current_user->ID),array()));break;
+			case 'defaultauthorlist':echo json_encode(wats_ajax_get_user_list($searched_value,0,array(),array()));break;
+			default:break;
+		}
+	}
+
+	exit;
+}
+
+/**************************************************************/
+/*                                                            */
+/* Fonction Ajax de construction de la liste des utilisateurs */
+/*                                                            */
+/**************************************************************/
+
+function wats_ajax_get_user_list($searched_value,$required_capability,$excluded_user_list,$included_user_list)
+{
+	global $wpdb, $wats_settings;
+	
+	wats_load_settings();
+	
+	$metakeylist = wats_get_list_of_user_meta_keys(1);
+	foreach ($metakeylist AS $index => $metakey)
+	{
+		if (strpos($wats_settings['user_selector_format'],$metakey) === false)
+			unset($metakeylist[$index]);
+	}
+
+	$join = '';
+	$where = '';
+	$x = 0;
+	foreach ($metakeylist AS $index => $metakey)
+	{
+		$x++;
+		$join .= " LEFT JOIN $wpdb->usermeta AS wp".$x." ON wp0.ID = wp".$x.".user_id";
+		$where .= " OR (wp".$x.".meta_key = '".$metakey."' AND wp".$x.".meta_value LIKE '%%".esc_sql($wpdb->esc_like($searched_value))."%%')";
+	}
+
+	$limit = " LIMIT 0,".WATS_MAX_NUMBER_OF_RESULTS_FOR_AUTO_COMPLETE;
+	$users = $wpdb->get_results("SELECT DISTINCT user_login, ID FROM $wpdb->users as wp0 ".$join." WHERE wp0.user_login LIKE '%%".esc_sql($wpdb->esc_like($searched_value))."%%' ".$where.$limit);
+
+	$list = array();
+	foreach ($users as $user)
+	{
+		$user = new WP_user($user->ID);
+		if (!in_array($user->ID,$excluded_user_list,true))
+		{
+			$has_cap = 0;
+			if (is_array($required_capability))
+			foreach ($required_capability as $key => $capability)
+			{
+				if ($user->has_cap($capability))
+					$has_cap = 1;
+			}
+			
+			if ((!is_array($required_capability) && $required_capability === 0) || $has_cap == 1 || in_array("$user->ID",$included_user_list,true))
+			{
+				$output = $wats_settings['user_selector_format'];
+				foreach ($metakeylist AS $metakey)
+				{
+					if (strpos($wats_settings['user_selector_format'],$metakey) !== false)
+						$output = str_replace($metakey,get_user_meta($user->ID,$metakey,true),$output);
+				}
+				$output = str_replace('user_login',$user->user_login,$output);
+				if (wats_is_string(stripslashes($output)))
+					$entry['label'] = esc_html(stripslashes($output));
+				else
+					$entry['label'] = $user->user_login;
+				$entry['value'] = $user->user_login;
+				array_push($list,$entry);
+			}
+		}
+	}
+	
+	return ($list);
+}
 
 /*********************************************************/
 /*                                                       */
@@ -315,7 +572,7 @@ function wats_build_user_list($firstitem,$cap)
 	$order1 = $wats_settings['user_selector_order_1'];
 	$order2 = $wats_settings['user_selector_order_2'];
 	
-    $users = $wpdb->get_results($wpdb->prepare("SELECT ID FROM $wpdb->users LEFT JOIN $wpdb->usermeta AS wp1 ON ($wpdb->users.ID = wp1.user_id AND wp1.meta_key = '$order1') LEFT JOIN $wpdb->usermeta AS wp2 ON ($wpdb->users.ID = wp2.user_id AND wp2.meta_key = '$order2') ORDER BY wp1.meta_value, wp2.meta_value",0));
+    $users = $wpdb->get_results($wpdb->prepare("SELECT ID FROM $wpdb->users LEFT JOIN $wpdb->usermeta AS wp1 ON ($wpdb->users.ID = wp1.user_id AND wp1.meta_key = %s) LEFT JOIN $wpdb->usermeta AS wp2 ON ($wpdb->users.ID = wp2.user_id AND wp2.meta_key = %s) ORDER BY wp1.meta_value, wp2.meta_value",$order1,$order2));
     $userlist = array();
 	if ($firstitem !== 0)
 		$userlist[0] = $firstitem;
@@ -348,7 +605,6 @@ function wats_build_user_list($firstitem,$cap)
         
     return ($userlist);
 }
-
 
 /*******************************************/
 /*                                         */
@@ -396,7 +652,7 @@ function wats_get_list_of_user_meta_keys($view)
 {
 	global $wpdb;
 	
-	$keys = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT meta_key FROM $wpdb->usermeta",0));
+	$keys = $wpdb->get_results("SELECT DISTINCT meta_key FROM $wpdb->usermeta");
 	if ($view == 0)
 	{
 		$list = '';
@@ -586,7 +842,7 @@ function wats_get_posts_with_shortcode($shortcode)
 {
 	global $wpdb;
 	
-	$posts = $wpdb->get_results($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_content LIKE %s AND post_status='publish'",'%'.like_escape($shortcode).'%',0));
+	$posts = $wpdb->get_results($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_content LIKE %s AND post_status='publish'",'%'.$wpdb->esc_like($shortcode).'%'));
 	
 	return $posts;
 }

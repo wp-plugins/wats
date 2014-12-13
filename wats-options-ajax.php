@@ -1,4 +1,5 @@
 <?php
+header("Content-Type: application/javascript");
 ?>
 jQuery(document).ready(function() {
 	function wats_options_editable_init()
@@ -28,7 +29,7 @@ jQuery(document).ready(function() {
 			var idtable = jQuery(this).parent("tr").parent().parent("table").attr("id");
 			var idvalue = content.current;
 			var idprevvalue = content.previous;
-			jQuery.post(ajaxurl, {action:"wats_admin_update_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, idtable:idtable, idprevvalue:idprevvalue},
+			jQuery.post(ajaxurl, {action:"wats_admin_update_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, idtable:idtable, idprevvalue:idprevvalue},
 			function(res)
 			{
 				var message_result = eval('(' + res + ')');
@@ -51,7 +52,7 @@ jQuery(document).ready(function() {
 		var idvalue = jQuery("#idtype").val();
 		wats_loading(document.getElementById("resultaddtype"),watsmsg[4]);
 		var idcat = 0;
-		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 		function(res)
 		{
 			jQuery('#idaddtype').removeAttr('disabled');
@@ -83,7 +84,7 @@ jQuery(document).ready(function() {
 				jQuery('#idsuptype').attr('disabled','disabled');
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
-				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
 					jQuery('#idsuptype').removeAttr('disabled');
@@ -108,7 +109,7 @@ jQuery(document).ready(function() {
 		var idvalue = jQuery("#idpriority").val();
 		var idcat = 0;
 		wats_loading(document.getElementById("resultaddpriority"),watsmsg[4]);
-		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 		function(res)
 		{
 			jQuery('#idaddpriority').removeAttr('disabled');
@@ -140,7 +141,7 @@ jQuery(document).ready(function() {
 				jQuery('#idsuppriority').attr('disabled','disabled');
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
-				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
 					jQuery('#idsuppriority').removeAttr('disabled');
@@ -165,7 +166,7 @@ jQuery(document).ready(function() {
 		var idvalue = jQuery("#idstatus").val();
 		wats_loading(document.getElementById("resultaddstatus"),watsmsg[4]);
 		var idcat = 0;
-		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 		function(res)
 		{
 			jQuery('#idaddstatus').removeAttr('disabled');
@@ -197,7 +198,7 @@ jQuery(document).ready(function() {
 				jQuery('#idsupstatus').attr('disabled','disabled');
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
-				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
 					jQuery('#idsupstatus').removeAttr('disabled');
@@ -222,7 +223,7 @@ jQuery(document).ready(function() {
 		var idvalue = jQuery("#idproduct").val();
 		var idcat = 0;
 		wats_loading(document.getElementById("resultaddproduct"),watsmsg[4]);
-		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 		function(res)
 		{
 			jQuery('#idaddproduct').removeAttr('disabled');
@@ -254,7 +255,7 @@ jQuery(document).ready(function() {
 				jQuery('#idsupproduct').attr('disabled','disabled');
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
-				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
 					jQuery('#idsupproduct').removeAttr('disabled');
@@ -279,7 +280,7 @@ jQuery(document).ready(function() {
 		var idvalue = jQuery("#idsla").val();
 		var idcat = 0;
 		wats_loading(document.getElementById("resultaddsla"),watsmsg[4]);
-		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 		function(res)
 		{
 			jQuery('#idaddsla').removeAttr('disabled');
@@ -311,7 +312,7 @@ jQuery(document).ready(function() {
 				jQuery('#idsupsla').attr('disabled','disabled');
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
-				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
 					jQuery('#idsupsla').removeAttr('disabled');
@@ -336,7 +337,7 @@ jQuery(document).ready(function() {
 		var idvalue = jQuery('#catlist option:selected').text();
 		var idcat = jQuery('#catlist option:selected').val();
 		wats_loading(document.getElementById("resultaddcat"),watsmsg[4]);
-		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 		function(res)
 		{
 			jQuery('#idaddcat').removeAttr('disabled');
@@ -367,7 +368,7 @@ jQuery(document).ready(function() {
 				jQuery('#idsupcat').attr('disabled','disabled');
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
-				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type},
 				function(res)
 				{
 					jQuery('#idsupcat').removeAttr('disabled');
@@ -398,7 +399,7 @@ jQuery(document).ready(function() {
 		var idrulescope = jQuery('#notification_rules_select_rule_scope option:selected').val();
 		var listvalue = jQuery("#rule_mailing_list").val();
 		wats_loading(document.getElementById("resultaddrule"),watsmsg[4]);
-		jQuery.post(ajaxurl, {action:"wats_admin_insert_notification_rule_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idtype:idtype, idpriority:idpriority, idstatus:idstatus, idproduct:idproduct, idcountry:idcountry, idcompany:idcompany, idcategorie:idcategorie, listvalue:listvalue, idrulescope:idrulescope},
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_notification_rule_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idtype:idtype, idpriority:idpriority, idstatus:idstatus, idproduct:idproduct, idcountry:idcountry, idcompany:idcompany, idcategorie:idcategorie, listvalue:listvalue, idrulescope:idrulescope},
 		function(res)
 		{
 			jQuery('#idaddrule').removeAttr('disabled');
@@ -428,7 +429,7 @@ jQuery(document).ready(function() {
 				jQuery('#idsuprule').attr('disabled','disabled');
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
-				jQuery.post(ajaxurl, {action:"wats_admin_remove_notification_rule_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue},
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_notification_rule_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue},
 				function(res)
 				{
 					jQuery('#idsuprule').removeAttr('disabled');
@@ -459,7 +460,7 @@ jQuery(document).ready(function() {
 		var customfieldname = jQuery("#customfieldsdisplayname").val();
 		var customfieldmetakey = jQuery("#customfieldsmetakey").val();
 		wats_loading(document.getElementById("resultaddcustomfields"),watsmsg[4]);
-		jQuery.post(ajaxurl, {action:"wats_admin_insert_ticket_custom_field", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idfsf:idfsf, idatef:idatef, idftdt:idftdt, idftuf:idftuf, idftlf:idftlf, idftltc:idftltc, customfieldname:customfieldname, customfieldmetakey:customfieldmetakey, idtype:idtype},
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_ticket_custom_field", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idfsf:idfsf, idatef:idatef, idftdt:idftdt, idftuf:idftuf, idftlf:idftlf, idftltc:idftltc, customfieldname:customfieldname, customfieldmetakey:customfieldmetakey, idtype:idtype},
 		function(res)
 		{
 			jQuery('#idaddcustomfields').removeAttr('disabled');
@@ -478,33 +479,29 @@ jQuery(document).ready(function() {
 	});
 	
 	jQuery('#idsupcustomfields').click(function() {
-		if (jQuery("input[name=customfieldcheck]").length == 0)
+		if (jQuery('input[name^="customfieldcheck"]').length == 0)
 			wats_stop_loading(document.getElementById("resultsupcustomfields"),watsmsg[0]);
-		else if (jQuery("input[name=customfieldcheck]:checked").length == 0)
+		else if (jQuery('input[name^="customfieldcheck"]:checked').length == 0)
 			wats_stop_loading(document.getElementById("resultsupcustomfields"),watsmsg[1]);
-	    jQuery("input[name=customfieldcheck]:checked").each(function()
+		else if (jQuery('input[name^="customfieldcheck"]:checked').length > 0)
 		{
-		    if (this.checked == true)
+			var liste =  JSON.stringify(wats_js_get_selected_checkbox('customfieldcheck'));
+
+			jQuery.post(ajaxurl, {action:"wats_admin_remove_ticket_custom_field", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), liste:liste},
+			function(res)
 			{
-				jQuery('#idsupcustomfields').attr('disabled','disabled');
-				var idvalue = this.value;
-				var nodetoremove = this.parentNode;
-				jQuery.post(ajaxurl, {action:"wats_admin_remove_ticket_custom_field", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue},
-				function(res)
+				var message_result = JSON.parse(res);
+
+				wats_stop_loading(document.getElementById("resultsupcustomfields"),message_result.error);
+				if (message_result.success == "TRUE")
 				{
-					jQuery('#idsupcustomfields').removeAttr('disabled');
-					var message_result = eval('(' + res + ')');
-					wats_stop_loading(document.getElementById("resultsupcustomfields"),message_result.error);
-					if (message_result.success == "TRUE")
-					{
-						parenttoremove = nodetoremove.parentNode;
-						parenttoremove.parentNode.removeChild(parenttoremove);
-					}
-					if (jQuery("input[name=customfieldcheck]").length == 0)
-						wats_js_add_blank_cell("tablecustomfields",10,watsmsg[2]);
-				});
-			}
-		});
+					jQuery("#divticketcustomfieldstable").html(message_result.output).hide();
+					jQuery("#divticketcustomfieldstable").fadeIn("slow");
+					wats_js_options_bind_edit_custom_field();
+				}
+			});
+		}
+		
 		return false;
 	});
 	
@@ -514,7 +511,7 @@ jQuery(document).ready(function() {
 		var idvalue = jQuery("#idcustomselector").val();
 		var idcat = jQuery('#wats_custom_fields_selector option:selected').val();
 		wats_loading(document.getElementById("resultaddcustomselector"),watsmsg[4]);
-		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 		function(res)
 		{
 			jQuery('#idaddcustomselector').removeAttr('disabled');
@@ -540,6 +537,7 @@ jQuery(document).ready(function() {
 			wats_stop_loading(document.getElementById("resultsupcustomselector"),watsmsg[1]);
 		var type = "wats_custom_selector";
 		var idcat = jQuery('#wats_custom_fields_selector option:selected').val();
+		
 	    jQuery("input[name=customselectorcheck]:checked").each(function()
 		{
 		    if (this.checked == true)
@@ -547,7 +545,7 @@ jQuery(document).ready(function() {
 				jQuery('#idsupcustomselector').attr('disabled','disabled');
 				var idvalue = this.value;
 				var nodetoremove = this.parentNode;
-				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
+				jQuery.post(ajaxurl, {action:"wats_admin_remove_option_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, type:type, idcat:idcat},
 				function(res)
 				{
 					jQuery('#idsupcustomselector').removeAttr('disabled');
@@ -568,7 +566,7 @@ jQuery(document).ready(function() {
 	
 	jQuery('#wats_custom_fields_selector').change(function() {
 		var idvalue = jQuery('#wats_custom_fields_selector option:selected').val();
-		jQuery.post(ajaxurl, {action:"wats_admin_get_custom_fields_selector_values_table", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue},
+		jQuery.post(ajaxurl, {action:"wats_admin_get_custom_fields_selector_values_table", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue},
 				function(res)
 				{
 					var message_result = eval('(' + res + ')');
@@ -595,7 +593,7 @@ jQuery(document).ready(function() {
 							data: {	
 								value:jQuery('#guestlist_ac').val(),
 								type:'guestlist',
-								_ajax_nonce:jQuery("#_wpnonce").val(),
+								_ajax_nonce:jQuery("#wats_nonce").val(),
 								'cookie': encodeURIComponent(document.cookie)
 							},
 							success: function(data) {
@@ -628,7 +626,7 @@ jQuery(document).ready(function() {
 							data: {	
 								value:jQuery('#defaultauthorlist_ac').val(),
 								type:'defaultauthorlist',
-								_ajax_nonce:jQuery("#_wpnonce").val(),
+								_ajax_nonce:jQuery("#wats_nonce").val(),
 								'cookie': encodeURIComponent(document.cookie)
 							},
 							success: function(data) {
@@ -658,7 +656,7 @@ function wats_js_options_bind_edit_custom_field()
 	jQuery('[name^=wats_edit_custom_field]').click(function() {
 		jQuery('[name^=wats_edit_custom_field]').attr('disabled','disabled');
 		idvalue = jQuery(this).parent('td').next('td').find('input').val();
-		jQuery.post(ajaxurl, {action:"wats_admin_options_get_custom_field_table_row", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue},
+		jQuery.post(ajaxurl, {action:"wats_admin_options_get_custom_field_table_row", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue},
 				function(res)
 				{
 					var message_result = eval('(' + res + ')');
@@ -690,8 +688,9 @@ function wats_js_options_bind_save_custom_field()
 		var idtype = jQuery('#wats_custom_field_type_'+idvalue+' option:selected').val();
 		var customfieldname = jQuery("#customfieldsdisplayname"+idvalue).val();
 		var customfieldmetakey = jQuery("#customfieldsmetakey"+idvalue).val();
+		var idnewvalue = jQuery('#customfieldid'+idvalue).val();
 		
-		jQuery.post(ajaxurl, {action:"wats_admin_update_ticket_custom_field", _ajax_nonce:jQuery("#_wpnonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, idfsf:idfsf, idatef:idatef, idftdt:idftdt, idftuf:idftuf, idftlf:idftlf, idftltc:idftltc, customfieldname:customfieldname, customfieldmetakey:customfieldmetakey, idtype:idtype},
+		jQuery.post(ajaxurl, {action:"wats_admin_update_ticket_custom_field", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, idfsf:idfsf, idatef:idatef, idftdt:idftdt, idftuf:idftuf, idftlf:idftlf, idftltc:idftltc, customfieldname:customfieldname, customfieldmetakey:customfieldmetakey, idtype:idtype, idnewvalue:idnewvalue},
 		function(res)
 		{
 			jQuery('#idaddcustomfields').removeAttr('disabled');

@@ -1,10 +1,10 @@
 === Wordpress Advanced Ticket System ===
 Contributors: Olivier
 Donate link: http://www.ticket-system.net/
-Tags: ticket,case,system,support,help,helpdesk,ticket system,support system,crm,contact
+Tags: case, contact, CRM, help, helpdesk, support, support system, system, ticket, ticket system
 Requires at least: 3.0
-Tested up to: 4.0
-Stable tag: 1.0.57
+Tested up to: 4.1
+Stable tag: 1.0.58
 
 == Description ==
 
@@ -68,7 +68,7 @@ Translations :
 * Lithuanian (Minimum release : 1.0.50, Originator : Arturas from http://www.taisyklajums.lt/ )
 * Russian (Minimum release : 1.0.53, Originators : Alexey from http://reservation.isaev.asia/ and Eugene from http://1245.ru/ )
 * Indonesian (Minimum release : 1.0.53, Originator : Rizal Fauzie from http://fauzievolute.com/ )
-* Italian (Minimum release : 1.0.54, Originators : Alessandro Pagano from http://www.alessandropagano.net/ and Roberto Scano from http://robertoscano.info )
+* Italian (Minimum release : 1.0.54, Originators : Erick Jara from http://www.impesud.it/ and Alessandro Pagano from http://www.alessandropagano.net/ and Roberto Scano from http://robertoscano.info )
 * Polish (Minimum release : 1.0.55, Originator : Eryk Lewandowski from http://www.disena.pl/ )
 * Belarussian (Minimum release : 1.0.56, Originator : Alex from http://webhostinggeeks.com/ )
 * Romanian (Minimum release : 1.0.56, Originator : Alex from http://webhostinggeeks.com/ )
@@ -99,6 +99,20 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 
 
 == Changelog ==
+
+= V1.0.58 (13/12/2014) =
++ added an option to define which fields are mandatory to be filled by user on frontend submission form
++ added HTML editor to frontend submission form for ticket description edition and to the frontend ticket update form
++ fixed a bug with search query
++ added an option to allow ticket update on behalf of a user in frontend ticket update form
++ enhanced category list in frontend submission form to allow hierarchical display and sorting
++ added an option to allow any user to define custom ticket update notification mailing list
++ added possibility to reorder custom fields
++ updated italian translation by Erick Jara from http://www.impesud.it/
++ added inline edit capability for admins to frontend ticket listing for priority, status, product and type keys
++ fixed a nonce conflict in options page
++ enhanced ticket by email submission to use default values for ticket keys
++ fixed a bug preventing use of special passwords in ticket by email submission
 
 = V1.0.57 (13/12/2012) =
 * enhanced ticket age details in frontend ticket listing
