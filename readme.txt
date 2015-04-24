@@ -3,7 +3,7 @@ Contributors: Olivier
 Donate link: http://www.ticket-system.net/
 Tags: case, contact, CRM, help, helpdesk, support, support system, system, ticket, ticket system
 Requires at least: 3.0
-Tested up to: 4.1
+Tested up to: 4.2
 Stable tag: 1.0.58
 
 == Description ==
