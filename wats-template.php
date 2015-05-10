@@ -708,16 +708,19 @@ function wats_get_comments_clauses($clauses)
 		{
 			$clauses['join'] = " AS wp1 LEFT JOIN ".$wpdb->posts." AS wp3 ON wp1.comment_post_id = wp3.ID ";
 			$clauses['where'] .= " AND wp3.post_status = 'publish' AND (wp3.post_author = ".$current_user->ID." OR wp3.post_type != 'ticket') AND NOT EXISTS (SELECT * FROM ".$wpdb->commentmeta." AS wp2 WHERE wp1.comment_ID = wp2.comment_id AND wp2.meta_key = 'wats_internal_update' AND wp2.meta_value = 1) ";
+			$clauses['orderby'] = "wp1.comment_date_gmt ASC, wp1.comment_ID ASC";
 		}
 		else if (($wats_settings['visibility'] == 1 && is_user_logged_in()) || $wats_settings['visibility'] == 0)
 		{
 			$clauses['join'] = " AS wp1 LEFT JOIN ".$wpdb->posts." AS wp3 ON wp1.comment_post_id = wp3.ID";
 			$clauses['where'] .= " AND wp3.post_status = 'publish' AND NOT EXISTS (SELECT * FROM ".$wpdb->commentmeta." AS wp2 WHERE wp1.comment_ID = wp2.comment_id AND wp2.meta_key = 'wats_internal_update' AND wp2.meta_value = 1) ";
+			$clauses['orderby'] = "wp1.comment_date_gmt ASC, wp1.comment_ID ASC";
 		}
 		else
 		{
 			$clauses['join'] = " AS wp1 LEFT JOIN ".$wpdb->posts." AS wp3 ON wp1.comment_post_id = wp3.ID ";
 			$clauses['where'] .= " AND wp3.post_status = 'publish' AND wp3.post_type != 'ticket' AND NOT EXISTS (SELECT * FROM ".$wpdb->commentmeta." AS wp2 WHERE wp1.comment_ID = wp2.comment_id AND wp2.meta_key = 'wats_internal_update' AND wp2.meta_value = 1) ";
+			$clauses['orderby'] = "wp1.comment_date_gmt ASC, wp1.comment_ID ASC";
 		}
 	}
 
