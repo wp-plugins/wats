@@ -2602,12 +2602,34 @@ function wats_options_manage_stats_options()
 
 /***********************************************/
 /*                                             */
+/* Fonction d'affichage du nombre de downloads */
+/*                                             */
+/***********************************************/
+
+function wats_options_get_number_of_downloads()
+{
+ 
+	$plugin_information = array('action' => 'plugin_information',
+								'request' => serialize((object)array('slug' => 'wats',
+																	 'fields' => array('downloaded' => true,
+																				       'description' => false))));
+ 
+    $result = wp_remote_post('http://api.wordpress.org/plugins/info/1.0/', array('body' => $plugin_information));
+ 
+    $result = unserialize($result['body']);
+    
+	return ($result->downloaded);
+}
+
+/***********************************************/
+/*                                             */
 /* Fonction d'affichage des options d'accueil */
 /*                                             */
 /***********************************************/
 
 function wats_options_manage_home_options()
 {
+	global $wats_settings;
 
 	echo __('Just select a menuitem in the right sidebar widget and set the options according to your needs.','WATS').'<br /><br />';
 	echo __('You can also browse the documentation on <a href="http://www.ticket-system.net/">official website</a> to get further help.','WATS');
@@ -2617,10 +2639,29 @@ function wats_options_manage_home_options()
 		echo '<h3>'.__('Upgrade to Premium release','WATS').' :</h3>';
 		echo __('You are currently using the standard release of WATS. This release is free.','WATS');
 		echo __(' There is a Premium release available for you. It contains all the features of the standard release plus many advanced features.','WATS');
-		echo __(' You can learn more about the premium release and order it on ','WATS').'<a href="http://www.ticket-system.net">'.__('WATS official website','WATS').'</a>.';
+		echo __(' Then the Premium release comes with one year of Premium support from WATS lead developer and one year of Premium release updates.','WATS');
+		$downloads = wats_options_get_number_of_downloads();
+		$downloads = substr($downloads,0,-3).'.000';
+		echo '<br /><br />'.sprintf(__('WATS has already been downloaded more than <b>%s times</b>!!! ','WATS'),$downloads);
+		echo __(' WATS is the first and most complete ticketing system for WordPress. It has been actively developped since 2009!','WATS');
+		echo '<br /><br />'.__(' You can learn more about the premium release and order it on ','WATS').'<a href="http://www.ticket-system.net/order-now/">'.__('WATS official website','WATS').'</a>.';
+		echo '<br /><br /><h3>'.__('Here is what you can do with the free release :','WATS').'</h3>';
+		echo '<ul style="padding-left: 30px; list-style-type: disc;"><li>'.__('Submit tickets through the admin side (for registered users with a minimum level of contributor)','WATS').'</li>';
+		echo '<li>'.__('Update tickets through the frontend','WATS').'</li>';
+		echo '<li>'.__('Control who can view tickets (everybody, only registered users, only ticket author and admins)','WATS').'</li></ul>';
+		echo '<br /><h3>'.__("By upgrading to the premium release, you'll benefit from the following additional features :",'WATS').'</h3>';
+		echo '<ul style="padding-left: 30px; list-style-type: disc;"><li>'.__('Submit tickets through the frontend (unregistered and registered users)','WATS').'</li>';
+		echo '<li>'.__('Submit tickets by email','WATS').'</li>';
+		echo '<li>'.__('Unlimited number of custom fields to enrich the ticket details','WATS').'</li>';
+		echo '<li>'.__('Notifications of new tickets for admins and ticket updates','WATS').'</li>';
+		echo '<li>'.__('Frontend ticket listing with export of tickets list to Excel','WATS').'</li>';
+		echo '<li>'.__('Grouping of users by company','WATS').'</li>';
+		echo '<li>'.__('Possibility to assign tickets to users','WATS').'</li></ul>';
+		echo '<br /><br />'.sprintf(__('Note : this feature list is up to date as of the current release (WATS %s). ','WATS'),$wats_settings['wats_version']);
+		echo __('For the detailed features list by release, please check out ','WATS').'<a href="http://www.ticket-system.net/features/">'.__('the feature list page','WATS').'</a>.';
 	}
 	
-	echo '<br /><br />'.__('In order to be always updated on the news around WATS, you can :','WATS');
+	/*echo '<br /><br />'.__('In order to be always updated on the news around WATS, you can :','WATS');
 	echo '<ul style="list-style-type:disc;margin-left:40px;"><li><a href="http://www.ticket-system.net">'.__('Subscribe to the newsletter','WATS').'</a></li>';
 	echo '<li><a href="https://twitter.com/wpwats" class="twitter-follow-button" data-show-count="false">Follow @wpwats</a>';
 	echo '<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li></ul>';
@@ -2638,6 +2679,7 @@ function wats_options_manage_home_options()
 		  })();
 		  </script>';
 	echo '<div style="float:left;margin-right:10px;"><script src="//platform.linkedin.com/in.js" type="text/javascript"></script><script type="IN/Share" data-url="http://www.ticket-system.net/" data-counter="top"></script></div>';
+	*/
 	
 	return;
 }
