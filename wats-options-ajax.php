@@ -408,14 +408,20 @@ jQuery(document).ready(function() {
 		var idcategorie = jQuery('#notification_rules_select_category option:selected').val();
 		var idrulescope = jQuery('#notification_rules_select_rule_scope option:selected').val();
 		var listvalue = jQuery("#rule_mailing_list").val();
-		var idduedatefield = jQuery('#wats_rules_due_date option:selected').val();
+		var idduedatefield = -1;
+		if (jQuery('#wats_rules_due_date option:selected').val())
+			idduedatefield = jQuery('#wats_rules_due_date option:selected').val();
 		var idauthorcheck = jQuery('#notification_rules_author_check').is(':checked');
 		var idownercheck = jQuery('#notification_rules_owner_check').is(':checked');
 		var idadminscheck = jQuery('#notification_rules_all_admins_check').is(':checked');
 		var idupdaterscheck = jQuery('#notification_rules_all_updaters_check').is(':checked');
-		var due_date_notification_interval = jQuery("#rule_due_date_notification_interval").val();
-		var due_date_notification_start = jQuery("#rule_due_date_notification_start").val();
-		
+		var due_date_notification_interval = -1;
+		if (jQuery('#rule_due_date_notification_interval').val())
+			due_date_notification_interval = jQuery("#rule_due_date_notification_interval").val();
+		var due_date_notification_start = -1;
+		if (jQuery('#rule_due_date_notification_start').val())
+			due_date_notification_start = jQuery("#rule_due_date_notification_start").val();
+
 		wats_loading(document.getElementById("resultaddrule"),watsmsg[4]);
 		jQuery.post(ajaxurl, {action:"wats_admin_insert_notification_rule_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idtype:idtype, idpriority:idpriority, idstatus:idstatus, idproduct:idproduct, idcountry:idcountry, idcompany:idcompany, idcategorie:idcategorie, listvalue:listvalue, idrulescope:idrulescope, idduedatefield:idduedatefield, idauthorcheck:idauthorcheck, idownercheck:idownercheck, idadminscheck:idadminscheck, idupdaterscheck:idupdaterscheck, due_date_notification_interval:due_date_notification_interval, due_date_notification_start:due_date_notification_start},
 		function(res)

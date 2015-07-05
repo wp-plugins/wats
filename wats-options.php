@@ -509,7 +509,8 @@ function wats_load_settings()
 		if (!isset($wats_settings['ftuf_enable_tinymce']))
 		{
 			$wats_settings['ftuf_enable_tinymce'] = 0;
-		}		
+		}
+		
 		if (!isset($wats_settings['wats_ticket_listing_queries']))
 		{
 			$wats_settings['wats_ticket_listing_queries'] = array();
@@ -907,7 +908,11 @@ function wats_admin_insert_notification_rule_entry()
 		
 		end($wats_notification_rules);
 		$last_id = key($wats_notification_rules);
-		$listvalue = (strlen($listvalue) > 0) ? $listvalue.__(' AND ','WATS').wats_admin_display_notification_rules_notifiers(wats_admin_build_notification_rule($rule)) : wats_admin_display_notification_rules_notifiers(wats_admin_build_notification_rule($rule));
+		$notifiers = wats_admin_display_notification_rules_notifiers(wats_admin_build_notification_rule($rule));
+		if (strlen($listvalue) > 0 && strlen($notifiers) > 0)
+			$listvalue = $listvalue.__(' AND ','WATS').$notifiers;
+		else if (strlen($notifiers) > 0)
+			$listvalue = $notifiers;
 		$message_result = array('id' => $last_id, 'rule' => wats_admin_display_notification_rule(wats_admin_build_notification_rule($rule)), 'list' => $listvalue, 'success' => "TRUE", 'error' => __("Rule successfully added!",'WATS'));
 	}
 	
@@ -1518,7 +1523,11 @@ function wats_admin_display_notification_rules_list()
 				echo '>';
 				echo '<td>'.$key.'</td>';
 				echo '<td>'.esc_html($rules).'</td>';
-				$list = (strlen($list) > 0) ? $list.__(' AND ','WATS').wats_admin_display_notification_rules_notifiers(wats_admin_build_notification_rule($rule)) : wats_admin_display_notification_rules_notifiers(wats_admin_build_notification_rule($rule));
+				$notifiers = wats_admin_display_notification_rules_notifiers(wats_admin_build_notification_rule($rule));
+				if (strlen($list) > 0 && strlen($notifiers) > 0)
+					$list = $list.__(' AND ','WATS').$notifiers;
+				else if (strlen($notifiers) > 0)
+					$list = $notifiers;
 				echo '<td>'.esc_html($list).'</td>';
 				echo '<td><input type="checkbox" name="notification_rule_check" id="notification_rule_check" value="'.$key.'" /></td>';
 				echo '</tr>';
