@@ -4,11 +4,11 @@ Donate link: http://www.ticket-system.net/
 Tags: case, contact, CRM, help, helpdesk, support, support system, system, ticket, ticket system
 Requires at least: 3.0
 Tested up to: 4.2
-Stable tag: 1.0.58
+Stable tag: 1.0.59
 
 == Description ==
 
-This plugin adds to Wordpress the features of a complete ticket system. This allows users to submit tickets to report problems or get support on whatever you want. Users can set the status, priority, product and type of each ticket.
+This plugin adds to Wordpress the features of a complete support and ticket system fully. This allows users to submit tickets to report problems or get support on whatever you want. Users can set the status, priority, product and type of each ticket.
 
 = Plugin's Official website =
 Wordpress Advanced Ticket System : http://www.ticket-system.net/
@@ -29,13 +29,15 @@ WATS key features :
 * ticket submission through the frontend (Premium release)
 * ticket submission through email piping (Premium release)
 * ticket assignment (Premium release)
-* ticket submission on behalf of users, usefull for call centre
+* ticket submission and update on behalf of users, usefull for call centre
+* HTML editor for ticket submission and ticket update in the frontend (Premium release)
 * priority, status, type and product values preset by the admin
 * priority, status, type and product keys selection for each ticket
-* unlimited number of text input and drop down selector custom fields for tickets, fully integrated with total control over read/write rights (Premium release)
+* unlimited number of text input, drop down selector and datepicker custom fields for tickets, fully integrated with total control over read/write rights (Premium release)
 * internal comments support for private exchanges between admins (Premium release)
 * mail notification upon new ticket submission for admins (Premium release)
-* mail notification based on key rules (product, priority, status and ticket types as well as author company and country) upon new ticket submission and ticket update for selected distribution list (Premium release)
+* mail notification based on key rules (product, priority, status and ticket types as well as author company and country) upon new ticket submission and ticket update for selected distribution list, ticket author, ticket updaters, ticket owner and admins (Premium release)
+* mail notification at regular intervals based on ticket due date (Premium release)
 * mail notification upon ticket update for ticket originator, updaters and admins (Premium release)
 * complete control over mail notifications format through the API (Premium release)
 * ticket list filtering, sorting and export to Excel in the frontend (Premium release)
@@ -43,7 +45,6 @@ WATS key features :
 * advanced user profile features : account expiration date, country and company definition, user profile email modification prevention (Premium release)
 * smooth integration with WordPress themes
 * scalability : able to work on websites with more than 50.000 users! (Premium release)
-
 WATS offers a wide range of features. A lot of options are available to allow you to set it up according to your needs thus making WATS compliant with most of the requirements.
 
 Examples of use of WATS :
@@ -58,6 +59,8 @@ Examples of use of WATS :
 * contact form with database tracking
 * collaborative content site with frontend post submission
 * appointment request system
+* easy ticket management for large organization
+* booking system
 
 Translations :
 
@@ -92,14 +95,28 @@ THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
 
 == Screenshots ==
 
-1. Sample ticket display in the frontend
-2. Ticket update form in the frontend
-3. Tickets listing in the frontend
-4. Ticket creation in the admin backend
+1. Ticket submission form in the frontend
+2. Ticket listing in the frontend
+3. Sample ticket display in the frontend
 
 
 == Changelog ==
 
+= V1.0.59 (05/07/2015) =
++ improved CSS of frontend ticket listing table head
++ added logout link to frontend submission form
++ added ticket description excerpt to frontend ticket listing as an optionnal row below the ticket details row
++ added a filter to the frontend ticket listing to allow ticket filtering by ID
++ fixed a bug affecting comments in WordPress 4.2+
++ fixed a bug affecting comments when ticket visibility is enabled for users from same company
++ added support for datepicker in the custom fields
++ added the possibility to define notification rules and notification interval based on ticket due date
++ added the possibility to define notification rules for ticket author, ticket owner, ticket updaters and all admins
++ modified the frontend ticket listing author column to show the unregistered author name
++ added inline style to frontend ticket listing priority column entries
++ enhanced styling of frontend ticket submission form
++ added the possibility to define cutom queries for the frontend ticket listing
++ fixed a bug with the ticket age column sorting in the frontend ticket listing
 = V1.0.58 (13/12/2014) =
 + added an option to define which fields are mandatory to be filled by user on frontend submission form
 + added HTML editor to frontend submission form for ticket description edition and to the frontend ticket update form

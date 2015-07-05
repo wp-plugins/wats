@@ -538,8 +538,13 @@ function wats_ticket_details_meta_box($post,$view=0)
 
 	if (((is_admin() || $view == 1) && current_user_can('administrator') && $wats_settings['call_center_ticket_creation'] == 1) || (!is_admin() && $view == 0 && current_user_can('administrator') && $wats_settings['call_center_ticket_update'] == 1))
 	{
-		if (is_object($post))
-			$selected_login = get_the_author_meta('user_login');
+		if (is_object($post) && is_admin())
+		{
+			if ($post->post_author === '0')
+				$selected_login = $current_user->user_login;
+			else
+				$selected_login = get_the_author_meta('user_login', $post->post_author);
+		}
 		else
 			$selected_login = $current_user->user_login;
 	

@@ -4,12 +4,27 @@ Plugin Name: Wats
 Plugin URI: http://www.ticket-system.net/
 Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
 Author: Olivier
-Version: 1.0.58
+Version: 1.0.59
 Author URI: http://www.ticket-system.net/
 */
 
 /*
 1/ Release history :
+- V1.0.59 (05/07/2015) :
++ improved CSS of frontend ticket listing table head
++ added logout link to frontend submission form
++ added ticket description excerpt to frontend ticket listing as an optionnal row below the ticket details row
++ added a filter to the frontend ticket listing to allow ticket filtering by ID
++ fixed a bug affecting comments in WordPress 4.2+
++ fixed a bug affecting comments when ticket visibility is enabled for users from same company
++ added support for datepicker in the custom fields
++ added the possibility to define notification rules and notification interval based on ticket due date
++ added the possibility to define notification rules for ticket author, ticket owner, ticket updaters and all admins
++ modified the frontend ticket listing author column to show the unregistered author name
++ added inline style to frontend ticket listing priority column entries
++ enhanced styling of frontend ticket submission form
++ added the possibility to define cutom queries for the frontend ticket listing
++ fixed a bug with the ticket age column sorting in the frontend ticket listing
 - V1.0.58 (13/12/2014) :
 + added an option to define which fields are mandatory to be filled by user on frontend submission form
 + added HTML editor to frontend submission form for ticket description edition and to the frontend ticket update form
@@ -411,7 +426,7 @@ define('WATS_BACKLINK','http://www.ticket-system.net/');
 define('WATS_ANCHOR','ticket system');
 
 $wats_settings = array();
-$wats_version = '1.0.58';
+$wats_version = '1.0.59';
 $wats_printing_inline_data = false;
 $wats_current_post_author = 0;
 
@@ -419,8 +434,8 @@ $wats_default_ticket_priority = array(1 => "Emergency", 2 => "Critical", 3 => "M
 $wats_default_ticket_status = array(1 => "Newly open", 2 => "Under investigation", 3 => "Waiting for reoccurence", 4 => "Waiting for details", 5 => "Solution delivered", 6 => "Closed");
 $wats_default_ticket_type = array(1 => "Question", 2 => "SW Bug", 3 => "Installation request", 4 => "Feature request");
 $wats_default_sla = array(1 => "Gold", 2 => "Silver", 3 => "Bronze");
-$wats_default_ticket_listing_columns = array("id" => "ID","title" => "Title","category" => "Category","author" => "Author","owner" => "Owner","creation_date" => "Creation date","modification_date" => "Last modification date","last_updater" => "Last modification author","ticket_age" => "Ticket age","closure_date" => "Closure date","type" => "Type","priority" => "Priority","status" => "Status","product" => "Product","edit" => "Edit");
-$wats_rule_scope = array(0 => __('New ticket and ticket update','WATS'), 1 => __('New ticket only','WATS'), 2 => __('Ticket update only','WATS'));
+$wats_default_ticket_listing_columns = array("id" => "ID","title" => "Title","category" => "Category","author" => "Author","owner" => "Owner","creation_date" => "Creation date","modification_date" => "Last modification date","last_updater" => "Last modification author","ticket_age" => "Ticket age","closure_date" => "Closure date","type" => "Type","priority" => "Priority","status" => "Status","product" => "Product","edit" => "Edit","description" => "Description");
+$wats_rule_scope = array(0 => __('New ticket and ticket update','WATS'), 1 => __('New ticket only','WATS'), 2 => __('Ticket update only','WATS'), 3 => __('Due date reminder','WATS'));
 
 $wats_custom_fields_selectors;
 
@@ -536,6 +551,10 @@ add_action('wp_ajax_wats_admin_remove_ticket_custom_field','wats_admin_remove_ti
 add_action('wp_ajax_wats_admin_get_custom_fields_selector_values_table','wats_admin_get_custom_fields_selector_values_table',10);
 add_action('wp_ajax_wats_admin_options_get_custom_field_table_row','wats_admin_options_get_custom_field_table_row',10);
 add_action('wp_ajax_wats_admin_update_ticket_custom_field','wats_admin_update_ticket_custom_field',10);
+add_action('wp_ajax_wats_admin_insert_ticket_listing_query','wats_admin_insert_ticket_listing_query',10);
+add_action('wp_ajax_wats_admin_remove_ticket_listing_query','wats_admin_remove_ticket_listing_query',10);
+add_action('wp_ajax_wats_admin_options_get_custom_query_table_row','wats_admin_options_get_custom_query_table_row',10);
+add_action('wp_ajax_wats_admin_update_ticket_custom_query','wats_admin_update_ticket_custom_query',10);
 
 
 ?>

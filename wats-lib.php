@@ -84,12 +84,17 @@ function wats_is_letter($i)
 /***************************************/
 /*                                     */
 /* Fonction de vérification d'une date */
+/* format 1 : yyyy-mm-dd               */
+/* format 2 : mm/dd/yyyy               */
 /*                                     */
 /***************************************/
 
-function wats_is_date($i)
+function wats_is_date($i,$format)
 {
-	return (preg_match("#^(\d{4})\-(\d{2})\-(\d{2})$#", $i));
+	if ($format == 1)
+		return (preg_match("#^(\d{4})\-(\d{2})\-(\d{2})$#", $i));
+	else
+		return (preg_match("#^(\d{2})\/(\d{2})\/(\d{4})$#", $i));	
 }
 
 /*************************************************************/
@@ -555,11 +560,11 @@ function wats_get_mail_notification_signature()
 	return(esc_html(str_replace(array('\r\n','\r','<br />'),"\r\n",html_entity_decode(stripslashes($wats_settings['notification_signature'])))));
 }
 
-/**********************************************************/
-/*                                                        */
+/***************************************************/
+/*                                                 */
 /* Fonction d'affichage des règles de notification */
-/*                                                        */
-/**********************************************************/
+/*                                                 */
+/***************************************************/
 
 function wats_admin_display_notification_rule($rule)
 {
@@ -574,7 +579,7 @@ function wats_admin_display_notification_rule($rule)
 	
 	foreach ($rule AS $key => $value)
 	{
-		if (strlen($output) > 0)
+		if (strlen($output) > 0 && !in_array($key,array('notify_author','notify_owner','notify_admins','notify_updaters')))
 			$output .= __(' AND ','WATS');
 		if ($value != "0")
 		{
@@ -588,12 +593,43 @@ function wats_admin_display_notification_rule($rule)
 				case "country" : $output .= $key." : ".$value; break;
 				case "company" : $output .= $key." : ".$value; break;
 				case "category" : $output .= $key." : ".get_cat_name($value); break;
+				case "duedatefield" : $output .= $key." : ".$value ; break;
+				case "duedateinterval" : $output .= __('Notification frequency','WATS').' : '.__('every','WATS').' '.$value.' '.__('days','WATS'); break;
+				case "duedatestart" : $output .= __('Notification start','WATS')." : ".$value.' '.__('days before the due date','WATS') ; break;
+
+				default : break;
 			}
 		}
 		else
 			$output .= $key." : ".__('Any','WATS');
 	}
 
+	return $output;
+}
+
+/****************************************************/
+/*                                                  */
+/* Fonction d'affichage des utilisateurs à notifier */
+/*                                                  */
+/****************************************************/
+
+function wats_admin_display_notification_rules_notifiers($rule)
+{
+	$output = '';
+	foreach ($rule AS $key => $value)
+	{
+		if (strlen($output) > 0 && $value == 'true')
+			$output .= __(' AND ','WATS');
+		switch ($key)
+		{
+			case "notify_author" : if ($value == 'true') $output .= __('Ticket author','WATS'); break;
+			case "notify_owner" : if ($value == 'true') $output .= __('Ticket owner','WATS'); break;
+			case "notify_admins" : if ($value == 'true') $output .= __('All administrators','WATS'); break;
+			case "notify_updaters" : if ($value == 'true') $output .= __('Ticket updaters','WATS'); break;
+			default : break;
+		}
+	}
+	
 	return $output;
 }
 

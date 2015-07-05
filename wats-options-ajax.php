@@ -387,6 +387,16 @@ jQuery(document).ready(function() {
 		return false;
 	});
 	
+	jQuery('#notification_rules_select_rule_scope').change(function() {
+		var idvalue = jQuery('#notification_rules_select_rule_scope option:selected').val();
+		if (idvalue == '3')
+			jQuery('#wats_rules_due_date').css('display','inline');
+		else
+			jQuery('#wats_rules_due_date').css('display','none');
+			
+		return false;
+	});
+	
 	jQuery('#idaddrule').click(function() {
 		jQuery('#idaddrule').attr('disabled','disabled');
 		var idtype = jQuery('#notification_rules_select_ticket_type option:selected').val();
@@ -398,8 +408,16 @@ jQuery(document).ready(function() {
 		var idcategorie = jQuery('#notification_rules_select_category option:selected').val();
 		var idrulescope = jQuery('#notification_rules_select_rule_scope option:selected').val();
 		var listvalue = jQuery("#rule_mailing_list").val();
+		var idduedatefield = jQuery('#wats_rules_due_date option:selected').val();
+		var idauthorcheck = jQuery('#notification_rules_author_check').is(':checked');
+		var idownercheck = jQuery('#notification_rules_owner_check').is(':checked');
+		var idadminscheck = jQuery('#notification_rules_all_admins_check').is(':checked');
+		var idupdaterscheck = jQuery('#notification_rules_all_updaters_check').is(':checked');
+		var due_date_notification_interval = jQuery("#rule_due_date_notification_interval").val();
+		var due_date_notification_start = jQuery("#rule_due_date_notification_start").val();
+		
 		wats_loading(document.getElementById("resultaddrule"),watsmsg[4]);
-		jQuery.post(ajaxurl, {action:"wats_admin_insert_notification_rule_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idtype:idtype, idpriority:idpriority, idstatus:idstatus, idproduct:idproduct, idcountry:idcountry, idcompany:idcompany, idcategorie:idcategorie, listvalue:listvalue, idrulescope:idrulescope},
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_notification_rule_entry", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idtype:idtype, idpriority:idpriority, idstatus:idstatus, idproduct:idproduct, idcountry:idcountry, idcompany:idcompany, idcategorie:idcategorie, listvalue:listvalue, idrulescope:idrulescope, idduedatefield:idduedatefield, idauthorcheck:idauthorcheck, idownercheck:idownercheck, idadminscheck:idadminscheck, idupdaterscheck:idupdaterscheck, due_date_notification_interval:due_date_notification_interval, due_date_notification_start:due_date_notification_start},
 		function(res)
 		{
 			jQuery('#idaddrule').removeAttr('disabled');
@@ -640,8 +658,122 @@ function wats_js_options_bind_save_custom_field()
 	
 	return false;
 }
+
+	jQuery('#idaddquery').click(function() {
+		jQuery('#idaddquery').attr('disabled','disabled');
+
+		var queryname = jQuery('#wats_input_ticket_query_name_tl_queries').val();
+		var idtype = jQuery('#wats_select_ticket_type_tl_queries option:selected').val();
+		var idpriority = jQuery('#wats_select_ticket_priority_tl_queries option:selected').val();
+		var idstatus = jQuery('#wats_select_ticket_status_tl_queries option:selected').val();
+		var idstatusoperator = jQuery('#wats_select_ticket_status_operator_tl_queries option:selected').val();
+		var idproduct = jQuery('#wats_select_ticket_product_tl_queries option:selected').val();
+		var idauthor = jQuery('#wats_select_ticket_author_tl_queries option:selected').val();
+		var idowner = jQuery('#wats_select_ticket_owner_tl_queries option:selected').val();
+		
+		wats_loading(document.getElementById("resultaddquery"),watsmsg[4]);
+		jQuery.post(ajaxurl, {action:"wats_admin_insert_ticket_listing_query", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idtype:idtype, idpriority:idpriority, idstatus:idstatus, idproduct:idproduct, idauthor:idauthor, idowner:idowner, queryname:queryname, idstatusoperator:idstatusoperator},
+		function(res)
+		{
+			jQuery('#idaddquery').removeAttr('disabled');
+			var message_result = eval('(' + res + ')');
+			if (message_result.success == "TRUE")
+			{
+				jQuery('#divticketfontendqueriestable').html(message_result.output);
+				jQuery("#wats_input_ticket_query_name_tl_queries").val('');
+				wats_js_options_bind_edit_custom_query();
+			}
+			wats_stop_loading(document.getElementById("resultaddquery"),message_result.error);
+		});
+
+		return false;
+	});
+	
+	jQuery('#idsupqueries').click(function() {
+		if (jQuery('input[name^="customquerycheck"]').length == 0)
+			wats_stop_loading(document.getElementById("resultsupqueries"),watsmsg[0]);
+		else if (jQuery('input[name^="customquerycheck"]:checked').length == 0)
+			wats_stop_loading(document.getElementById("resultsupqueries"),watsmsg[1]);
+		else if (jQuery('input[name^="customquerycheck"]:checked').length > 0)
+		{
+			var liste =  JSON.stringify(wats_js_get_selected_checkbox('customquerycheck'));
+
+			jQuery.post(ajaxurl, {action:"wats_admin_remove_ticket_listing_query", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), liste:liste},
+			function(res)
+			{
+				var message_result = JSON.parse(res);
+
+				wats_stop_loading(document.getElementById("resultsupqueries"),message_result.error);
+				if (message_result.success == "TRUE")
+				{
+					jQuery("#divticketfontendqueriestable").html(message_result.output).hide();
+					jQuery("#divticketfontendqueriestable").fadeIn("slow");
+					wats_js_options_bind_edit_custom_query();
+				}
+			});
+		}
+		
+		return false;
+	});
+
+function wats_js_options_bind_edit_custom_query()
+{
+	jQuery('[name^=wats_edit_query_]').click(function() {
+		jQuery('[name^=wats_edit_query_]').attr('disabled','disabled');
+		idvalue = jQuery(this).parent('td').next('td').find('input').val();
+		jQuery.post(ajaxurl, {action:"wats_admin_options_get_custom_query_table_row", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue},
+				function(res)
+				{
+					var message_result = eval('(' + res + ')');
+
+					if (message_result.success == "TRUE")
+					{
+						jQuery('#wats_edit_query_'+idvalue).parent('td').parent('tr').html(message_result.output);
+						wats_js_options_bind_save_custom_query();
+					}
+					else
+						wats_stop_loading(document.getElementById("idsupqueries"),message_result.error);
+				});
+		return false;
+	});
+	
+	return false;
+}
+
+function wats_js_options_bind_save_custom_query()
+{
+	jQuery('[name^=wats_save_query]').click(function() {
+		
+		var idvalue = jQuery(this).parent('td').next('td').find('input').val();
+		var queryname = jQuery('#wats_input_ticket_query_name_tl_queries'+idvalue).val();
+		var idtype = jQuery('#wats_select_ticket_type_tl_queries'+idvalue+' option:selected').val();
+		var idpriority = jQuery('#wats_select_ticket_priority_tl_queries'+idvalue+' option:selected').val();
+		var idstatus = jQuery('#wats_select_ticket_status_tl_queries'+idvalue+' option:selected').val();
+		var idstatusoperator = jQuery('#wats_select_ticket_status_operator_tl_queries'+idvalue+' option:selected').val();
+		var idproduct = jQuery('#wats_select_ticket_product_tl_queries'+idvalue+' option:selected').val();
+		var idauthor = jQuery('#wats_select_ticket_author_tl_queries'+idvalue+' option:selected').val();
+		var idowner = jQuery('#wats_select_ticket_owner_tl_queries'+idvalue+' option:selected').val();
+		
+		jQuery.post(ajaxurl, {action:"wats_admin_update_ticket_custom_query", _ajax_nonce:jQuery("#wats_nonce").val(), 'cookie': encodeURIComponent(document.cookie), idvalue:idvalue, queryname:queryname, idtype:idtype, idpriority:idpriority, idstatus:idstatus, idstatusoperator:idstatusoperator, idproduct:idproduct, idauthor:idauthor, idowner:idowner},
+		function(res)
+		{
+			var message_result = eval('(' + res + ')');
+			if (message_result.success == "TRUE")
+			{
+				jQuery('#divticketfontendqueriestable').html(message_result.output);
+				wats_js_options_bind_edit_custom_query();
+			}
+			wats_stop_loading(document.getElementById("resultsupcustomfields"),message_result.error);
+		});
+		return false;
+	});
+	
+	return false;
+}
+	
 	
 	wats_js_options_bind_edit_custom_field();
+	wats_js_options_bind_edit_custom_query();
 	
 	return false;
 });
