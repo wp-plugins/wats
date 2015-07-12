@@ -1,4 +1,4 @@
-=== Wordpress Advanced Ticket System ===
+=== Wordpress Advanced Ticket System, Elite Support Helpdesk ===
 Contributors: Olivier
 Donate link: http://www.ticket-system.net/
 Tags: case, contact, CRM, help, helpdesk, support, support system, system, ticket, ticket system

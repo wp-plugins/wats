@@ -3086,13 +3086,16 @@ function wats_options_manage_home_options()
 		echo '<br /><h3>'.__("By upgrading to the premium release, you'll benefit from the following additional features :",'WATS').'</h3>';
 		echo '<ul style="padding-left: 30px; list-style-type: disc;"><li>'.__('Submit tickets through the frontend (unregistered and registered users)','WATS').'</li>';
 		echo '<li>'.__('Submit tickets by email','WATS').'</li>';
+		echo '<li>'.__('Possibility to add internal updates for admins','WATS').'</li>';
 		echo '<li>'.__('Unlimited number of custom fields to enrich the ticket details','WATS').'</li>';
-		echo '<li>'.__('Notifications of new tickets for admins and ticket updates','WATS').'</li>';
+		echo '<li>'.__('Email notifications for new tickets and ticket updates','WATS').'</li>';
 		echo '<li>'.__('Frontend ticket listing with export of tickets list to Excel','WATS').'</li>';
 		echo '<li>'.__('Grouping of users by company','WATS').'</li>';
+		echo '<li>'.__('Advanced user profiles options','WATS').'</li>';
 		echo '<li>'.__('Possibility to assign tickets to users','WATS').'</li></ul>';
+		echo '<br /><H3>Also, the premium release comes with 1 year of premium updates and 1 year of support from WATS lead developer!</h3>';
 		echo '<br /><br />'.sprintf(__('Note : this feature list is up to date as of the current release (WATS %s). ','WATS'),$wats_settings['wats_version']);
-		echo __('For the detailed features list by release, please check out ','WATS').'<a href="http://www.ticket-system.net/features/">'.__('the feature list page','WATS').'</a>.';
+		echo __('For the detailed features list, please check out ','WATS').'<a href="http://www.ticket-system.net/features/">'.__('the feature list page','WATS').'</a>.';
 	}
 	
 	/*echo '<br /><br />'.__('In order to be always updated on the news around WATS, you can :','WATS');
