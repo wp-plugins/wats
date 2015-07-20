@@ -2,7 +2,7 @@
 /*
 Plugin Name: Wats
 Plugin URI: http://www.ticket-system.net/
-Description: Wats is a ticket system. Wats stands for Wordpress Advanced Ticket System.
+Description: WATS is a ticket system, used by helpdesk staff to deliver support. WATS stands for Wordpress Advanced Ticket System.
 Author: Olivier
 Version: 1.0.59
 Author URI: http://www.ticket-system.net/
